@@ -1,0 +1,37 @@
+name: New feature
+description: Request a new feature
+title: "[Feature]: "
+labels: ["feature"]
+assignees:
+  - sefford
+body:
+  - type: markdown
+    attributes:
+      value: |
+        As a **X** I want...
+  - type: textarea
+    id: what
+    attributes:
+      label: What feature would you want to add?
+      description: Describe in detail which feature you do want
+      placeholder: As a <x> I want...
+      value: "As a <x> I want..."
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: This feature will be completed when...
+      description: Add a set of requirements of when this feature will be completed
+      placeholder: The app is able to...
+      value: "The app is able to..."
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
