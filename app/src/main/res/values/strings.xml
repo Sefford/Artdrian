@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Artdrian</string>
+    <string name="title_activity_wallpaper_list">Wallpapers</string>
+    <string name="network_error">We are having problems getting the wallpapers,\ncould you try again later?</string>
 </resources>
