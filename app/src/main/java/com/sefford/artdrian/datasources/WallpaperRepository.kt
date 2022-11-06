@@ -14,54 +14,54 @@ class WallpaperRepository @Inject constructor(
     private val local: WallpaperMemoryDataSource
 ) {
 
-    suspend fun getAllMetadata(cachePolicy: CachePolicy = PRIORIZE_LOCAL): Either<RepositoryError, List<Metadata>> {
+    private suspend fun getAllMetadataFromApi(
+        onError: suspend () -> Either<RepositoryError, List<Metadata>> = { NetworkingError().left() }
+    ): Either<RepositoryError, List<Metadata>> =
+        try {
+            val response = api.getAllMetadata()
+            local.saveMetadata(response)
+            response.right()
+        } catch (x: Exception) {
+            onError()
+        }
+
+    private suspend fun getAllMetadataFromLocal(
+        onError: suspend (RepositoryError) -> Either<RepositoryError, List<Metadata>> = { it.left() }
+    ): Either<RepositoryError, List<Metadata>> = local.getAllMetadata().fold({ onError(it) }) { it.right() }
+
+    private suspend fun getWallpaperMetadataFromApi(
+        id: String,
+        onError: suspend () -> Either<RepositoryError, Metadata> = { NotFound(id).left() }
+    ): Either<RepositoryError, Metadata> =
+        getAllMetadataFromApi()
+            .fold({ it.left() }) { allMetadata ->
+                allMetadata.find { metadata -> metadata.id == id }?.right() ?: onError()
+            }
+
+    private suspend fun getWallpaperMetadataFromLocal(
+        id: String,
+        onError: suspend (RepositoryError) -> Either<RepositoryError, Metadata> = { it.left() }
+    ): Either<RepositoryError, Metadata> =
+        local.getWallpaperMetadata(id).fold({ onError(it) }) { it.right()}
+
+    suspend fun getAllMetadata(cachePolicy: CachePolicy = PRIORITIZE_LOCAL): Either<RepositoryError, List<Metadata>> {
         return when (cachePolicy) {
-            PRIORIZE_LOCAL -> {
-                when (val metadata = local.getAllMetadata()) {
-                    is Either.Left -> try {
-                        val response = api.getAllMetadata()
-                        local.saveMetadata(response)
-                        response.right()
-                    } catch (x: Exception) {
-                        NetworkingError().left()
-                    }
-                    is Either.Right -> metadata
-                }
-            }
-            ALWAYS_NETWORK -> try {
-                api.getAllMetadata().right()
-            } catch (x: Exception) {
-                NetworkingError().left()
-            }
-            LOCAL_ONLY -> when (val metadata = local.getAllMetadata()) {
-                is Either.Left -> NotFound().left()
-                is Either.Right -> metadata
-            }
+            PRIORITIZE_LOCAL -> getAllMetadataFromLocal { getAllMetadataFromApi() }
+            PRIORITIZE_NETWORK -> getAllMetadataFromApi { getAllMetadataFromLocal() }
+            NETWORK_ONLY -> getAllMetadataFromApi()
+            OFFLINE -> getAllMetadataFromLocal()
         }
     }
 
     suspend fun getWallpaperMetadata(
         id: String,
-        cachePolicy: CachePolicy = PRIORIZE_LOCAL
+        cachePolicy: CachePolicy = PRIORITIZE_LOCAL
     ): Either<RepositoryError, Metadata> {
         return when (cachePolicy) {
-            PRIORIZE_LOCAL -> {
-                when (val allMetadata = local.getWallpaperMetadata(id)) {
-                    is Either.Left -> getAllMetadata(ALWAYS_NETWORK).fold({ error -> error.left() }) { allMetadata ->
-                                    allMetadata.find { metadata -> metadata.id == id }
-                                    ?.right() ?: NotFound(id).left()
-                    }
-                    is Either.Right -> allMetadata
-                }
-            }
-            ALWAYS_NETWORK -> try {
-                api.getAllMetadata()
-                    .find { metadata -> metadata.id == id }
-                    ?.right() ?: NotFound(id).left()
-            } catch (x: Exception) {
-                NetworkingError().left()
-            }
-            LOCAL_ONLY -> local.getWallpaperMetadata(id)
+            PRIORITIZE_LOCAL -> getWallpaperMetadataFromLocal(id) { getWallpaperMetadataFromApi(id) }
+            PRIORITIZE_NETWORK -> getWallpaperMetadataFromApi(id) { getWallpaperMetadataFromLocal(id) }
+            NETWORK_ONLY -> getWallpaperMetadataFromApi(id)
+            OFFLINE -> getWallpaperMetadataFromLocal(id)
         }
     }
 
@@ -71,8 +71,9 @@ class WallpaperRepository @Inject constructor(
     }
 
     enum class CachePolicy {
-        PRIORIZE_LOCAL,
-        ALWAYS_NETWORK,
-        LOCAL_ONLY
+        PRIORITIZE_LOCAL,
+        PRIORITIZE_NETWORK,
+        NETWORK_ONLY,
+        OFFLINE
     }
 }
