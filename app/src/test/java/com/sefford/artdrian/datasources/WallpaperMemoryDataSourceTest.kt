@@ -6,9 +6,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class WallpaperMemoryDataSourceTest {
+class WallpaperMemoryDataSourceTest {
 
     private lateinit var dataSource: WallpaperMemoryDataSource
+    private lateinit var api: FakeWallpaperApi
 
     @BeforeEach
     fun setUp() {
