@@ -60,9 +60,6 @@ fun WallpaperCard(wallpaper: Wallpaper) {
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            com.sefford.artdrian.model.Metadata("", "test", 123, 1000, Date(), Date()),
-            "http://test",
-            "http://test",
-        )
+            com.sefford.artdrian.model.Metadata("", "test", 123, 1000, Date(), Date()))
     )
 }

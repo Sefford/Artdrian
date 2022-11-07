@@ -37,8 +37,7 @@ fun WallpaperListScreen(response: WallpaperListViewModel.ViewState) {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding), color = MaterialTheme.colorScheme
-                        .background
+                        .padding(innerPadding),
                 ) {
                     when (response) {
                         WallpaperListViewModel.ViewState.Loading -> ShowLoading()
@@ -75,6 +74,10 @@ private fun ShowWallpapers(wallpapers: List<Wallpaper>) {
 
 @Composable
 private fun ShowError(errors: WallpaperListViewModel.Errors) {
+    val icon = when (errors) {
+        is WallpaperListViewModel.Errors.NetworkError -> Icons.Rounded.WifiOff
+        is WallpaperListViewModel.Errors.NotFoundError -> Icons.Rounded.QuestionMark
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -82,45 +85,31 @@ private fun ShowError(errors: WallpaperListViewModel.Errors) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        val icon = when(errors) {
-            is WallpaperListViewModel.Errors.NetworkError -> Icons.Rounded.WifiOff
-            is WallpaperListViewModel.Errors.NotFoundError -> Icons.Rounded.QuestionMark
-        }
-        Icon(icon, modifier = Modifier.size(120.dp), contentDescription = "")
+        Icon(icon, modifier = Modifier.size(120.dp), contentDescription = "", tint = Color.Black)
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(R.string.network_error), textAlign = TextAlign.Center)
+        Text(
+            text = stringResource(R.string.network_error),
+            textAlign = TextAlign.Center,
+            color = Color.Black
+        )
     }
 }
 
 @Preview
 @Composable
 private fun showLoading() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        ShowLoading()
-    }
+    WallpaperListScreen(WallpaperListViewModel.ViewState.Loading)
 }
 
 @Preview
 @Composable
 private fun showContent() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        ShowWallpapers(listOf())
-    }
+    WallpaperListScreen(WallpaperListViewModel.ViewState.Content(listOf()))
 }
 
 @Preview
 @Composable
 private fun showError() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        ShowError(WallpaperListViewModel.Errors.NetworkError(0))
-    }
+    WallpaperListScreen(WallpaperListViewModel.ViewState.Error(WallpaperListViewModel.Errors.NetworkError(0)))
+
 }

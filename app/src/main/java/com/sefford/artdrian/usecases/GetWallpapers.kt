@@ -11,21 +11,8 @@ class GetWallpapers @Inject constructor(private val repository: WallpaperReposit
     suspend fun getWallpapers(): Either<RepositoryError, List<Wallpaper>> {
         return repository.getAllMetadata().map { allMetadata ->
             allMetadata.map { metadata ->
-                Wallpaper(
-                    metadata = metadata,
-                    desktop = BASE_URL.format(Type.DESKTOP.identifier, metadata.slug),
-                    mobile = BASE_URL.format(Type.MOBILE.identifier, metadata.slug),
-                )
+                Wallpaper(metadata)
             }
         }
-    }
-
-    companion object {
-        val BASE_URL = "https://adrianmato.art/static/downloads/%s/%s.png"
-    }
-
-    enum class Type(val identifier: String) {
-        DESKTOP("desktop"),
-        MOBILE("mobile")
     }
 }
