@@ -1,5 +1,6 @@
 package com.sefford.artdrian.wallpaperlist.ui
 
+import WallpaperListScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,92 +49,10 @@ class WallpaperListActivity : ComponentActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getWallpapers().flowOn(Dispatchers.IO).collect { response ->
                     setContent {
-                        SetContent(response)
+                        WallpaperListScreen(response)
                     }
                 }
             }
-        }
-    }
-
-    @Composable
-    @OptIn(ExperimentalMaterial3Api::class)
-    private fun SetContent(response: WallpaperListViewModel.ViewState) {
-        ArtdrianTheme {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = stringResource(id = R.string.app_name)) },
-                        colors = centerAlignedTopAppBarColors(
-                            containerColor = Color.Black,
-                            titleContentColor = Color.White
-                        )
-                    )
-                },
-                content = { innerPadding ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding), color = MaterialTheme.colorScheme
-                            .background
-                    ) {
-                        when (response) {
-                            WallpaperListViewModel.ViewState.Loading -> ShowLoading()
-                            is WallpaperListViewModel.ViewState.Content -> ShowWallpapers(response.wallpapers)
-                            is WallpaperListViewModel.ViewState.Error -> ShowError(response.error)
-                        }
-                    }
-                })
-        }
-    }
-
-    @Composable
-    private fun ShowLoading() {
-        Box(modifier = Modifier.fillMaxSize()) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .wrapContentSize()
-                    .align(Alignment.Center), color = Color.Black
-            )
-        }
-    }
-
-    @Composable
-    private fun ShowWallpapers(wallpapers: List<Wallpaper>) {
-        LazyColumn(
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(wallpapers) { wallpaper ->
-                WallpaperCard(wallpaper = wallpaper)
-            }
-        }
-    }
-
-    @Composable
-    private fun ShowError(errors: Errors) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            val icon = when(errors) {
-                is Errors.NetworkError -> Icons.Rounded.WifiOff
-                is Errors.NotFoundError -> Icons.Rounded.QuestionMark
-            }
-            Icon(icon, modifier = Modifier.size(120.dp), contentDescription = "")
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(text = stringResource(R.string.network_error), textAlign = TextAlign.Center)
-        }
-    }
-
-    @Preview
-    @Composable
-    fun showError() {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-           ShowError(Errors.NetworkError(0))
         }
     }
 }
