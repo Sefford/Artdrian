@@ -1,0 +1,7 @@
+{
+  "__class__": "Error",
+  "error": {
+    "__class__": "NetworkError",
+    "status": 0
+  }
+}

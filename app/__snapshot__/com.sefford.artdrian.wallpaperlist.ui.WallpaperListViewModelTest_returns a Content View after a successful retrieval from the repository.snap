@@ -1,0 +1,61 @@
+{
+  "__class__": "Content",
+  "wallpapers": [
+    {
+      "__class__": "Wallpaper",
+      "metadata": {
+        "__class__": "Metadata",
+        "ID": "5",
+        "Slug": "ghost_waves_001",
+        "Views": 1,
+        "Downloads": 588,
+        "CreatedAt": "0001-01-01T00:00:00.000Z",
+        "UpdatedAt": "0001-01-01T00:00:00.000Z"
+      },
+      "desktop": "https://adrianmato.art/static/downloads/desktop/ghost_waves_001.png",
+      "mobile": "https://adrianmato.art/static/downloads/mobile/ghost_waves_001.png"
+    },
+    {
+      "__class__": "Wallpaper",
+      "metadata": {
+        "__class__": "Metadata",
+        "ID": "6",
+        "Slug": "ghost_waves_002",
+        "Views": 1,
+        "Downloads": 868,
+        "CreatedAt": "0001-01-01T00:00:00.000Z",
+        "UpdatedAt": "0001-01-01T00:00:00.000Z"
+      },
+      "desktop": "https://adrianmato.art/static/downloads/desktop/ghost_waves_002.png",
+      "mobile": "https://adrianmato.art/static/downloads/mobile/ghost_waves_002.png"
+    },
+    {
+      "__class__": "Wallpaper",
+      "metadata": {
+        "__class__": "Metadata",
+        "ID": "7",
+        "Slug": "ghost_waves_003",
+        "Views": 1,
+        "Downloads": 1228,
+        "CreatedAt": "0001-01-01T00:00:00.000Z",
+        "UpdatedAt": "0001-01-01T00:00:00.000Z"
+      },
+      "desktop": "https://adrianmato.art/static/downloads/desktop/ghost_waves_003.png",
+      "mobile": "https://adrianmato.art/static/downloads/mobile/ghost_waves_003.png"
+    },
+    {
+      "__class__": "Wallpaper",
+      "metadata": {
+        "__class__": "Metadata",
+        "ID": "8",
+        "Slug": "caustics_001",
+        "Views": 1,
+        "Downloads": 1703,
+        "CreatedAt": "0001-01-01T00:00:00.000Z",
+        "UpdatedAt": "0001-01-01T00:00:00.000Z"
+      },
+      "desktop": "https://adrianmato.art/static/downloads/desktop/caustics_001.png",
+      "mobile": "https://adrianmato.art/static/downloads/mobile/caustics_001.png"
+    }
+  ]
+}
