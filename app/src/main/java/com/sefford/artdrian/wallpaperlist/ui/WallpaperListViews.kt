@@ -21,7 +21,7 @@ import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun WallpaperListScreen(response: WallpaperListViewModel.ViewState) {
+fun WallpaperListScreen(response: WallpaperListViewModel.ViewState, onItemClicked: (String, String) -> Unit = {_,_ ->}) {
     ArtdrianTheme {
         Scaffold(
             topBar = {
@@ -41,7 +41,7 @@ fun WallpaperListScreen(response: WallpaperListViewModel.ViewState) {
                 ) {
                     when (response) {
                         WallpaperListViewModel.ViewState.Loading -> ShowLoading()
-                        is WallpaperListViewModel.ViewState.Content -> ShowWallpapers(response.wallpapers)
+                        is WallpaperListViewModel.ViewState.Content -> ShowWallpapers(response.wallpapers, onItemClicked)
                         is WallpaperListViewModel.ViewState.Error -> ShowError(response.error)
                     }
                 }
@@ -61,13 +61,13 @@ private fun ShowLoading() {
 }
 
 @Composable
-private fun ShowWallpapers(wallpapers: List<Wallpaper>) {
+private fun ShowWallpapers(wallpapers: List<Wallpaper>, onItemClick: (String, String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(wallpapers) { wallpaper ->
-            WallpaperCard(wallpaper = wallpaper)
+            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.metadata.id, wallpaper.name) })
         }
     }
 }
@@ -111,5 +111,4 @@ private fun showContent() {
 @Composable
 private fun showError() {
     WallpaperListScreen(WallpaperListViewModel.ViewState.Error(WallpaperListViewModel.Errors.NetworkError(0)))
-
 }

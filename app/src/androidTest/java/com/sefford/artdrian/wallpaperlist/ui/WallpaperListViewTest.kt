@@ -22,10 +22,6 @@ class WallpaperListViewTest: ScreenshotTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Before
-    fun setUp() {
-    }
-
     @Test
     fun rendersWallpaperListScreenInLoadingState() {
         composeTestRule.setContent { WallpaperListScreen(Loading) }
@@ -43,8 +39,6 @@ class WallpaperListViewTest: ScreenshotTest {
     @Test
     fun rendersWallpaperListScreenInNotFoundErrorState() {
         composeTestRule.setContent { WallpaperListScreen(Error(NotFoundError(""))) }
-
-        composeTestRule.onRoot().printToLog("Sefford")
 
         compareScreenshot(composeTestRule)
     }
