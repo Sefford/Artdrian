@@ -1,42 +1,42 @@
-package com.sefford.artdrian.wallpaperlist.ui
+package com.sefford.artdrian.wallpaperdetail.ui
 
-import WallpaperListScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.sefford.artdrian.ui.navigation.goToDetail
 import com.sefford.artdrian.utils.graph
+import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class WallpaperListActivity : ComponentActivity() {
+class WallpaperDetailActivity : ComponentActivity() {
 
-    private val viewModel: WallpaperListViewModel by viewModels()
+    private val viewModel: WallpaperDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        graph.inject(viewModel)
-        requestWallpapers()
+        graph.plus(WallpaperDetailModule(intent.getStringExtra(EXTRA_ID)!!)).inject(viewModel)
+        requestWallpaper(intent.getStringExtra(EXTRA_NAME)!!)
     }
 
-    private fun requestWallpapers() {
+    private fun requestWallpaper(name: String) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getWallpapers().flowOn(Dispatchers.IO).collect { response ->
+                viewModel.getWallpaper().flowOn(Dispatchers.IO).collect { viewState ->
                     setContent {
-                        WallpaperListScreen(response) { wallpaperId, wallpaperName ->
-                            goToDetail(wallpaperId, wallpaperName)
-                        }
+                        WallpaperDetailScreen(viewState, name)
                     }
                 }
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_ID = "extra_id"
+        const val EXTRA_NAME = "extra_name"
     }
 }

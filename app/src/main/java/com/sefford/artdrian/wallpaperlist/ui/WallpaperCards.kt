@@ -1,6 +1,7 @@
 package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -18,17 +19,21 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import java.util.*
 
 @Composable
-fun WallpaperCard(wallpaper: Wallpaper) {
+fun WallpaperCard(
+    wallpaper: Wallpaper,
+    onItemClicked: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1.7f)
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxSize().clickable(onClick = onItemClicked)) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
                 model = wallpaper.desktop,
@@ -60,6 +65,7 @@ fun WallpaperCard(wallpaper: Wallpaper) {
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            com.sefford.artdrian.model.Metadata("", "test", 123, 1000, Date(), Date()))
+            Metadata("", "test", 123, 1000, Date(), Date())
+        )
     )
 }
