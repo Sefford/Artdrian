@@ -1,0 +1,17 @@
+{
+  "__class__": "Right",
+  "value": {
+    "__class__": "Wallpaper",
+    "metadata": {
+      "__class__": "Metadata",
+      "ID": "1",
+      "Slug": "test_001",
+      "Views": 123,
+      "Downloads": 456,
+      "CreatedAt": "2022-11-05T00:00:00.000Z",
+      "UpdatedAt": "2022-11-05T00:00:00.000Z"
+    }
+  },
+  "isLeft": false,
+  "isRight": true
+}
