@@ -26,13 +26,6 @@ class WallpaperDetailActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                Log.d("Sefford", "Changed Wallpaper")
-            }
-        }
-        registerReceiver(receiver, IntentFilter(Intent.ACTION_WALLPAPER_CHANGED))
-        registerReceiver(receiver, IntentFilter(Intent.ACTION_SET_WALLPAPER))
         graph.plus(WallpaperDetailModule(intent.getStringExtra(EXTRA_ID)!!)).inject(viewModel)
         requestWallpaper(intent.getStringExtra(EXTRA_NAME)!!)
     }
