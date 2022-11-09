@@ -1,6 +1,11 @@
 package com.sefford.artdrian.wallpaperdetail.ui
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,6 +26,13 @@ class WallpaperDetailActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                Log.d("Sefford", "Changed Wallpaper")
+            }
+        }
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_WALLPAPER_CHANGED))
+        registerReceiver(receiver, IntentFilter(Intent.ACTION_SET_WALLPAPER))
         graph.plus(WallpaperDetailModule(intent.getStringExtra(EXTRA_ID)!!)).inject(viewModel)
         requestWallpaper(intent.getStringExtra(EXTRA_NAME)!!)
     }

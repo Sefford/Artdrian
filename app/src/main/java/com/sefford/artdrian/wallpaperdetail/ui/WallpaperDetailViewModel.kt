@@ -65,8 +65,8 @@ class WallpaperDetailViewModel : ViewModel() {
                 when(result) {
                     is DownloadResult.Error -> SetWallpaperResult.Error(result.error)
                     is DownloadResult.Response -> {
-                        when (setWallpaper.setWallpaper(result.uri)) {
-                            is Either.Left -> emit(SetWallpaperResult.Error(RuntimeException("Some error happened")))
+                        when (val wallpaperResponse = setWallpaper.setWallpaper(result.uri)) {
+                            is Either.Left -> emit(SetWallpaperResult.Error(wallpaperResponse.value))
                             is Either.Right -> emit(SetWallpaperResult.Ok)
                         }
                     }
