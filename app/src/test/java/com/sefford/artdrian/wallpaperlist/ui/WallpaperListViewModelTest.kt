@@ -3,6 +3,7 @@ package com.sefford.artdrian.wallpaperlist.ui
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.di.CoreModule
 import com.sefford.artdrian.di.DaggerTestComponent
+import com.sefford.artdrian.di.DoublesModule
 import com.sefford.utils.Files
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
@@ -34,6 +35,7 @@ class WallpaperListViewModelTest : Files {
     private fun initializeViewModel() {
         DaggerTestComponent.builder()
             .coreModule(CoreModule(server.url("/").toString()))
+            .doublesModule(DoublesModule())
             .build()
             .inject(viewModel)
     }

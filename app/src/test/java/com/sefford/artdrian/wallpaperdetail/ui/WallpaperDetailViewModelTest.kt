@@ -3,6 +3,7 @@ package com.sefford.artdrian.wallpaperdetail.ui
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.di.CoreModule
 import com.sefford.artdrian.di.DaggerTestComponent
+import com.sefford.artdrian.di.DoublesModule
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
 import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 import com.sefford.utils.Files
@@ -38,6 +39,7 @@ class WallpaperDetailViewModelTest: Files {
     private fun initializeViewModel() {
         DaggerTestComponent.builder()
             .coreModule(CoreModule(server.url("/").toString()))
+            .doublesModule(DoublesModule())
             .build()
             .plus(WallpaperDetailModule(WALLPAPER_ID))
             .inject(viewModel)

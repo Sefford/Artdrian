@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.core.content.ContextCompat
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
+import com.sefford.artdrian.common.WallpaperAdapter
+import com.sefford.artdrian.common.WallpaperAdapterImpl
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -20,4 +22,8 @@ class AndroidModule {
     @Provides
     @Singleton
     fun provideFileManager(@Application context: Context, client: OkHttpClient): FileManager = FileManagerImpl(context, client)
+
+    @Provides
+    @Singleton
+    fun provideWallpaperAdapter(wallpaperManager: WallpaperManager): WallpaperAdapter = WallpaperAdapterImpl(wallpaperManager)
 }
