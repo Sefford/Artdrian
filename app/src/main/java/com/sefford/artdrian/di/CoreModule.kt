@@ -35,10 +35,6 @@ class CoreModule(val endpoint: String) {
 
     @Provides
     @Singleton
-    fun provideWallpaperApi(retrofit: Retrofit): WallpaperApi = retrofit.create(WallpaperApi::class.java)
-
-    @Provides
-    @Singleton
     fun provideLocalWallpaperCache(): WallpaperMemoryDataSource = WallpaperMemoryDataSource()
 
     @Provides

@@ -1,5 +1,7 @@
 package com.sefford.artdrian.wallpaperdetail.ui
 
+import android.Manifest
+import android.os.Build
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -24,16 +26,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.*
+import com.sefford.artdrian.utils.isAtLeastAPI
 import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WallpaperDetailScreen(viewState: ViewState, name: String) {
+fun WallpaperDetailScreen(
+    viewState: ViewState,
+    name: String,
+    onSaveClicked: () -> Unit = {},
+    onApplyClicked: () -> Unit = {}
+) {
     ArtdrianTheme {
         Scaffold(
             topBar = {
@@ -53,7 +63,11 @@ fun WallpaperDetailScreen(viewState: ViewState, name: String) {
                 ) {
                     when (viewState) {
                         ViewState.Loading -> ShowLoading()
-                        is ViewState.Content -> ShowWallpaper(viewState.wallpaper)
+                        is ViewState.Content -> ShowWallpaper(
+                            wallpaper = viewState.wallpaper,
+                            onSaveClicked = onSaveClicked,
+                            onApplyClicked = onApplyClicked
+                        )
                         is ViewState.NotFound -> ShowError()
                     }
                 }
@@ -73,7 +87,11 @@ private fun ShowLoading() {
 }
 
 @Composable
-private fun ShowWallpaper(wallpaper: Wallpaper) {
+private fun ShowWallpaper(
+    wallpaper: Wallpaper,
+    onSaveClicked: () -> Unit = {},
+    onApplyClicked: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .padding(8.dp)
@@ -112,14 +130,38 @@ private fun ShowWallpaper(wallpaper: Wallpaper) {
                 icon = Icons.Sharp.Download,
                 buttonText = R.string.detail_save_button,
                 buttonColor = White20,
-                iconTint = Color.White
-            ) {}
+                iconTint = Color.White,
+                onClick = decorateWithPermissions(onSaveClicked)
+            )
             ButtonWithLabel(
                 icon = Icons.Default.Wallpaper,
                 buttonText = R.string.detail_apply_button,
                 buttonColor = Black80,
-                iconTint = Color.White
-            ) {}
+                iconTint = Color.White,
+                onClick = decorateWithPermissions(onApplyClicked)
+            )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalPermissionsApi::class)
+private fun decorateWithPermissions(onPermissionsGranted: () -> Unit): () -> Unit {
+    val permissionsState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+    ) { permissions ->
+        if (permissions.all { (_, status) -> status }) {
+            onPermissionsGranted()
+        }
+    }
+    return {
+        if (permissionsState.allPermissionsGranted || isAtLeastAPI(Build.VERSION_CODES.Q)) {
+            onPermissionsGranted()
+        } else {
+            permissionsState.launchMultiplePermissionRequest()
         }
     }
 }

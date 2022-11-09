@@ -1,0 +1,14 @@
+{
+  "__class__": "Left",
+  "value": {
+    "__class__": "PersistingError",
+    "exception": {
+      "__class__": "IllegalStateException",
+      "detailMessage": "This was an error",
+      "stackTrace": [],
+      "suppressedExceptions": []
+    }
+  },
+  "isLeft": true,
+  "isRight": false
+}

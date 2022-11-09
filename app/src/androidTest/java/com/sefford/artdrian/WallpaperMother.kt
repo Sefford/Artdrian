@@ -7,11 +7,12 @@ import java.time.ZoneOffset
 import java.util.*
 
 object WallpaperMother {
+    const val FIRST_ID = "1"
 
     val WALLPAPER_LIST = listOf(
         Wallpaper(
             Metadata(
-            id = "1",
+            id = FIRST_ID,
             slug = "ghost_waves_001",
             views = 123,
             downloads = 456,
