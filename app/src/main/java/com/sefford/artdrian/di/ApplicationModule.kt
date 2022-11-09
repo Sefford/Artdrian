@@ -8,13 +8,10 @@ import dagger.Provides
 import com.sefford.artdrian.di.Application as ApplicationContext
 
 @Module
-class ApplicationModule(val application: Artpplication) {
+class ApplicationModule(val application: Application) {
 
     @Provides
     fun provideApplication(): Application = application
-
-    @Provides
-    fun provideArtpplication(): Artpplication = application
 
     @Provides
     @ApplicationContext
