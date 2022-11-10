@@ -2,29 +2,27 @@ package com.sefford.artdrian.usecases
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.common.FakeFileManager
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DownloadWallpaperTest {
 
     private lateinit var useCase: DownloadWallpaper
 
     @Test
-    fun `returns an URI when the file is successfully saved`() {
-        useCase = DownloadWallpaper(FakeFileManager{ ANY_SAVED_WALLPAPER_URI })
+    fun `returns an URI when the file is successfully saved`() = runTest {
+        useCase = DownloadWallpaper(FakeFileManager { ANY_SAVED_WALLPAPER_URI })
 
-        runBlocking {
-            useCase.download(ANY_WALLPAPER_URL).matchWithSnapshot()
-        }
+        useCase.download(ANY_WALLPAPER_URL).matchWithSnapshot()
     }
 
     @Test
-    fun `returns an PersistenceError with the underlying exception`() {
-        useCase = DownloadWallpaper(FakeFileManager{ throw IllegalStateException("This was an error") })
+    fun `returns an PersistenceError with the underlying exception`() = runTest {
+        useCase = DownloadWallpaper(FakeFileManager { throw IllegalStateException("This was an error") })
 
-        runBlocking {
-            useCase.download(ANY_WALLPAPER_URL).matchWithSnapshot()
-        }
+        useCase.download(ANY_WALLPAPER_URL).matchWithSnapshot()
     }
 
     private companion object {
