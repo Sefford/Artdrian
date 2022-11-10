@@ -5,6 +5,9 @@
     <string name="detail_apply_button">Apply</string>
     <string name="detail_save_button">Save</string>
     <string name="detail_info_button">Info</string>
+    <string name="detail_info_downloads">%1$d downloads</string>
+    <string name="detail_info_copyright">© 2022 CRAFTED WITH LOVE BY ADRIÁN MATO</string>
+    <string name="detail_close_button">Close</string>
     <string name="detail_save_saving_success">Wallpaper has been saved</string>
     <string name="detail_save_saving_error">Something happened trying to download the wallpaper</string>
     <string name="detail_apply_success">Wallpaper has been set</string>
