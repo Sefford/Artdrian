@@ -5,25 +5,23 @@ import com.sefford.artdrian.di.CoreModule
 import com.sefford.artdrian.di.DaggerTestComponent
 import com.sefford.artdrian.di.DoublesModule
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 import com.sefford.utils.Files
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.Before
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-
 import org.junit.jupiter.api.Assertions.*
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
-class WallpaperDetailViewModelTest: Files {
+class WallpaperDetailViewModelTest : Files {
 
     lateinit var viewModel: WallpaperDetailViewModel
     lateinit var server: MockWebServer
@@ -46,49 +44,41 @@ class WallpaperDetailViewModelTest: Files {
     }
 
     @org.junit.Test
-    fun `returns a Content View after a successful retrieval from the repository`() {
+    fun `returns a Content View after a successful retrieval from the repository`() = runTest {
         server.enqueue(
             MockResponse().setResponseCode(200)
                 .setBody("com/sefford/artdrian/usecases/metadata_response.json".readResourceFromFile())
         )
 
-        runBlocking {
-            viewModel.getWallpaper().last().matchWithSnapshot()
-        }
+        viewModel.getWallpaper().last().matchWithSnapshot()
     }
 
     @org.junit.Test
-    fun `notifies an error occurred during the retrieval`() {
+    fun `notifies an error occurred during the retrieval`() = runTest {
         server.enqueue(MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AT_START))
 
-        runBlocking {
-            viewModel.getWallpaper().last().matchWithSnapshot()
-        }
+        viewModel.getWallpaper().last().matchWithSnapshot()
     }
 
     @org.junit.Test
-    fun `sets the loading spinner when attempting to load`() {
+    fun `sets the loading spinner when attempting to load`() = runTest {
         server.enqueue(
             MockResponse().setResponseCode(200)
                 .setBody("com/sefford/artdrian/usecases/metadata_response.json".readResourceFromFile())
         )
 
-        runBlocking {
-            viewModel.getWallpaper().first().matchWithSnapshot()
-        }
+        viewModel.getWallpaper().first().matchWithSnapshot()
     }
 
     @org.junit.Test
-    fun `re-requesting the view model info skips the loading`() {
+    fun `re-requesting the view model info skips the loading`() = runTest {
         server.enqueue(
             MockResponse().setResponseCode(200)
                 .setBody("com/sefford/artdrian/usecases/metadata_response.json".readResourceFromFile())
         )
 
-        runBlocking {
-            viewModel.getWallpaper().last()
-            viewModel.getWallpaper().toList().matchWithSnapshot()
-        }
+        viewModel.getWallpaper().last()
+        viewModel.getWallpaper().toList().matchWithSnapshot()
     }
 
     private companion object {
