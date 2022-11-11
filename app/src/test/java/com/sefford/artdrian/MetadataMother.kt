@@ -26,6 +26,14 @@ object MetadataMother {
         created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
         updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
     )
+    val GHOST_WAVES_003 = Metadata(
+        id = SECOND_METADATA_ID,
+        slug = "ghost_waves_003",
+        views = 100,
+        downloads = 200,
+        created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
+        updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
+    )
     val EXAMPLE_METADATA = listOf(
         FIRST_METADATA
     )
