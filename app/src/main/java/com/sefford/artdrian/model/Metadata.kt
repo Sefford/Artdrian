@@ -11,3 +11,6 @@ data class Metadata(
   @SerializedName("CreatedAt") val created: Date,
   @SerializedName("UpdatedAt") val updated: Date
 )
+
+fun Metadata.isPngFile(): Boolean = this.slug != "ghost_waves_003"
+
