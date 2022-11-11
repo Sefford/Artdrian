@@ -20,7 +20,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(RobolectricTestRunner::class)
 class WallpaperDetailViewModelTest : Files {
 
     lateinit var viewModel: WallpaperDetailViewModel
