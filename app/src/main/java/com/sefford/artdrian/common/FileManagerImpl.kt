@@ -3,7 +3,6 @@ package com.sefford.artdrian.common
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -12,6 +11,8 @@ import androidx.core.net.toUri
 import com.sefford.artdrian.di.Application
 import com.sefford.artdrian.utils.getUriFromPath
 import com.sefford.artdrian.utils.isAtLeastAPI
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -24,14 +25,17 @@ import javax.inject.Singleton
 @Singleton
 class FileManagerImpl @Inject constructor(
     @Application private val context: Context,
-    private val client: OkHttpClient
+    private val client: OkHttpClient,
+    private val mutex: Mutex = Mutex()
 ) : FileManager {
 
     override suspend fun saveFileIntoDirectory(source: String, target: String): String {
-        return if (isAtLeastAPI(Build.VERSION_CODES.Q)) {
-            saveToMediaStorage(source, target)
-        } else {
-            saveToExternalStorage(source, target)
+        return mutex.withLock {
+            if (isAtLeastAPI(Build.VERSION_CODES.Q)) {
+                saveToMediaStorage(source, target)
+            } else {
+                saveToExternalStorage(source, target)
+            }
         }
     }
 
