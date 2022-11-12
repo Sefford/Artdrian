@@ -7,11 +7,14 @@ import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.model.Metadata
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 class WallpaperRepository @Inject constructor(
     private val api: WallpaperApi,
-    private val local: WallpaperMemoryDataSource
+    private val local: WallpaperMemoryDataSource,
+    private val mutex: Mutex = Mutex()
 ) {
 
     private suspend fun getAllMetadataFromApi(
@@ -19,7 +22,9 @@ class WallpaperRepository @Inject constructor(
     ): Either<RepositoryError, List<Metadata>> =
         try {
             val response = api.getAllMetadata()
-            local.saveMetadata(response)
+            mutex.withLock {
+                local.saveMetadata(response)
+            }
             response.right()
         } catch (x: Exception) {
             onError()
@@ -42,7 +47,7 @@ class WallpaperRepository @Inject constructor(
         id: String,
         onError: suspend (RepositoryError) -> Either<RepositoryError, Metadata> = { it.left() }
     ): Either<RepositoryError, Metadata> =
-        local.getWallpaperMetadata(id).fold({ onError(it) }) { it.right()}
+        local.getWallpaperMetadata(id).fold({ onError(it) }) { it.right() }
 
     suspend fun getAllMetadata(cachePolicy: CachePolicy = PRIORITIZE_LOCAL): Either<RepositoryError, List<Metadata>> {
         return when (cachePolicy) {
