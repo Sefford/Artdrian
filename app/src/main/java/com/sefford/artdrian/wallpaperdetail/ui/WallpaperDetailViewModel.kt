@@ -9,8 +9,10 @@ import com.sefford.artdrian.usecases.GetWallpaper
 import com.sefford.artdrian.usecases.SetWallpaper
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperId
 import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState.Loading
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class WallpaperDetailViewModel : ViewModel() {
@@ -23,6 +25,9 @@ class WallpaperDetailViewModel : ViewModel() {
 
     @Inject
     protected lateinit var setWallpaper: SetWallpaper
+
+    @Inject
+    protected lateinit var dispatcher: CoroutineDispatcher
 
     @Inject
     @WallpaperId
@@ -43,7 +48,7 @@ class WallpaperDetailViewModel : ViewModel() {
                         }
                     }
                 }) { wallpaper -> emit(ViewState.Content(wallpaper)) }
-        }
+        }.flowOn(dispatcher)
     }
 
     fun downloadWallpaper(): Flow<DownloadResult> {
@@ -56,7 +61,7 @@ class WallpaperDetailViewModel : ViewModel() {
                     is Either.Right -> emit(DownloadResult.Response(response.value))
                 }
             }
-        }
+        }.flowOn(dispatcher)
     }
 
     fun applyWallpaper(): Flow<SetWallpaperResult> {
@@ -72,7 +77,7 @@ class WallpaperDetailViewModel : ViewModel() {
                     }
                 }
         }
-    }
+    }.flowOn(dispatcher)
 }
 
 sealed class ViewState {

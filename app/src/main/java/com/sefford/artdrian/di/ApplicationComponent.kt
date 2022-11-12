@@ -7,7 +7,12 @@ import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 import dagger.Component
 import javax.inject.Singleton
 
-@Component(modules = [ApplicationModule::class, CoreModule::class, AndroidModule::class, ApiModule::class])
+@Component(modules = [
+    ApplicationModule::class,
+    AndroidModule::class,
+    ConcurrencyModule::class,
+    CoreModule::class,
+    ApiModule::class])
 @Singleton
 interface ApplicationComponent {
 
