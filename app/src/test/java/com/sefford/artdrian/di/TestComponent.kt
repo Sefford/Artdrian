@@ -7,7 +7,10 @@ import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 import dagger.Component
 import javax.inject.Singleton
 
-@Component(modules = [CoreModule::class, DoublesModule::class, ApiModule::class])
+@Component(modules = [
+    ApiModule::class,
+    CoreModule::class,
+    DoublesModule::class])
 @Singleton
 interface TestComponent {
 

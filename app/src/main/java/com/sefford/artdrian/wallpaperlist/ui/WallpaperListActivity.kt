@@ -29,7 +29,7 @@ class WallpaperListActivity : ComponentActivity() {
     private fun requestWallpapers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getWallpapers().flowOn(Dispatchers.IO).collect { response ->
+                viewModel.getWallpapers().collect { response ->
                     setContent {
                         WallpaperListScreen(response) { wallpaperId, wallpaperName ->
                             goToDetail(wallpaperId, wallpaperName)

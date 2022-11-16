@@ -33,7 +33,7 @@ class WallpaperDetailActivity : ComponentActivity() {
     private fun requestWallpaper(name: String) {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getWallpaper().flowOn(Dispatchers.IO).collect { viewState ->
+                viewModel.getWallpaper().collect { viewState ->
                     setContent {
                         WallpaperDetailScreen(
                             viewState = viewState,
@@ -48,7 +48,7 @@ class WallpaperDetailActivity : ComponentActivity() {
 
     private fun saveWallpaper() {
         lifecycleScope.launch {
-            viewModel.downloadWallpaper().flowOn(Dispatchers.IO).collect { result ->
+            viewModel.downloadWallpaper().collect { result ->
                 val message = when (result) {
                     is WallpaperDetailViewModel.DownloadResult.Error -> R.string.detail_save_saving_error
                     is WallpaperDetailViewModel.DownloadResult.Response -> R.string.detail_save_saving_success
@@ -60,7 +60,7 @@ class WallpaperDetailActivity : ComponentActivity() {
 
     private fun applyWallpaper() {
         lifecycleScope.launch {
-            viewModel.applyWallpaper().flowOn(Dispatchers.IO).collect { result ->
+            viewModel.applyWallpaper().collect { result ->
                 val message = when (result) {
                     is WallpaperDetailViewModel.SetWallpaperResult.Error -> R.string.detail_apply_error
                     WallpaperDetailViewModel.SetWallpaperResult.Ok -> R.string.detail_apply_success

@@ -8,14 +8,19 @@ import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.Netw
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.usecases.GetWallpapers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class WallpaperListViewModel : ViewModel() {
 
     @Inject
     protected lateinit var getWallpapers: GetWallpapers
+
+    @Inject
+    protected lateinit var dispatcher: CoroutineDispatcher
 
     private val wallpapers: MutableList<Wallpaper> = mutableListOf()
 
@@ -36,7 +41,7 @@ class WallpaperListViewModel : ViewModel() {
                     }
                 }
             }
-        }
+        }.flowOn(dispatcher)
     }
 
     sealed class ViewState {

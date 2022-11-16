@@ -6,6 +6,8 @@ import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
@@ -21,4 +23,7 @@ class DoublesModule(
     @Provides
     @Singleton
     fun provideFakeWallpaperAdapter(): WallpaperAdapter = FakeWallpaperAdapter(wallpaperManagerResponse)
+
+    @Provides
+    fun provideTestDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
