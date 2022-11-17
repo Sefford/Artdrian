@@ -26,7 +26,6 @@
         <activity
             android:name=".wallpaperlist.ui.WallpaperListActivity"
             android:exported="true"
-            android:label="@string/title_activity_wallpaper_list"
             android:theme="@style/Theme.Artdrian"
             >
             <meta-data
