@@ -1,15 +1,14 @@
 package com.sefford.artdrian.datasources
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
-import com.sefford.artdrian.MetadataMother.FIRST_METADATA
-import com.sefford.artdrian.MetadataMother.SECOND_METADATA
+import com.sefford.artdrian.MetadataMother.FIRST_METADATADTO
+import com.sefford.artdrian.MetadataMother.SECOND_METADATADTO
 import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.data.datasources.WallpaperRepository
 import com.sefford.artdrian.data.datasources.WallpaperRepository.CachePolicy.*
+import com.sefford.artdrian.data.dto.toDomain
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -31,9 +30,9 @@ class WallpaperRepositoryTest {
 
         @BeforeEach
         fun setUp() = runTest {
-            api = FakeWallpaperApi { listOf(FIRST_METADATA) }
+            api = FakeWallpaperApi { listOf(FIRST_METADATADTO) }
             local = WallpaperMemoryDataSource()
-            local.saveMetadata(listOf(SECOND_METADATA))
+            local.saveMetadata(listOf(SECOND_METADATADTO).map { it.toDomain() })
             repository = WallpaperRepository(api, local)
         }
 
@@ -56,7 +55,7 @@ class WallpaperRepositoryTest {
 
         @Test
         fun `empty local cache defaults to network on PRIORITIZE_LOCAL`() = runTest {
-            val api = FakeWallpaperApi { listOf(FIRST_METADATA) }
+            val api = FakeWallpaperApi { listOf(FIRST_METADATADTO) }
             val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
 
             repository.getAllMetadata(WallpaperRepository.CachePolicy.PRIORITIZE_LOCAL).matchWithSnapshot()
@@ -68,7 +67,7 @@ class WallpaperRepositoryTest {
             val local = WallpaperMemoryDataSource()
             val repository = WallpaperRepository(api, local)
 
-            local.saveMetadata(listOf(SECOND_METADATA))
+            local.saveMetadata(listOf(SECOND_METADATADTO).map { it.toDomain() })
 
             repository.getAllMetadata(PRIORITIZE_NETWORK).matchWithSnapshot()
         }

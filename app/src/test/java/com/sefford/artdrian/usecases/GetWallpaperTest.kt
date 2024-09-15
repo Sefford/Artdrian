@@ -7,7 +7,6 @@ import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.data.datasources.WallpaperRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -20,7 +19,7 @@ class GetWallpaperTest {
     @BeforeEach
     fun setUp() {
         local = WallpaperMemoryDataSource()
-        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { listOf(MetadataMother.FIRST_METADATA) }, local))
+        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { listOf(MetadataMother.FIRST_METADATADTO) }, local))
     }
 
     @Test
