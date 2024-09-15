@@ -2,9 +2,9 @@ package com.sefford.artdrian.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sefford.artdrian.datasources.WallpaperApi
-import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
-import com.sefford.artdrian.datasources.WallpaperRepository
+import com.sefford.artdrian.data.datasources.WallpaperApi
+import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
+import com.sefford.artdrian.data.datasources.WallpaperRepository
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient

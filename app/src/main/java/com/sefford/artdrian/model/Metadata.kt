@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName
 import java.util.Date
 
 data class Metadata(
-  @SerializedName("ID") val id: String,
-  @SerializedName("Slug") val slug: String,
-  @SerializedName("Views") val views: Int,
-  @SerializedName("Downloads") val downloads: Int,
-  @SerializedName("CreatedAt") val created: Date,
-  @SerializedName("UpdatedAt") val updated: Date
+  val id: String,
+  val slug: String,
+  val views: Int,
+  val downloads: Int,
+  val created: Date,
+  val updated: Date
 )
 
 fun Metadata.isPngFile(): Boolean = this.slug != "ghost_waves_003"

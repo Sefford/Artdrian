@@ -3,8 +3,8 @@ package com.sefford.artdrian.usecases
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
 import com.sefford.artdrian.datasources.FakeWallpaperApi
-import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
-import com.sefford.artdrian.datasources.WallpaperRepository
+import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
+import com.sefford.artdrian.data.datasources.WallpaperRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.*

@@ -2,9 +2,9 @@ package com.sefford.artdrian.usecases
 
 import com.google.gson.Gson
 import com.karumi.kotlinsnapshot.matchWithSnapshot
-import com.sefford.artdrian.datasources.WallpaperApi
-import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
-import com.sefford.artdrian.datasources.WallpaperRepository
+import com.sefford.artdrian.data.datasources.WallpaperApi
+import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
+import com.sefford.artdrian.data.datasources.WallpaperRepository
 import com.sefford.utils.Files
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

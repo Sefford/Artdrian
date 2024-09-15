@@ -1,6 +1,6 @@
 package com.sefford.artdrian.di
 
-import com.sefford.artdrian.datasources.WallpaperApi
+import com.sefford.artdrian.data.datasources.WallpaperApi
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

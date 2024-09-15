@@ -3,7 +3,9 @@ package com.sefford.artdrian.datasources
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother.FIRST_METADATA
 import com.sefford.artdrian.MetadataMother.SECOND_METADATA
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
+import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
+import com.sefford.artdrian.data.datasources.WallpaperRepository
+import com.sefford.artdrian.data.datasources.WallpaperRepository.CachePolicy.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

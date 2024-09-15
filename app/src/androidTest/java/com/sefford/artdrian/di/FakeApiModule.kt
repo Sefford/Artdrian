@@ -2,7 +2,7 @@ package com.sefford.artdrian.di
 
 import com.sefford.artdrian.WallpaperMother.WALLPAPER_LIST
 import com.sefford.artdrian.datasources.FakeWallpaperApi
-import com.sefford.artdrian.datasources.WallpaperApi
+import com.sefford.artdrian.data.datasources.WallpaperApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

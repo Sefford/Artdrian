@@ -2,6 +2,7 @@ package com.sefford.artdrian.datasources
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
+import com.sefford.artdrian.data.datasources.WallpaperMemoryDataSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach

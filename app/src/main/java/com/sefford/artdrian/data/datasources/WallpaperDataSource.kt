@@ -1,7 +1,7 @@
-package com.sefford.artdrian.datasources
+package com.sefford.artdrian.data.datasources
 
 import arrow.core.Either
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
+import com.sefford.artdrian.data.datasources.WallpaperRepository.RepositoryError
 import com.sefford.artdrian.model.Metadata
 
 interface WallpaperDataSource {

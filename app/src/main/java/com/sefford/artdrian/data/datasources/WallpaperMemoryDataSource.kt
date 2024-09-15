@@ -1,10 +1,10 @@
-package com.sefford.artdrian.datasources
+package com.sefford.artdrian.data.datasources
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.datasources.WallpaperRepository.RepositoryError
+import com.sefford.artdrian.data.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.model.Metadata
 
 class WallpaperMemoryDataSource(

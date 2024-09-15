@@ -1,11 +1,12 @@
-package com.sefford.artdrian.datasources
+package com.sefford.artdrian.data.datasources
 
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.datasources.WallpaperRepository.CachePolicy.*
+import com.sefford.artdrian.data.datasources.WallpaperRepository.RepositoryError.NetworkingError
+import com.sefford.artdrian.data.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.dto.toDomain
 import com.sefford.artdrian.model.Metadata
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -23,9 +24,9 @@ class WallpaperRepository @Inject constructor(
         try {
             val response = api.getAllMetadata()
             mutex.withLock {
-                local.saveMetadata(response)
+                local.saveMetadata(response.map { it.toDomain() })
             }
-            response.right()
+            response.map { it.toDomain() }.right()
         } catch (x: Exception) {
             onError()
         }

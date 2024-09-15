@@ -1,7 +1,7 @@
 package com.sefford.artdrian.test
 
 import android.app.Application
-import com.sefford.artdrian.Endpoints
+import com.sefford.artdrian.data.Endpoints
 import com.sefford.artdrian.TopComponentHolder
 import com.sefford.artdrian.di.ApplicationComponent
 import com.sefford.artdrian.di.ApplicationModule
