@@ -67,7 +67,7 @@ fun WallpaperCard(
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            Metadata("", 98, 123, "test", Date(), Date())
+            Metadata("", "title",98, 123, "test", Date(), Date())
         )
     )
 }

@@ -346,6 +346,7 @@ private fun showContent() {
             Wallpaper(
                 Metadata(
                     id = "6",
+                    title = "ghost_waves_001",
                     views = 123,
                     downloads = 456,
                     slug = "ghost_waves_001",

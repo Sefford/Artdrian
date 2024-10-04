@@ -35,6 +35,6 @@ object MetadataMother {
         updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
     )
     val EXAMPLE_METADATA = listOf(
-        FIRST_METADATA_DTO
+        SECOND_METADATA
     )
 }

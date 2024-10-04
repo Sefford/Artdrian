@@ -5,6 +5,7 @@ import java.util.Date
 
 class Metadata(
     val id: String,
+    val title: String,
     val views: Int,
     val downloads: Int,
     val slug: String,
@@ -14,6 +15,7 @@ class Metadata(
 
     constructor(dto: MetadataDto) : this(
         id = dto.id,
+        title = dto.title,
         views = 0,
         downloads = dto.downloads,
         slug = dto.slug,

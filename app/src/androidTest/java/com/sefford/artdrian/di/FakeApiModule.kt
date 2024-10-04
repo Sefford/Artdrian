@@ -1,6 +1,6 @@
 package com.sefford.artdrian.di
 
-import com.sefford.artdrian.WallpaperMother.WALLPAPER_LIST
+import com.sefford.artdrian.WallpaperMother.WALLPAPER_LIST_DTO
 import com.sefford.artdrian.data.dto.WallpaperResponse
 import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperApi
@@ -14,7 +14,8 @@ class FakeApiModule {
 
     @Provides
     @Singleton
-    fun providesWallpaperApi(): WallpaperApi = FakeWallpaperApi{ WallpaperResponse(WALLPAPER_LIST.map { it.metadata }) }
+    fun providesWallpaperApi(): WallpaperApi =
+        FakeWallpaperApi { WallpaperResponse(WALLPAPER_LIST_DTO) }
 
     @Provides
     @Singleton
