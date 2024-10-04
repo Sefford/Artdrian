@@ -67,7 +67,7 @@ private fun ShowWallpapers(wallpapers: List<Wallpaper>, onItemClick: (String, St
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(wallpapers) { wallpaper ->
-            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.metadata.id, wallpaper.name) })
+            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.metadataDto.id, wallpaper.name) })
         }
     }
 }

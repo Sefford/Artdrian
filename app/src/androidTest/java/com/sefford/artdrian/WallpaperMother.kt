@@ -1,6 +1,6 @@
 package com.sefford.artdrian
 
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Wallpaper
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -11,16 +11,17 @@ object WallpaperMother {
 
     val WALLPAPER_LIST = listOf(
         Wallpaper(
-            Metadata(
+            MetadataDto(
             id = FIRST_ID,
             slug = "ghost_waves_001",
             views = 123,
             downloads = 456,
             created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
             updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
-        )),
+        )
+        ),
         Wallpaper(
-            Metadata(
+            MetadataDto(
                 id = "2",
                 slug = "ghost_waves_002",
                 views = 100,

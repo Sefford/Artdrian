@@ -2,7 +2,7 @@ package com.sefford.artdrian.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
+import com.sefford.artdrian.data.dto.WallpaperResponse
 import com.sefford.artdrian.data.dto.deserializers.WallpaperResponseDeserializer
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource

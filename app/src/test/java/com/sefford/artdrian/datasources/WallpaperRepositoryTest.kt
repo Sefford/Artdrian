@@ -1,14 +1,12 @@
 package com.sefford.artdrian.datasources
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
-import com.sefford.artdrian.MetadataMother.FIRST_METADATA
-import com.sefford.artdrian.MetadataMother.SECOND_METADATA
-import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
+import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
+import com.sefford.artdrian.MetadataMother.SECOND_METADATA_DTO
+import com.sefford.artdrian.data.dto.WallpaperResponse
 import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -30,9 +28,9 @@ class WallpaperRepositoryTest {
 
         @BeforeEach
         fun setUp() = runTest {
-            api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA)) }
+            api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA_DTO)) }
             local = WallpaperMemoryDataSource()
-            local.saveMetadata(listOf(SECOND_METADATA))
+            local.saveMetadata(listOf(SECOND_METADATA_DTO))
             repository = WallpaperRepository(api, local)
         }
 
@@ -55,7 +53,7 @@ class WallpaperRepositoryTest {
 
         @Test
         fun `empty local cache defaults to network on PRIORITIZE_LOCAL`() = runTest {
-            val api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA)) }
+            val api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA_DTO)) }
             val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
 
             repository.getAllMetadata(WallpaperRepository.CachePolicy.PRIORITIZE_LOCAL).matchWithSnapshot()
@@ -67,7 +65,7 @@ class WallpaperRepositoryTest {
             val local = WallpaperMemoryDataSource()
             val repository = WallpaperRepository(api, local)
 
-            local.saveMetadata(listOf(SECOND_METADATA))
+            local.saveMetadata(listOf(SECOND_METADATA_DTO))
 
             repository.getAllMetadata(PRIORITIZE_NETWORK).matchWithSnapshot()
         }

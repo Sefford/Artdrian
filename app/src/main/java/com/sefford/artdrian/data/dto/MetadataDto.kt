@@ -1,9 +1,9 @@
-package com.sefford.artdrian.model
+package com.sefford.artdrian.data.dto
 
 import com.google.gson.annotations.SerializedName
 import java.util.Date
 
-data class Metadata(
+data class MetadataDto(
   @SerializedName("_id") val id: String,
   @SerializedName("slug") val slug: String,
   @SerializedName("Views") val views: Int,
@@ -12,5 +12,5 @@ data class Metadata(
   @SerializedName("UpdatedAt") val updated: Date
 )
 
-fun Metadata.isPngFile(): Boolean = this.slug.contains("png")
+fun MetadataDto.isPngFile(): Boolean = this.slug.contains("png")
 

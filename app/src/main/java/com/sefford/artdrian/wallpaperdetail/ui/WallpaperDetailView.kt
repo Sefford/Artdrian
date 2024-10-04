@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
+import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.*
 import com.sefford.artdrian.utils.isAtLeastAPI
@@ -165,7 +166,7 @@ private fun InfoOverlay(
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
             Text(
-                stringResource(id = R.string.detail_info_downloads, wallpaper.metadata.downloads),
+                stringResource(id = R.string.detail_info_downloads, wallpaper.metadataDto.downloads),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -343,7 +344,7 @@ private fun showContent() {
     WallpaperDetailScreen(
         ViewState.Content(
             Wallpaper(
-                com.sefford.artdrian.model.Metadata(
+                MetadataDto(
                     id = "6",
                     views = 123,
                     downloads = 456,
