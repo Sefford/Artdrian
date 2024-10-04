@@ -1,10 +1,10 @@
 package com.sefford.artdrian.datasources
 
+import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
 import retrofit2.http.GET
-import com.sefford.artdrian.model.Metadata
 
 interface WallpaperApi {
 
-    @GET("/")
-    suspend fun getAllMetadata(): List<Metadata>
+    @GET("index.json")
+    suspend fun getAllMetadata(): WallpaperResponse
 }

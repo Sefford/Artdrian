@@ -1,0 +1,40 @@
+{
+  "__class__": "WallpaperResponse",
+  "wallpapers": [
+    {
+      "__class__": "Metadata",
+      "_id": "wallpapers/ghost_waves_004.mdx",
+      "slug": "ghost_waves_004",
+      "Views": 0,
+      "Downloads": 0
+    },
+    {
+      "__class__": "Metadata",
+      "_id": "wallpapers/ghost_waves_003.mdx",
+      "slug": "ghost_waves_003",
+      "Views": 0,
+      "Downloads": 0
+    },
+    {
+      "__class__": "Metadata",
+      "_id": "wallpapers/caustics_001.mdx",
+      "slug": "caustics_001",
+      "Views": 0,
+      "Downloads": 0
+    },
+    {
+      "__class__": "Metadata",
+      "_id": "wallpapers/ghost_waves_002.mdx",
+      "slug": "ghost_waves_002",
+      "Views": 0,
+      "Downloads": 0
+    },
+    {
+      "__class__": "Metadata",
+      "_id": "wallpapers/ghost_waves_001.mdx",
+      "slug": "ghost_waves_001",
+      "Views": 0,
+      "Downloads": 0
+    }
+  ]
+}

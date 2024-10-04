@@ -2,6 +2,7 @@ package com.sefford.artdrian.usecases
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
+import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
 import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
@@ -20,7 +21,7 @@ class GetWallpaperTest {
     @BeforeEach
     fun setUp() {
         local = WallpaperMemoryDataSource()
-        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { listOf(MetadataMother.FIRST_METADATA) }, local))
+        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { WallpaperResponse(listOf(MetadataMother.FIRST_METADATA)) }, local))
     }
 
     @Test
