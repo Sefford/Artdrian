@@ -1,7 +1,6 @@
 package com.sefford.artdrian.model
 
 import com.sefford.artdrian.MetadataMother
-import com.sefford.artdrian.data.dto.isPngFile
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import net.jqwik.api.*
@@ -12,12 +11,12 @@ class WallpaperTest {
 
     @Test
     fun `Ghost Waves 003 indicates it is a JPG wallpaper`() {
-        Wallpaper(MetadataMother.GHOST_WAVES_003).metadataDto.isPngFile().shouldBeFalse()
+        Wallpaper(MetadataMother.GHOST_WAVES_003).metadata.isPngFile().shouldBeFalse()
     }
 
     @Property
     fun `any other wallpaper indicates it is a PNG wallpaper`(@ForAll("slugs") slug: String) {
-        Wallpaper(MetadataMother.FIRST_METADATA_DTO.copy(slug = slug)).metadataDto.isPngFile().shouldBeTrue()
+        Wallpaper(MetadataMother.FIRST_METADATA_DTO.copy(slug = slug)).metadata.isPngFile().shouldBeTrue()
     }
 
     @Provide

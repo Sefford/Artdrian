@@ -3,13 +3,14 @@ package com.sefford.artdrian.datasources
 import arrow.core.Either
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
 import com.sefford.artdrian.data.dto.MetadataDto
+import com.sefford.artdrian.model.Metadata
 
 interface WallpaperDataSource {
 
-    suspend fun getAllMetadata(): Either<RepositoryError, List<MetadataDto>>
+    suspend fun getAllMetadata(): Either<RepositoryError, List<Metadata>>
 
-    suspend fun saveMetadata(metadataDtoList: List<MetadataDto>)
+    suspend fun saveMetadata(metadataDtoList: List<Metadata>)
 
-    suspend fun getWallpaperMetadata(id: String): Either<RepositoryError, MetadataDto>
+    suspend fun getWallpaperMetadata(id: String): Either<RepositoryError, Metadata>
 
 }

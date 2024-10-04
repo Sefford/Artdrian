@@ -6,23 +6,24 @@ import arrow.core.right
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.data.dto.MetadataDto
+import com.sefford.artdrian.model.Metadata
 
 class WallpaperMemoryDataSource(
-    private val list: MutableList<MetadataDto> = mutableListOf(),
-    private val indexed: MutableMap<String, MetadataDto> = mutableMapOf()
+    private val list: MutableList<Metadata> = mutableListOf(),
+    private val indexed: MutableMap<String, Metadata> = mutableMapOf()
 ) : WallpaperDataSource {
 
-    override suspend fun saveMetadata(metadataDtoList: List<MetadataDto>) {
+    override suspend fun saveMetadata(metadataDtoList: List<Metadata>) {
         this.list.clear()
-        this.list.addAll(metadataDtoList)
+        this.list.addAll(list)
         this.indexed.clear()
-        this.indexed.putAll(metadataDtoList.associateBy { metadata -> metadata.id })
+        this.indexed.putAll(list.associateBy { metadata -> metadata.id })
     }
 
-    override suspend fun getWallpaperMetadata(id: String) : Either<RepositoryError, MetadataDto> =
+    override suspend fun getWallpaperMetadata(id: String) : Either<RepositoryError, Metadata> =
         indexed[id]?.right() ?: NotFound(id).left()
 
-    override suspend fun getAllMetadata(): Either<RepositoryError, List<MetadataDto>> {
+    override suspend fun getAllMetadata(): Either<RepositoryError, List<Metadata>> {
         return if (list.isNotEmpty()) list.right() else NotFound().left()
     }
 

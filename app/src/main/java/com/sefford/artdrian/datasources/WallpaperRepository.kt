@@ -7,6 +7,7 @@ import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.data.dto.MetadataDto
+import com.sefford.artdrian.model.Metadata
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
@@ -18,26 +19,27 @@ class WallpaperRepository @Inject constructor(
 ) {
 
     private suspend fun getAllMetadataFromApi(
-        onError: suspend () -> Either<RepositoryError, List<MetadataDto>> = { NetworkingError().left() }
-    ): Either<RepositoryError, List<MetadataDto>> =
+        onError: suspend () -> Either<RepositoryError, List<Metadata>> = { NetworkingError().left() }
+    ): Either<RepositoryError, List<Metadata>> =
         try {
             val response = api.getAllMetadata()
+            val model = response.wallpapers.map { Metadata(it) }
             mutex.withLock {
-                local.saveMetadata(response.wallpapers)
+                local.saveMetadata(model)
             }
-            response.wallpapers.right()
+            model.right()
         } catch (x: Exception) {
             onError()
         }
 
     private suspend fun getAllMetadataFromLocal(
-        onError: suspend (RepositoryError) -> Either<RepositoryError, List<MetadataDto>> = { it.left() }
-    ): Either<RepositoryError, List<MetadataDto>> = local.getAllMetadata().fold({ onError(it) }) { it.right() }
+        onError: suspend (RepositoryError) -> Either<RepositoryError, List<Metadata>> = { it.left() }
+    ): Either<RepositoryError, List<Metadata>> = local.getAllMetadata().fold({ onError(it) }) { it.right() }
 
     private suspend fun getWallpaperMetadataFromApi(
         id: String,
-        onError: suspend () -> Either<RepositoryError, MetadataDto> = { NotFound(id).left() }
-    ): Either<RepositoryError, MetadataDto> =
+        onError: suspend () -> Either<RepositoryError, Metadata> = { NotFound(id).left() }
+    ): Either<RepositoryError, Metadata> =
         getAllMetadataFromApi()
             .fold({ it.left() }) { allMetadata ->
                 allMetadata.find { metadata -> metadata.id == id }?.right() ?: onError()
@@ -45,11 +47,11 @@ class WallpaperRepository @Inject constructor(
 
     private suspend fun getWallpaperMetadataFromLocal(
         id: String,
-        onError: suspend (RepositoryError) -> Either<RepositoryError, MetadataDto> = { it.left() }
-    ): Either<RepositoryError, MetadataDto> =
+        onError: suspend (RepositoryError) -> Either<RepositoryError, Metadata> = { it.left() }
+    ): Either<RepositoryError, Metadata> =
         local.getWallpaperMetadata(id).fold({ onError(it) }) { it.right() }
 
-    suspend fun getAllMetadata(cachePolicy: CachePolicy = PRIORITIZE_LOCAL): Either<RepositoryError, List<MetadataDto>> {
+    suspend fun getAllMetadata(cachePolicy: CachePolicy = PRIORITIZE_LOCAL): Either<RepositoryError, List<Metadata>> {
         return when (cachePolicy) {
             PRIORITIZE_LOCAL -> getAllMetadataFromLocal { getAllMetadataFromApi() }
             PRIORITIZE_NETWORK -> getAllMetadataFromApi { getAllMetadataFromLocal() }
@@ -61,7 +63,7 @@ class WallpaperRepository @Inject constructor(
     suspend fun getWallpaperMetadata(
         id: String,
         cachePolicy: CachePolicy = PRIORITIZE_LOCAL
-    ): Either<RepositoryError, MetadataDto> {
+    ): Either<RepositoryError, Metadata> {
         return when (cachePolicy) {
             PRIORITIZE_LOCAL -> getWallpaperMetadataFromLocal(id) { getWallpaperMetadataFromApi(id) }
             PRIORITIZE_NETWORK -> getWallpaperMetadataFromApi(id) { getWallpaperMetadataFromLocal(id) }

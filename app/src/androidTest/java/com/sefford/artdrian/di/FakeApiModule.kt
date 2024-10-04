@@ -14,7 +14,7 @@ class FakeApiModule {
 
     @Provides
     @Singleton
-    fun providesWallpaperApi(): WallpaperApi = FakeWallpaperApi{ WallpaperResponse(WALLPAPER_LIST.map { it.metadataDto }) }
+    fun providesWallpaperApi(): WallpaperApi = FakeWallpaperApi{ WallpaperResponse(WALLPAPER_LIST.map { it.metadata }) }
 
     @Provides
     @Singleton
