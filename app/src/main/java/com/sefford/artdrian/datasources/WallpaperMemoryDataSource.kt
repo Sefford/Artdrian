@@ -13,11 +13,11 @@ class WallpaperMemoryDataSource(
     private val indexed: MutableMap<String, Metadata> = mutableMapOf()
 ) : WallpaperDataSource {
 
-    override suspend fun saveMetadata(metadataDtoList: List<Metadata>) {
+    override suspend fun saveMetadata(metadataList: List<Metadata>) {
         this.list.clear()
-        this.list.addAll(list)
+        this.list.addAll(metadataList)
         this.indexed.clear()
-        this.indexed.putAll(list.associateBy { metadata -> metadata.id })
+        this.indexed.putAll(metadataList.associateBy { metadata -> metadata.id })
     }
 
     override suspend fun getWallpaperMetadata(id: String) : Either<RepositoryError, Metadata> =

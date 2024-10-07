@@ -20,6 +20,7 @@ object MetadataMother {
     )
     val SECOND_METADATA = Metadata(
         id = SECOND_METADATA_ID,
+        title = "test_002",
         slug = "test_002",
         views = 100,
         downloads = 200,
@@ -28,6 +29,7 @@ object MetadataMother {
     )
     val GHOST_WAVES_003 = Metadata(
         id = SECOND_METADATA_ID,
+        title = "ghost_waves_003",
         slug = "ghost_waves_003",
         views = 100,
         downloads = 200,
