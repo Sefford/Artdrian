@@ -3,6 +3,7 @@ package com.sefford.artdrian.datasources
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother.FIRST_METADATA
 import com.sefford.artdrian.MetadataMother.SECOND_METADATA
+import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
 import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -29,7 +30,7 @@ class WallpaperRepositoryTest {
 
         @BeforeEach
         fun setUp() = runTest {
-            api = FakeWallpaperApi { listOf(FIRST_METADATA) }
+            api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA)) }
             local = WallpaperMemoryDataSource()
             local.saveMetadata(listOf(SECOND_METADATA))
             repository = WallpaperRepository(api, local)
@@ -54,7 +55,7 @@ class WallpaperRepositoryTest {
 
         @Test
         fun `empty local cache defaults to network on PRIORITIZE_LOCAL`() = runTest {
-            val api = FakeWallpaperApi { listOf(FIRST_METADATA) }
+            val api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA)) }
             val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
 
             repository.getAllMetadata(WallpaperRepository.CachePolicy.PRIORITIZE_LOCAL).matchWithSnapshot()

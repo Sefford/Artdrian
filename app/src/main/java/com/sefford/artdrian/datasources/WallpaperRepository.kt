@@ -23,9 +23,9 @@ class WallpaperRepository @Inject constructor(
         try {
             val response = api.getAllMetadata()
             mutex.withLock {
-                local.saveMetadata(response)
+                local.saveMetadata(response.wallpapers)
             }
-            response.right()
+            response.wallpapers.right()
         } catch (x: Exception) {
             onError()
         }

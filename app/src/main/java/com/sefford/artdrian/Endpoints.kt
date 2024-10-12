@@ -1,5 +1,5 @@
 package com.sefford.artdrian
 
 object Endpoints {
-    const val ENDPOINT = "https://adrianmg-go-server.fly.dev/"
+    const val ENDPOINT = "https://adrianmato.art/_next/data/jCZPyMoNMuUVfNkZ6NnO4/"
 }

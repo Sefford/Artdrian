@@ -1,9 +1,9 @@
 package com.sefford.artdrian.datasources
 
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
 
-class FakeWallpaperApi(private val response: () -> List<Metadata>) : WallpaperApi {
+class FakeWallpaperApi(private val response: () -> WallpaperResponse) : WallpaperApi {
 
-    override suspend fun getAllMetadata(): List<Metadata> = response()
+    override suspend fun getAllMetadata(): WallpaperResponse = response()
 
 }
