@@ -3,7 +3,8 @@ package com.sefford.artdrian.data.dto.deserializers
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.data.dto.WallpaperResponse
+import com.sefford.artdrian.data.dto.MetadataDto
 import java.lang.reflect.Type
 
 class WallpaperResponseDeserializer : JsonDeserializer<WallpaperResponse> {
@@ -18,9 +19,6 @@ class WallpaperResponseDeserializer : JsonDeserializer<WallpaperResponse> {
         .get("wallpapers")
         .asJsonArray
         .map { elem ->
-            context.deserialize(elem, Metadata::class.java)
+            context.deserialize(elem, MetadataDto::class.java)
         })
 }
-
-@JvmInline
-value class WallpaperResponse(val wallpapers: List<Metadata>)

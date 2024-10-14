@@ -5,6 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 
 class WallpaperMemoryDataSource(

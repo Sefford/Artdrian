@@ -2,13 +2,12 @@ package com.sefford.artdrian.usecases
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
-import com.sefford.artdrian.data.dto.deserializers.WallpaperResponse
+import com.sefford.artdrian.data.dto.WallpaperResponse
 import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -21,7 +20,7 @@ class GetWallpaperTest {
     @BeforeEach
     fun setUp() {
         local = WallpaperMemoryDataSource()
-        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { WallpaperResponse(listOf(MetadataMother.FIRST_METADATA)) }, local))
+        useCase = GetWallpaper(WallpaperRepository(FakeWallpaperApi { WallpaperResponse(listOf(MetadataMother.FIRST_METADATA_DTO)) }, local))
     }
 
     @Test

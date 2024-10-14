@@ -1,7 +1,8 @@
 package com.sefford.artdrian.model
 
-import com.sefford.artdrian.model.Wallpaper.Extension.*
-import java.util.*
+import com.sefford.artdrian.model.Wallpaper.Extension.JPG
+import com.sefford.artdrian.model.Wallpaper.Extension.PNG
+import java.util.Locale
 
 data class Wallpaper(val metadata: Metadata) {
     val desktop: String

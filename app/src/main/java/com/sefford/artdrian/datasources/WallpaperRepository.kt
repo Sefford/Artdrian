@@ -6,6 +6,7 @@ import arrow.core.right
 import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -22,10 +23,11 @@ class WallpaperRepository @Inject constructor(
     ): Either<RepositoryError, List<Metadata>> =
         try {
             val response = api.getAllMetadata()
+            val model = response.wallpapers.map { Metadata(it) }
             mutex.withLock {
-                local.saveMetadata(response.wallpapers)
+                local.saveMetadata(model)
             }
-            response.wallpapers.right()
+            model.right()
         } catch (x: Exception) {
             onError()
         }

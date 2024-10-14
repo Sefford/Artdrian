@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import java.util.*
@@ -66,7 +67,7 @@ fun WallpaperCard(
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            Metadata("", "test", 123, 1000, Date(), Date())
+            Metadata("", "title",98, 123, "test", Date(), Date())
         )
     )
 }

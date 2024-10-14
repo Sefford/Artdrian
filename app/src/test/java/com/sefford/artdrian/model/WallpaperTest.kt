@@ -1,6 +1,5 @@
 package com.sefford.artdrian.model
 
-import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
@@ -17,7 +16,7 @@ class WallpaperTest {
 
     @Property
     fun `any other wallpaper indicates it is a PNG wallpaper`(@ForAll("slugs") slug: String) {
-        Wallpaper(MetadataMother.FIRST_METADATA.copy(slug = slug)).metadata.isPngFile().shouldBeTrue()
+        Wallpaper(MetadataMother.FIRST_METADATA_DTO.copy(slug = slug)).metadata.isPngFile().shouldBeTrue()
     }
 
     @Provide

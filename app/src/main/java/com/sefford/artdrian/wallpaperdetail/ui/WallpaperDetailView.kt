@@ -37,6 +37,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
+import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.*
 import com.sefford.artdrian.utils.isAtLeastAPI
@@ -343,8 +344,9 @@ private fun showContent() {
     WallpaperDetailScreen(
         ViewState.Content(
             Wallpaper(
-                com.sefford.artdrian.model.Metadata(
+                Metadata(
                     id = "6",
+                    title = "ghost_waves_001",
                     views = 123,
                     downloads = 456,
                     slug = "ghost_waves_001",
