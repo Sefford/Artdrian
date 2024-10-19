@@ -1,13 +1,15 @@
 package com.sefford.artdrian.data.dto
 
-import com.google.gson.annotations.SerializedName
-import java.util.Date
+import kotlinx.datetime.LocalDateTime
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MetadataDto(
-  @SerializedName("_id") val id: String,
-  @SerializedName("slug") val slug: String,
-  @SerializedName("title") val title: String,
-  @SerializedName("totalDownloads") val downloads: Int,
-  @SerializedName("publishedAt") val created: Date,
+  @SerialName("_id") val id: String,
+  @SerialName("slug") val slug: String,
+  @SerialName("title") val title: String,
+  @SerialName("totalDownloads") val downloads: Int,
+  @SerialName("publishedAt") val created: LocalDateTime,
 )
 
