@@ -11,8 +11,7 @@ import javax.inject.Singleton
     ApplicationModule::class,
     AndroidModule::class,
     ConcurrencyModule::class,
-    CoreModule::class,
-    ApiModule::class])
+    CoreModule::class])
 @Singleton
 interface ApplicationComponent {
 

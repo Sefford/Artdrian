@@ -11,8 +11,19 @@ import androidx.core.net.toUri
 import com.sefford.artdrian.di.Application
 import com.sefford.artdrian.utils.getUriFromPath
 import com.sefford.artdrian.utils.isAtLeastAPI
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
+import io.ktor.client.statement.readBytes
+import io.ktor.client.statement.readText
+import io.ktor.http.isSuccess
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
@@ -25,7 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class FileManagerImpl @Inject constructor(
     @Application private val context: Context,
-    private val client: OkHttpClient,
+    private val client: HttpClient,
     private val mutex: Mutex = Mutex()
 ) : FileManager {
 
@@ -68,11 +79,11 @@ class FileManagerImpl @Inject constructor(
         return absolutePathOfTarget
     }
 
-    private fun saveToExternalStorage(source: String, target: String): String {
-        client.newCall(
-            Request.Builder().url(source).build()
-        ).execute().use { response ->
-            if (!response.isSuccessful) throw IOException("Unexpected code $response")
+    private suspend fun saveToExternalStorage(source: String, target: String): String {
+        return withContext(Dispatchers.IO) {
+            val response = client.get(source)
+
+            if (!response.status.isSuccess()) throw IOException("Unexpected code $response")
 
             val folder = File(Environment.getExternalStorageDirectory(), target.substringBeforeLast("/"))
             folder.mkdirs()
@@ -80,8 +91,6 @@ class FileManagerImpl @Inject constructor(
             output.createNewFile()
             output.writeBytes(
                 response
-                    .body!!
-                    .byteStream()
                     .readBytes()
             )
             context.sendBroadcast(
@@ -90,7 +99,7 @@ class FileManagerImpl @Inject constructor(
                     output.toUri()
                 )
             )
-            return output.toUri().toString()
+            output.toUri().toString()
         }
     }
 }

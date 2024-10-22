@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetWallpaperTest {
+class GetWallpaperTestBuilder {
 
     private lateinit var useCase: GetWallpaper
     private lateinit var local: WallpaperMemoryDataSource

@@ -1,46 +1,76 @@
 package com.sefford.artdrian.di
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.sefford.artdrian.data.dto.WallpaperResponse
+import android.util.Log
 import com.sefford.artdrian.data.dto.deserializers.WallpaperResponseDeserializer
 import com.sefford.artdrian.datasources.WallpaperApi
+import com.sefford.artdrian.datasources.WallpaperApiImpl
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.observer.ResponseObserver
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import javax.inject.Singleton
 
 @Module
-class CoreModule(val endpoint: String) {
+class CoreModule {
+    private val TIME_OUT = 10_000
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient().newBuilder().addInterceptor(
-            HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+    fun provideHttpClient(): HttpClient {
+        return HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                })
             }
-        ).build()
+
+
+            install(Logging) {
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Log.v("Logger Ktor =>", message)
+                    }
+                }
+                level = LogLevel.ALL
+            }
+
+            install(ResponseObserver) {
+                onResponse { response ->
+                    Log.d("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
+                }
+            }
+
+            install(DefaultRequest) {
+                header(HttpHeaders.ContentType, ContentType.Application.Json)
+            }
+
+            engine {
+                requestTimeout = TIME_OUT.toLong()
+            }
+        }
     }
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder()
-        .registerTypeAdapter(WallpaperResponse::class.java, WallpaperResponseDeserializer())
-        .create()
-
-    @Provides
-    fun provideRetrofit(client: OkHttpClient, gson: Gson): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(endpoint)
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+    fun provideApiService(httpClient: HttpClient): WallpaperApi {
+        return WallpaperApiImpl(httpClient)
     }
 
     @Provides

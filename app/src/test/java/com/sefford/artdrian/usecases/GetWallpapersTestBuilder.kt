@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetWallpapersTest : Files {
+class GetWallpapersTestBuilder : Files {
 
     private lateinit var useCase: GetWallpapers
     private lateinit var server: MockWebServer
@@ -38,7 +38,7 @@ class GetWallpapersTest : Files {
     @Test
     fun `returns the wallpapers`() = runTest {
         server.enqueue(
-            MockResponse().setResponseCode(200).setBody(this@GetWallpapersTest::class.java.readResourceFromFile("metadata_response.json"))
+            MockResponse().setResponseCode(200).setBody(this@GetWallpapersTestBuilder::class.java.readResourceFromFile("metadata_response.json"))
         )
 
         useCase.getWallpapers().matchWithSnapshot()

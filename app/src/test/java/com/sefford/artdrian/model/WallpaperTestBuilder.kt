@@ -7,7 +7,7 @@ import net.jqwik.api.*
 import org.junit.jupiter.api.Test
 
 
-class WallpaperTest {
+class WallpaperTestBuilder {
 
     @Test
     fun `Ghost Waves 003 indicates it is a JPG wallpaper`() {

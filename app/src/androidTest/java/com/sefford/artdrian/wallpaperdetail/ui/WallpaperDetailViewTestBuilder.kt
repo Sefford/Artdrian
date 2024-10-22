@@ -13,7 +13,7 @@ import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewStat
 import org.junit.Rule
 import org.junit.Test
 
-class WallpaperDetailViewTest : ScreenshotTest {
+class WallpaperDetailViewTestBuilder : ScreenshotTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
