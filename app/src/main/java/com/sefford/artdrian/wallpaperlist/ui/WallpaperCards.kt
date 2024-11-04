@@ -23,6 +23,10 @@ import coil.compose.AsyncImage
 import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.util.*
 
 @Composable
@@ -67,7 +71,7 @@ fun WallpaperCard(
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            Metadata("", "title",98, 123, "test", Date(), Date())
+            Metadata("", "title",98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
         )
     )
 }

@@ -1,7 +1,7 @@
 package com.sefford.artdrian.usecases
 
-import com.google.gson.Gson
 import com.karumi.kotlinsnapshot.matchWithSnapshot
+import com.sefford.artdrian.data.dto.WallpaperResponse
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
@@ -12,8 +12,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class GetWallpapersTestBuilder : Files {
@@ -28,12 +26,12 @@ class GetWallpapersTestBuilder : Files {
         useCase = GetWallpapers(WallpaperRepository(initializeApi(), WallpaperMemoryDataSource()))
     }
 
-    private fun initializeApi(): WallpaperApi =
-        Retrofit.Builder()
-            .baseUrl(server.url("/"))
-            .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .build()
-            .create(WallpaperApi::class.java)
+    private fun initializeApi(): WallpaperApi = object: WallpaperApi {
+        override suspend fun getAllMetadata(): WallpaperResponse {
+            TODO("Not yet implemented")
+        }
+
+    }
 
     @Test
     fun `returns the wallpapers`() = runTest {

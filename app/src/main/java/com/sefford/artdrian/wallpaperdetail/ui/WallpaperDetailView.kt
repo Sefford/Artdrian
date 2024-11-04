@@ -43,6 +43,11 @@ import com.sefford.artdrian.ui.theme.*
 import com.sefford.artdrian.utils.isAtLeastAPI
 import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.*
 import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -350,8 +355,7 @@ private fun showContent() {
                     views = 123,
                     downloads = 456,
                     slug = "ghost_waves_001",
-                    created = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2022-11-05")!!,
-                    updated = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).parse("2022-11-05")!!,
+                    created = Clock.System.now().toLocalDateTime(TimeZone.UTC),
                 )
             )
         ), "Example"
