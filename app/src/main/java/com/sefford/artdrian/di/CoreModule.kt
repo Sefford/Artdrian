@@ -1,7 +1,6 @@
 package com.sefford.artdrian.di
 
 import android.util.Log
-import com.sefford.artdrian.data.dto.deserializers.WallpaperResponseDeserializer
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperApiImpl
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
@@ -21,8 +20,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
 import javax.inject.Singleton
 
 @Module
@@ -34,11 +31,13 @@ class CoreModule {
     fun provideHttpClient(): HttpClient {
         return HttpClient(CIO) {
             install(ContentNegotiation) {
-                json(Json {
-                    prettyPrint = true
-                    isLenient = true
-                    ignoreUnknownKeys = true
-                })
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    }, contentType = ContentType.parse("text/x-component")
+                )
             }
 
 
