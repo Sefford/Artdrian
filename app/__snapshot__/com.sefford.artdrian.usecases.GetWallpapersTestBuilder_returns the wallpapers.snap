@@ -1,0 +1,56 @@
+{
+  "__class__": "Right",
+  "value": [
+    {
+      "__class__": "Wallpaper",
+      "metadata": {
+        "__class__": "Metadata",
+        "id": "1",
+        "title": "test_001",
+        "views": 0,
+        "downloads": 456,
+        "slug": "test_001",
+        "created": {
+          "__class__": "LocalDateTime",
+          "value": {
+            "__class__": "LocalDateTime",
+            "date": {
+              "__class__": "LocalDate",
+              "year": 2024,
+              "month": 11,
+              "day": 25
+            },
+            "time": {
+              "__class__": "LocalTime",
+              "hour": 12,
+              "minute": 20,
+              "second": 34,
+              "nano": 544982000
+            }
+          }
+        },
+        "updated": {
+          "__class__": "LocalDateTime",
+          "value": {
+            "__class__": "LocalDateTime",
+            "date": {
+              "__class__": "LocalDate",
+              "year": 2024,
+              "month": 11,
+              "day": 25
+            },
+            "time": {
+              "__class__": "LocalTime",
+              "hour": 12,
+              "minute": 20,
+              "second": 34,
+              "nano": 544982000
+            }
+          }
+        }
+      }
+    }
+  ],
+  "isLeft": false,
+  "isRight": true
+}

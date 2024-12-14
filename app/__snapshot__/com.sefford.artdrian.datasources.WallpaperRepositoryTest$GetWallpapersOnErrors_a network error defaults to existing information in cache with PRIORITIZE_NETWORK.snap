@@ -3,12 +3,49 @@
   "value": [
     {
       "__class__": "Metadata",
-      "ID": "2",
-      "Slug": "test_002",
-      "Views": 100,
-      "Downloads": 200,
-      "CreatedAt": "2022-11-05T00:00:00.000Z",
-      "UpdatedAt": "2022-11-05T00:00:00.000Z"
+      "id": "2",
+      "title": "test_002",
+      "views": 100,
+      "downloads": 200,
+      "slug": "test_002",
+      "created": {
+        "__class__": "LocalDateTime",
+        "value": {
+          "__class__": "LocalDateTime",
+          "date": {
+            "__class__": "LocalDate",
+            "year": 2024,
+            "month": 11,
+            "day": 25
+          },
+          "time": {
+            "__class__": "LocalTime",
+            "hour": 12,
+            "minute": 20,
+            "second": 34,
+            "nano": 545012000
+          }
+        }
+      },
+      "updated": {
+        "__class__": "LocalDateTime",
+        "value": {
+          "__class__": "LocalDateTime",
+          "date": {
+            "__class__": "LocalDate",
+            "year": 2024,
+            "month": 11,
+            "day": 25
+          },
+          "time": {
+            "__class__": "LocalTime",
+            "hour": 12,
+            "minute": 20,
+            "second": 34,
+            "nano": 545012000
+          }
+        }
+      }
     }
   ],
   "isLeft": false,
