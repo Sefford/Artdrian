@@ -3,10 +3,12 @@ package com.sefford.artdrian.datasources
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.NETWORK_ONLY
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.OFFLINE
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.PRIORITIZE_LOCAL
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.PRIORITIZE_NETWORK
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
-import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -34,7 +36,8 @@ class WallpaperRepository @Inject constructor(
 
     private suspend fun getAllMetadataFromLocal(
         onError: suspend (RepositoryError) -> Either<RepositoryError, List<Metadata>> = { it.left() }
-    ): Either<RepositoryError, List<Metadata>> = local.getAllMetadata().fold({ onError(it) }) { it.right() }
+    ): Either<RepositoryError, List<Metadata>> =
+        local.getAllMetadata().fold({ onError(it) }) { it.right() }
 
     private suspend fun getWallpaperMetadataFromApi(
         id: String,

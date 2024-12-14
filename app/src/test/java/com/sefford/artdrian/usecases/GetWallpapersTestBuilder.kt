@@ -1,7 +1,9 @@
 package com.sefford.artdrian.usecases
 
 import com.karumi.kotlinsnapshot.matchWithSnapshot
+import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
 import com.sefford.artdrian.data.dto.WallpaperResponse
+import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
@@ -28,9 +30,8 @@ class GetWallpapersTestBuilder : Files {
 
     private fun initializeApi(): WallpaperApi = object: WallpaperApi {
         override suspend fun getAllMetadata(): WallpaperResponse {
-            TODO("Not yet implemented")
+            return WallpaperResponse(listOf(FIRST_METADATA_DTO))
         }
-
     }
 
     @Test

@@ -3,12 +3,10 @@ package com.sefford.artdrian
 import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.util.Date
+import kotlinx.datetime.LocalDateTime
 
 object WallpaperMother {
-    const val FIRST_ID = "1"
+    const val FIRST_ID = "wallpapers/ghost_waves_004.mdx"
 
     val WALLPAPER_LIST_DTO = listOf(
 
@@ -17,9 +15,7 @@ object WallpaperMother {
             slug = "ghost_waves_001",
             title = "ghost_waves_001",
             downloads = 456,
-            created = Date.from(
-                LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-            ),
+            created = LocalDateTime.parse("2022-11-05T00:00:00"),
         ),
 
         MetadataDto(
@@ -28,9 +24,7 @@ object WallpaperMother {
             title = "ghost_waves_002",
 
             downloads = 200,
-            created = Date.from(
-                LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-            ),
+            created = LocalDateTime.parse("2022-11-05T00:00:00"),
         )
     )
 
@@ -42,12 +36,8 @@ object WallpaperMother {
                 slug = "ghost_waves_001",
                 title = "ghost_waves_001",
                 downloads = 456,
-                created = Date.from(
-                    LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-                ),
-                updated = Date.from(
-                    LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-                ),
+                created = LocalDateTime.parse("2022-11-05T00:00:00"),
+                updated = LocalDateTime.parse("2022-11-05T00:00:00"),
             ),
         ),
         Wallpaper(
@@ -57,12 +47,8 @@ object WallpaperMother {
                 slug = "ghost_waves_002",
                 title = "ghost_waves_002",
                 downloads = 200,
-                created = Date.from(
-                    LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-                ),
-                updated = Date.from(
-                    LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)
-                ),
+                created = LocalDateTime.parse("2022-11-05T00:00:00"),
+                updated = LocalDateTime.parse("2022-11-05T00:00:00"),
             )
         )
     )
