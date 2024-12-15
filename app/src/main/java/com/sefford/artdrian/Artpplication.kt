@@ -9,7 +9,7 @@ class Artpplication : Application(), TopComponentHolder {
 
     override val graph = DaggerApplicationComponent.builder()
         .applicationModule(ApplicationModule(this))
-        .coreModule(CoreModule(Endpoints.ENDPOINT))
+        .coreModule(CoreModule())
         .build()
 
 }

@@ -24,7 +24,7 @@ import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
-class WallpaperDetailActivityTest : ScreenshotTest {
+class WallpaperDetailActivityTestBuilder : ScreenshotTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<WallpaperListActivity>()

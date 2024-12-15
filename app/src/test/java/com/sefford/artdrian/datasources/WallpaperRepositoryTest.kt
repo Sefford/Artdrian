@@ -4,7 +4,9 @@ import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
 import com.sefford.artdrian.MetadataMother.SECOND_METADATA
 import com.sefford.artdrian.data.dto.WallpaperResponse
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.*
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.NETWORK_ONLY
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.OFFLINE
+import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.PRIORITIZE_NETWORK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach

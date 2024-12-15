@@ -1,10 +1,10 @@
 package com.sefford.artdrian
 
 import com.sefford.artdrian.data.dto.MetadataDto
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.util.*
 import com.sefford.artdrian.model.Metadata
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 
 object MetadataMother {
@@ -16,7 +16,7 @@ object MetadataMother {
         slug = "test_001",
         title = "test_001",
         downloads = 456,
-        created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
+        created = Clock.System.now().toLocalDateTime(TimeZone.UTC),
     )
     val SECOND_METADATA = Metadata(
         id = SECOND_METADATA_ID,
@@ -24,8 +24,7 @@ object MetadataMother {
         slug = "test_002",
         views = 100,
         downloads = 200,
-        created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
-        updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
+        created = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     )
     val GHOST_WAVES_003 = Metadata(
         id = SECOND_METADATA_ID,
@@ -33,8 +32,7 @@ object MetadataMother {
         slug = "ghost_waves_003",
         views = 100,
         downloads = 200,
-        created = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
-        updated = Date.from(LocalDate.parse("2022-11-05").atStartOfDay().toInstant(ZoneOffset.UTC)),
+        created = Clock.System.now().toLocalDateTime(TimeZone.UTC)
     )
     val EXAMPLE_METADATA = listOf(
         SECOND_METADATA

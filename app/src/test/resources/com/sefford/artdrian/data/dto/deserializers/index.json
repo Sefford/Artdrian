@@ -1,1 +1,157 @@
-{"pageProps":{"wallpapers":[{"title":"Ghost waves","edition":"004","tags":["6k-ready"],"publishedAt":"2024-04-21T00:00:00.000Z","image":"/static/images/wallpaper/ghost_waves_004_web_preview.jpg","imageQuality":100,"imageUnoptimized":true,"imageObjectPosition":"17% 50%","imageExtension":"jpg","description":"","className":"bg-wallpaper-ghost_waves_004 hover:bg-wallpaper-ghost_waves_004","body":{"raw":"","code":"var Component=(()=>{var _=Object.create;var s=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var l=Object.getOwnPropertyNames;var u=Object.getPrototypeOf,w=Object.prototype.hasOwnProperty;var d=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),x=(e,t)=>{for(var a in t)s(e,a,{get:t[a],enumerable:!0})},r=(e,t,a,o)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let n of l(t))!w.call(e,n)&&n!==a&&s(e,n,{get:()=>t[n],enumerable:!(o=c(t,n))||o.enumerable});return e};var h=(e,t,a)=>(a=e!=null?_(u(e)):{},r(t||!e||!e.__esModule?s(a,\"default\",{value:e,enumerable:!0}):a,e)),j=e=>r(s({},\"__esModule\",{value:!0}),e);var m=d((C,g)=>{g.exports=_jsx_runtime});var y={};x(y,{default:()=>f,frontmatter:()=>b});var i=h(m()),b={title:\"Ghost waves\",edition:\"004\",publishedAt:\"2024-04-21\",description:\"\",className:\"bg-wallpaper-ghost_waves_004 hover:bg-wallpaper-ghost_waves_004\",image:\"/static/images/wallpaper/ghost_waves_004_web_preview.jpg\",imageObjectPosition:\"17% 50%\",imageExtension:\"jpg\",imageUnoptimized:!0,imageQuality:100,tags:[\"6k-ready\"]};function p(e){return(0,i.jsx)(i.Fragment,{})}function v(e={}){let{wrapper:t}=e.components||{};return t?(0,i.jsx)(t,Object.assign({},e,{children:(0,i.jsx)(p,e)})):p(e)}var f=v;return j(y);})();\n;return Component;"},"_id":"wallpapers/ghost_waves_004.mdx","_raw":{"sourceFilePath":"wallpapers/ghost_waves_004.mdx","sourceFileName":"ghost_waves_004.mdx","sourceFileDir":"wallpapers","contentType":"mdx","flattenedPath":"wallpapers/ghost_waves_004"},"type":"Wallpaper","slug":"ghost_waves_004","totalDownloads":29},{"title":"Ghost waves","edition":"003","tags":["6k-ready"],"publishedAt":"2022-08-04T00:00:00.000Z","image":"/static/images/wallpaper/ghost_waves_003_web_preview.webp","imageQuality":100,"imageUnoptimized":true,"imageObjectPosition":"50% 50%","imageExtension":"jpg","description":"","className":"bg-wallpaper-ghost_waves_003 hover:bg-wallpaper-ghost_waves_003","body":{"raw":"","code":"var Component=(()=>{var _=Object.create;var s=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var l=Object.getOwnPropertyNames;var w=Object.getPrototypeOf,u=Object.prototype.hasOwnProperty;var d=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),x=(e,t)=>{for(var a in t)s(e,a,{get:t[a],enumerable:!0})},r=(e,t,a,o)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let n of l(t))!u.call(e,n)&&n!==a&&s(e,n,{get:()=>t[n],enumerable:!(o=c(t,n))||o.enumerable});return e};var b=(e,t,a)=>(a=e!=null?_(w(e)):{},r(t||!e||!e.__esModule?s(a,\"default\",{value:e,enumerable:!0}):a,e)),h=e=>r(s({},\"__esModule\",{value:!0}),e);var m=d((C,g)=>{g.exports=_jsx_runtime});var y={};x(y,{default:()=>f,frontmatter:()=>j});var i=b(m()),j={title:\"Ghost waves\",edition:\"003\",publishedAt:\"2022-08-04\",description:\"\",className:\"bg-wallpaper-ghost_waves_003 hover:bg-wallpaper-ghost_waves_003\",image:\"/static/images/wallpaper/ghost_waves_003_web_preview.webp\",imageObjectPosition:\"50% 50%\",imageExtension:\"jpg\",imageUnoptimized:!0,imageQuality:100,tags:[\"6k-ready\"]};function p(e){return(0,i.jsx)(i.Fragment,{})}function v(e={}){let{wrapper:t}=e.components||{};return t?(0,i.jsx)(t,Object.assign({},e,{children:(0,i.jsx)(p,e)})):p(e)}var f=v;return h(y);})();\n;return Component;"},"_id":"wallpapers/ghost_waves_003.mdx","_raw":{"sourceFilePath":"wallpapers/ghost_waves_003.mdx","sourceFileName":"ghost_waves_003.mdx","sourceFileDir":"wallpapers","contentType":"mdx","flattenedPath":"wallpapers/ghost_waves_003"},"type":"Wallpaper","slug":"ghost_waves_003","totalDownloads":2484},{"title":"Caustics","edition":"001","tags":["4k-ready"],"publishedAt":"2022-08-03T00:00:00.000Z","image":"/static/images/wallpaper/caustics_001_web_preview.webp","imageQuality":100,"imageUnoptimized":true,"imageObjectPosition":"46% 50%","imageExtension":"png","description":"","className":"bg-wallpaper-caustics_001 hover:bg-wallpaper-caustics_001","body":{"raw":"","code":"var Component=(()=>{var u=Object.create;var n=Object.defineProperty;var l=Object.getOwnPropertyDescriptor;var g=Object.getOwnPropertyNames;var _=Object.getPrototypeOf,d=Object.prototype.hasOwnProperty;var b=(t,e)=>()=>(e||t((e={exports:{}}).exports,e),e.exports),w=(t,e)=>{for(var a in e)n(t,a,{get:e[a],enumerable:!0})},c=(t,e,a,r)=>{if(e&&typeof e==\"object\"||typeof e==\"function\")for(let s of g(e))!d.call(t,s)&&s!==a&&n(t,s,{get:()=>e[s],enumerable:!(r=l(e,s))||r.enumerable});return t};var x=(t,e,a)=>(a=t!=null?u(_(t)):{},c(e||!t||!t.__esModule?n(a,\"default\",{value:t,enumerable:!0}):a,t)),f=t=>c(n({},\"__esModule\",{value:!0}),t);var m=b((v,o)=>{o.exports=_jsx_runtime});var C={};w(C,{default:()=>y,frontmatter:()=>j});var i=x(m()),j={title:\"Caustics\",edition:\"001\",publishedAt:\"2022-08-03\",description:\"\",className:\"bg-wallpaper-caustics_001 hover:bg-wallpaper-caustics_001\",image:\"/static/images/wallpaper/caustics_001_web_preview.webp\",imageObjectPosition:\"46% 50%\",imageUnoptimized:!0,imageQuality:100,tags:[\"4k-ready\"]};function p(t){return(0,i.jsx)(i.Fragment,{})}function h(t={}){let{wrapper:e}=t.components||{};return e?(0,i.jsx)(e,Object.assign({},t,{children:(0,i.jsx)(p,t)})):p(t)}var y=h;return f(C);})();\n;return Component;"},"_id":"wallpapers/caustics_001.mdx","_raw":{"sourceFilePath":"wallpapers/caustics_001.mdx","sourceFileName":"caustics_001.mdx","sourceFileDir":"wallpapers","contentType":"mdx","flattenedPath":"wallpapers/caustics_001"},"type":"Wallpaper","slug":"caustics_001","totalDownloads":2934},{"title":"Ghost waves","edition":"002","tags":["4k-ready"],"publishedAt":"2022-08-02T00:00:00.000Z","image":"/static/images/wallpaper/ghost_waves_002_web_preview.jpg","imageQuality":100,"imageUnoptimized":true,"imageObjectPosition":"17% 50%","imageExtension":"png","description":"","className":"bg-wallpaper-ghost_waves_002 hover:bg-wallpaper-ghost_waves_002","body":{"raw":"\n<div style={{ width: 800 }}>\n  <div className=\"imageContainer\">\n    <Image className=\"image\" alt={`2019 Year in Review`} src={`/static/images/ocean.png`} layout=\"fill\" priority />\n  </div>\n</div>\n","code":"var Component=(()=>{var g=Object.create;var n=Object.defineProperty;var p=Object.getOwnPropertyDescriptor;var d=Object.getOwnPropertyNames;var u=Object.getPrototypeOf,w=Object.prototype.hasOwnProperty;var _=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),f=(e,t)=>{for(var i in t)n(e,i,{get:t[i],enumerable:!0})},s=(e,t,i,r)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let o of d(t))!w.call(e,o)&&o!==i&&n(e,o,{get:()=>t[o],enumerable:!(r=p(t,o))||r.enumerable});return e};var h=(e,t,i)=>(i=e!=null?g(u(e)):{},s(t||!e||!e.__esModule?n(i,\"default\",{value:e,enumerable:!0}):i,e)),v=e=>s(n({},\"__esModule\",{value:!0}),e);var l=_((N,c)=>{c.exports=_jsx_runtime});var M={};f(M,{default:()=>y,frontmatter:()=>x});var a=h(l()),x={title:\"Ghost waves\",edition:\"002\",publishedAt:\"2022-08-02\",description:\"\",className:\"bg-wallpaper-ghost_waves_002 hover:bg-wallpaper-ghost_waves_002\",image:\"/static/images/wallpaper/ghost_waves_002_web_preview.jpg\",imageObjectPosition:\"17% 50%\",imageUnoptimized:!0,imageQuality:100,tags:[\"4k-ready\"]};function m(e){let{Image:t}=e.components||{};return t||j(\"Image\",!0),(0,a.jsx)(\"div\",{style:{width:800},children:(0,a.jsx)(\"div\",{className:\"imageContainer\",children:(0,a.jsx)(t,{className:\"image\",alt:\"2019 Year in Review\",src:\"/static/images/ocean.png\",layout:\"fill\",priority:!0})})})}function b(e={}){let{wrapper:t}=e.components||{};return t?(0,a.jsx)(t,Object.assign({},e,{children:(0,a.jsx)(m,e)})):m(e)}var y=b;function j(e,t){throw new Error(\"Expected \"+(t?\"component\":\"object\")+\" `\"+e+\"` to be defined: you likely forgot to import, pass, or provide it.\")}return v(M);})();\n;return Component;"},"_id":"wallpapers/ghost_waves_002.mdx","_raw":{"sourceFilePath":"wallpapers/ghost_waves_002.mdx","sourceFileName":"ghost_waves_002.mdx","sourceFileDir":"wallpapers","contentType":"mdx","flattenedPath":"wallpapers/ghost_waves_002"},"type":"Wallpaper","slug":"ghost_waves_002","totalDownloads":1528},{"title":"Ghost waves","edition":"001","tags":["4k-ready"],"publishedAt":"2022-08-01T00:00:00.000Z","image":"/static/images/wallpaper/ghost_waves_001_web_preview.jpg","imageQuality":100,"imageUnoptimized":true,"imageObjectPosition":"70% 50%","imageExtension":"png","description":"","className":"bg-wallpaper-ghost_waves_001 hover:bg-wallpaper-ghost_waves_001","body":{"raw":"","code":"var Component=(()=>{var _=Object.create;var n=Object.defineProperty;var c=Object.getOwnPropertyDescriptor;var l=Object.getOwnPropertyNames;var u=Object.getPrototypeOf,w=Object.prototype.hasOwnProperty;var d=(e,t)=>()=>(t||e((t={exports:{}}).exports,t),t.exports),h=(e,t)=>{for(var a in t)n(e,a,{get:t[a],enumerable:!0})},o=(e,t,a,r)=>{if(t&&typeof t==\"object\"||typeof t==\"function\")for(let i of l(t))!w.call(e,i)&&i!==a&&n(e,i,{get:()=>t[i],enumerable:!(r=c(t,i))||r.enumerable});return e};var x=(e,t,a)=>(a=e!=null?_(u(e)):{},o(t||!e||!e.__esModule?n(a,\"default\",{value:e,enumerable:!0}):a,e)),b=e=>o(n({},\"__esModule\",{value:!0}),e);var m=d((C,g)=>{g.exports=_jsx_runtime});var y={};h(y,{default:()=>f,frontmatter:()=>j});var s=x(m()),j={title:\"Ghost waves\",edition:\"001\",publishedAt:\"2022-08-01\",description:\"\",className:\"bg-wallpaper-ghost_waves_001 hover:bg-wallpaper-ghost_waves_001\",image:\"/static/images/wallpaper/ghost_waves_001_web_preview.jpg\",imageObjectPosition:\"70% 50%\",imageUnoptimized:!0,imageQuality:100,tags:[\"4k-ready\"]};function p(e){return(0,s.jsx)(s.Fragment,{})}function v(e={}){let{wrapper:t}=e.components||{};return t?(0,s.jsx)(t,Object.assign({},e,{children:(0,s.jsx)(p,e)})):p(e)}var f=v;return b(y);})();\n;return Component;"},"_id":"wallpapers/ghost_waves_001.mdx","_raw":{"sourceFilePath":"wallpapers/ghost_waves_001.mdx","sourceFileName":"ghost_waves_001.mdx","sourceFileDir":"wallpapers","contentType":"mdx","flattenedPath":"wallpapers/ghost_waves_001"},"type":"Wallpaper","slug":"ghost_waves_001","totalDownloads":992}]},"__N_SSG":true}
+{
+  "pageProps": {
+    "wallpapers": [
+      {
+        "title": "Ghost waves",
+        "edition": "004",
+        "tags": [
+          "6k-ready"
+        ],
+        "publishedAt": "2024-04-21T00:00:00.000Z",
+        "image": "/static/images/wallpaper/ghost_waves_004_web_preview.jpg",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "17% 50%",
+        "imageExtension": "jpg",
+        "description": "",
+        "className": "bg-wallpaper-ghost_waves_004 hover:bg-wallpaper-ghost_waves_004",
+        "body": {
+          "raw": "",
+          "code": ""
+        },
+        "_id": "wallpapers/ghost_waves_004.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/ghost_waves_004.mdx",
+          "sourceFileName": "ghost_waves_004.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/ghost_waves_004"
+        },
+        "type": "Wallpaper",
+        "slug": "ghost_waves_004",
+        "totalDownloads": 29
+      },
+      {
+        "title": "Ghost waves",
+        "edition": "003",
+        "tags": [
+          "6k-ready"
+        ],
+        "publishedAt": "2022-08-04T00:00:00.000Z",
+        "image": "/static/images/wallpaper/ghost_waves_003_web_preview.webp",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "50% 50%",
+        "imageExtension": "jpg",
+        "description": "",
+        "className": "bg-wallpaper-ghost_waves_003 hover:bg-wallpaper-ghost_waves_003",
+        "body": {
+          "raw": "",
+          "code": ""
+        },
+        "_id": "wallpapers/ghost_waves_003.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/ghost_waves_003.mdx",
+          "sourceFileName": "ghost_waves_003.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/ghost_waves_003"
+        },
+        "type": "Wallpaper",
+        "slug": "ghost_waves_003",
+        "totalDownloads": 2484
+      },
+      {
+        "title": "Caustics",
+        "edition": "001",
+        "tags": [
+          "4k-ready"
+        ],
+        "publishedAt": "2022-08-03T00:00:00.000Z",
+        "image": "/static/images/wallpaper/caustics_001_web_preview.webp",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "46% 50%",
+        "imageExtension": "png",
+        "description": "",
+        "className": "bg-wallpaper-caustics_001 hover:bg-wallpaper-caustics_001",
+        "body": {
+          "raw": "",
+          "code": ""
+        },
+        "_id": "wallpapers/caustics_001.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/caustics_001.mdx",
+          "sourceFileName": "caustics_001.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/caustics_001"
+        },
+        "type": "Wallpaper",
+        "slug": "caustics_001",
+        "totalDownloads": 2934
+      },
+      {
+        "title": "Ghost waves",
+        "edition": "002",
+        "tags": [
+          "4k-ready"
+        ],
+        "publishedAt": "2022-08-02T00:00:00.000Z",
+        "image": "/static/images/wallpaper/ghost_waves_002_web_preview.jpg",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "17% 50%",
+        "imageExtension": "png",
+        "description": "",
+        "className": "bg-wallpaper-ghost_waves_002 hover:bg-wallpaper-ghost_waves_002",
+        "body": {
+          "raw": "",
+          "code": ""
+        },
+        "_id": "wallpapers/ghost_waves_002.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/ghost_waves_002.mdx",
+          "sourceFileName": "ghost_waves_002.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/ghost_waves_002"
+        },
+        "type": "Wallpaper",
+        "slug": "ghost_waves_002",
+        "totalDownloads": 1528
+      },
+      {
+        "title": "Ghost waves",
+        "edition": "001",
+        "tags": [
+          "4k-ready"
+        ],
+        "publishedAt": "2022-08-01T00:00:00.000Z",
+        "image": "/static/images/wallpaper/ghost_waves_001_web_preview.jpg",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "70% 50%",
+        "imageExtension": "png",
+        "description": "",
+        "className": "bg-wallpaper-ghost_waves_001 hover:bg-wallpaper-ghost_waves_001",
+        "body": {
+          "raw": "",
+          "code": ""
+        },
+        "_id": "wallpapers/ghost_waves_001.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/ghost_waves_001.mdx",
+          "sourceFileName": "ghost_waves_001.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/ghost_waves_001"
+        },
+        "type": "Wallpaper",
+        "slug": "ghost_waves_001",
+        "totalDownloads": 992
+      }
+    ]
+  },
+  "__N_SSG": true
+}

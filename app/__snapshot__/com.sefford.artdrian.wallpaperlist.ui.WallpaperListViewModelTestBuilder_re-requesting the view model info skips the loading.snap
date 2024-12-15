@@ -1,0 +1,252 @@
+[
+  {
+    "__class__": "Content",
+    "wallpapers": [
+      {
+        "__class__": "Wallpaper",
+        "metadata": {
+          "__class__": "Metadata",
+          "id": "wallpapers/ghost_waves_004.mdx",
+          "title": "Ghost waves",
+          "views": 0,
+          "downloads": 29,
+          "slug": "ghost_waves_004",
+          "created": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2024,
+                "month": 4,
+                "day": 21
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          },
+          "updated": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2024,
+                "month": 4,
+                "day": 21
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "__class__": "Wallpaper",
+        "metadata": {
+          "__class__": "Metadata",
+          "id": "wallpapers/ghost_waves_003.mdx",
+          "title": "Ghost waves",
+          "views": 0,
+          "downloads": 2484,
+          "slug": "ghost_waves_003",
+          "created": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 4
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          },
+          "updated": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 4
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "__class__": "Wallpaper",
+        "metadata": {
+          "__class__": "Metadata",
+          "id": "wallpapers/caustics_001.mdx",
+          "title": "Caustics",
+          "views": 0,
+          "downloads": 2934,
+          "slug": "caustics_001",
+          "created": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 3
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          },
+          "updated": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 3
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "__class__": "Wallpaper",
+        "metadata": {
+          "__class__": "Metadata",
+          "id": "wallpapers/ghost_waves_002.mdx",
+          "title": "Ghost waves",
+          "views": 0,
+          "downloads": 1528,
+          "slug": "ghost_waves_002",
+          "created": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 2
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          },
+          "updated": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 2
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          }
+        }
+      },
+      {
+        "__class__": "Wallpaper",
+        "metadata": {
+          "__class__": "Metadata",
+          "id": "wallpapers/ghost_waves_001.mdx",
+          "title": "Ghost waves",
+          "views": 0,
+          "downloads": 992,
+          "slug": "ghost_waves_001",
+          "created": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 1
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          },
+          "updated": {
+            "__class__": "LocalDateTime",
+            "value": {
+              "__class__": "LocalDateTime",
+              "date": {
+                "__class__": "LocalDate",
+                "year": 2022,
+                "month": 8,
+                "day": 1
+              },
+              "time": {
+                "__class__": "LocalTime",
+                "hour": 0,
+                "minute": 0,
+                "second": 0,
+                "nano": 0
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+]

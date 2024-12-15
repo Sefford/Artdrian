@@ -1,6 +1,11 @@
 package com.sefford.artdrian.model
 
 import com.sefford.artdrian.data.dto.MetadataDto
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.UtcOffset
+import kotlinx.datetime.toInstant
+import java.time.ZoneOffset
 import java.util.Date
 
 class Metadata(
@@ -9,8 +14,8 @@ class Metadata(
     val views: Int,
     val downloads: Int,
     val slug: String,
-    val created: Date,
-    val updated: Date,
+    val created: LocalDateTime,
+    val updated: LocalDateTime = created,
 ) {
 
     constructor(dto: MetadataDto) : this(
@@ -19,8 +24,7 @@ class Metadata(
         views = 0,
         downloads = dto.downloads,
         slug = dto.slug,
-        created = dto.created,
-        updated = dto.created //TODO: look up for this parameter in the api response
+        created = dto.created //TODO: look up for this parameter in the api response
     )
 }
 

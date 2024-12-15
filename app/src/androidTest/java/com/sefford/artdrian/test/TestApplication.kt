@@ -12,6 +12,6 @@ class TestApplication: Application(), TopComponentHolder {
 
     override val graph: ApplicationComponent = DaggerTestApplicationComponent.builder()
         .applicationModule(ApplicationModule(this))
-        .coreModule(CoreModule(Endpoints.ENDPOINT))
+        .coreModule(CoreModule())
         .build()
 }

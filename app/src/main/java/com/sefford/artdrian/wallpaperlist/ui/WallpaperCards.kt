@@ -20,10 +20,11 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
-import java.util.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun WallpaperCard(
@@ -67,7 +68,7 @@ fun WallpaperCard(
 fun showPreviewCard() {
     WallpaperCard(
         Wallpaper(
-            Metadata("", "title",98, 123, "test", Date(), Date())
+            Metadata("", "title",98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
         )
     )
 }

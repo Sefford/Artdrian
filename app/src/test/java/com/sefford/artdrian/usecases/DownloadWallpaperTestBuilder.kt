@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class DownloadWallpaperTest {
+class DownloadWallpaperTestBuilder {
 
     private lateinit var useCase: DownloadWallpaper
 

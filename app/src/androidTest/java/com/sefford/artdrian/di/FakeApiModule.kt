@@ -14,10 +14,5 @@ class FakeApiModule {
 
     @Provides
     @Singleton
-    fun providesWallpaperApi(): WallpaperApi =
-        FakeWallpaperApi { WallpaperResponse(WALLPAPER_LIST_DTO) }
-
-    @Provides
-    @Singleton
     fun providesCoroutineDispatcher() = Dispatchers.Unconfined
 }

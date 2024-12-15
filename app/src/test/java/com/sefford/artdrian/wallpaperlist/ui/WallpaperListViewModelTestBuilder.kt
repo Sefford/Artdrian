@@ -15,12 +15,9 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.SocketPolicy
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class WallpaperListViewModelTest : Files {
+class WallpaperListViewModelTestBuilder : Files {
 
     lateinit var viewModel: WallpaperListViewModel
     lateinit var server: MockWebServer
@@ -35,7 +32,7 @@ class WallpaperListViewModelTest : Files {
 
     private fun initializeViewModel() {
         DaggerTestComponent.builder()
-            .coreModule(CoreModule(server.url("/").toString()))
+            .coreModule(CoreModule())
             .doublesModule(DoublesModule())
             .build()
             .inject(viewModel)

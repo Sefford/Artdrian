@@ -1,7 +1,9 @@
 package com.sefford.artdrian.usecases
 
-import com.google.gson.Gson
 import com.karumi.kotlinsnapshot.matchWithSnapshot
+import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
+import com.sefford.artdrian.data.dto.WallpaperResponse
+import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
@@ -12,11 +14,9 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GetWallpapersTest : Files {
+class GetWallpapersTestBuilder : Files {
 
     private lateinit var useCase: GetWallpapers
     private lateinit var server: MockWebServer
@@ -28,17 +28,16 @@ class GetWallpapersTest : Files {
         useCase = GetWallpapers(WallpaperRepository(initializeApi(), WallpaperMemoryDataSource()))
     }
 
-    private fun initializeApi(): WallpaperApi =
-        Retrofit.Builder()
-            .baseUrl(server.url("/"))
-            .addConverterFactory(GsonConverterFactory.create(Gson()))
-            .build()
-            .create(WallpaperApi::class.java)
+    private fun initializeApi(): WallpaperApi = object: WallpaperApi {
+        override suspend fun getAllMetadata(): WallpaperResponse {
+            return WallpaperResponse(listOf(FIRST_METADATA_DTO))
+        }
+    }
 
     @Test
     fun `returns the wallpapers`() = runTest {
         server.enqueue(
-            MockResponse().setResponseCode(200).setBody(this@GetWallpapersTest::class.java.readResourceFromFile("metadata_response.json"))
+            MockResponse().setResponseCode(200).setBody(this@GetWallpapersTestBuilder::class.java.readResourceFromFile("metadata_response.json"))
         )
 
         useCase.getWallpapers().matchWithSnapshot()
