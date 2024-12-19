@@ -16,15 +16,15 @@
           "date": {
             "__class__": "LocalDate",
             "year": 2024,
-            "month": 11,
-            "day": 25
+            "month": 12,
+            "day": 19
           },
           "time": {
             "__class__": "LocalTime",
-            "hour": 12,
-            "minute": 20,
-            "second": 34,
-            "nano": 544982000
+            "hour": 23,
+            "minute": 49,
+            "second": 9,
+            "nano": 183673081
           }
         }
       },
@@ -35,15 +35,15 @@
           "date": {
             "__class__": "LocalDate",
             "year": 2024,
-            "month": 11,
-            "day": 25
+            "month": 12,
+            "day": 19
           },
           "time": {
             "__class__": "LocalTime",
-            "hour": 12,
-            "minute": 20,
-            "second": 34,
-            "nano": 544982000
+            "hour": 23,
+            "minute": 49,
+            "second": 9,
+            "nano": 183673081
           }
         }
       }
