@@ -2,11 +2,8 @@ package com.sefford.artdrian.data.dto.deserializers
 
 import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.data.dto.WallpaperResponse
-import com.sefford.artdrian.model.Wallpaper
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder

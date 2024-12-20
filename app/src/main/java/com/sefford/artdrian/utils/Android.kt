@@ -1,7 +1,6 @@
 package com.sefford.artdrian.utils
 
 import android.content.ContentResolver
-import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity

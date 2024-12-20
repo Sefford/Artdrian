@@ -2,7 +2,6 @@ package com.sefford.artdrian.common
 
 import android.app.WallpaperManager
 import android.graphics.BitmapFactory
-import java.io.File
 import java.net.URL
 import javax.inject.Inject
 import javax.inject.Singleton

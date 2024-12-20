@@ -1,11 +1,6 @@
 package com.sefford.artdrian.wallpaperdetail.ui
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,8 +11,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.sefford.artdrian.R
 import com.sefford.artdrian.utils.graph
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
 class WallpaperDetailActivity : ComponentActivity() {

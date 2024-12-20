@@ -2,8 +2,6 @@ package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
-import com.sefford.artdrian.datasources.WallpaperRepository
-import com.sefford.artdrian.datasources.WallpaperRepository.*
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
 import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
 import com.sefford.artdrian.model.Wallpaper
