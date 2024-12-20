@@ -1,12 +1,7 @@
 package com.sefford.artdrian.model
 
 import com.sefford.artdrian.data.dto.MetadataDto
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.UtcOffset
-import kotlinx.datetime.toInstant
-import java.time.ZoneOffset
-import java.util.Date
 
 class Metadata(
     val id: String,

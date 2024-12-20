@@ -1,0 +1,90 @@
+[versions]
+accompanist = "0.34.0"
+accompanist-permissions = "0.27.0"
+activity-compose = "1.9.3"
+android-gradle-plugin = "8.7.3"
+arrow = "1.2.4"
+coil-compose = "2.4.0"
+compose-bom = "2024.12.01"
+coroutines = "1.8.0"
+coroutines-test = "1.10.0"
+core-ktx = "1.15.0"
+dagger = "2.50"
+datetime = "0.6.1"
+junit-bom = "5.9.3"
+jqwik = "1.7.1"
+kotest = "5.5.4"
+kotlin = "2.1.0"
+kotlin-serialization = "2.1.0"
+kotlin-snapshot = "2.3.0"
+ksp = "2.1.0-1.0.29"
+lifecycle-runtime-ktx = "2.8.7"
+material3 = "1.3.1"
+material-icons-extended = "1.7.6"
+mockwebserver = "4.9.3"
+robolectric = "4.14.1"
+serialization-json = "1.7.3"
+shot = "6.1.0"
+ktor = "2.3.12"
+ktor-logging = "2.0.0"
+ktor-serialization = "2.3.4"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin-serialization" }
+
+[libraries]
+
+# Accompanist
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
+
+# AndroidX Libraries
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
+
+# Compose
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+# Coil
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+
+# Dagger
+dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
+dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", version.ref = "dagger" }
+
+# Ktor
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor-serialization" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-logging" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-serialization" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-serialization" }
+
+# KotlinX
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization-json" }
+kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "coroutines-test" }
+
+# Kotlin Libraries
+arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
+
+# Testing
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
+jqwik = { group = "net.jqwik", name = "jqwik", version.ref = "jqwik" }
+mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+
+# Snapshot Plugins
+snapshot = { module = "com.karumi.kotlinsnapshot:plugin", version.ref = "kotlin-snapshot" }
+screenshot = { module = "com.karumi:shot", version.ref = "shot" }
