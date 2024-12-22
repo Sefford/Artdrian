@@ -68,9 +68,7 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideApiService(httpClient: HttpClient): WallpaperApi {
-        return WallpaperApiImpl(httpClient)
-    }
+    fun provideApiService(impl: WallpaperApiImpl): WallpaperApi = impl
 
     @Provides
     @Singleton
