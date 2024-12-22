@@ -2,8 +2,7 @@ package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NetworkingError
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError.NotFound
+import com.sefford.artdrian.data.RepositoryError
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.usecases.GetWallpapers
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,7 +11,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class WallpaperListViewModel : ViewModel() {
+class
+WallpaperListViewModel : ViewModel() {
 
     @Inject
     protected lateinit var getWallpapers: GetWallpapers
@@ -30,8 +30,8 @@ class WallpaperListViewModel : ViewModel() {
                 emit(ViewState.Loading)
                 when (val response = getWallpapers.getWallpapers()) {
                     is Either.Left -> when(val error = response.value){
-                        is NetworkingError -> emit(ViewState.Error(Errors.NetworkError(error.status)))
-                        is NotFound -> emit(ViewState.Error(Errors.NotFoundError(error.id)))
+                        is RepositoryError.NetworkingError -> emit(ViewState.Error(Errors.NetworkError(error.status)))
+                        is RepositoryError.NotFound -> emit(ViewState.Error(Errors.NotFoundError(error.id)))
                     }
                     is Either.Right -> {
                         wallpapers.addAll(response.value)

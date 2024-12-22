@@ -1,8 +1,8 @@
 package com.sefford.artdrian.usecases
 
 import arrow.core.Either
+import com.sefford.artdrian.data.RepositoryError
 import com.sefford.artdrian.datasources.WallpaperRepository
-import com.sefford.artdrian.datasources.WallpaperRepository.RepositoryError
 import com.sefford.artdrian.model.Wallpaper
 import javax.inject.Inject
 

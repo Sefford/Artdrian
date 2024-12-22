@@ -7,3 +7,9 @@ annotation class Application
 
 @Qualifier
 annotation class Endpoint
+
+@Qualifier
+annotation class Memory
+
+@Qualifier
+annotation class Disk
