@@ -3,6 +3,7 @@ package com.sefford.artdrian.datasources
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -14,7 +15,7 @@ class WallpaperMemoryDataSourceTest {
 
     @BeforeEach
     fun setUp() {
-        dataSource = WallpaperMemoryDataSource()
+        dataSource = WallpaperMemoryDataSource(scope = TestScope())
     }
 
     @Test

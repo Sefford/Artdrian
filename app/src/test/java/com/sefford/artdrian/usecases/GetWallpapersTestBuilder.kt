@@ -3,12 +3,12 @@ package com.sefford.artdrian.usecases
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
 import com.sefford.artdrian.data.dto.WallpaperResponse
-import com.sefford.artdrian.datasources.FakeWallpaperApi
 import com.sefford.artdrian.datasources.WallpaperApi
 import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.utils.Files
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -25,14 +25,10 @@ class GetWallpapersTestBuilder : Files {
     fun setUp() {
         server = MockWebServer()
         server.start()
-        useCase = GetWallpapers(WallpaperRepository(initializeApi(), WallpaperMemoryDataSource()))
+        useCase = GetWallpapers(WallpaperRepository(initializeApi(), WallpaperMemoryDataSource(scope = TestScope())))
     }
 
-    private fun initializeApi(): WallpaperApi = object: WallpaperApi {
-        override suspend fun getAllMetadata(): WallpaperResponse {
-            return WallpaperResponse(listOf(FIRST_METADATA_DTO))
-        }
-    }
+    private fun initializeApi(): WallpaperApi = WallpaperApi { WallpaperResponse(listOf(FIRST_METADATA_DTO)) }
 
     @Test
     fun `returns the wallpapers`() = runTest {
