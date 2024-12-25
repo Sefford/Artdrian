@@ -4,10 +4,8 @@ import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.MetadataMother.FIRST_METADATA_DTO
 import com.sefford.artdrian.MetadataMother.SECOND_METADATA
 import com.sefford.artdrian.data.dto.WallpaperResponse
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.NETWORK_ONLY
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.OFFLINE
-import com.sefford.artdrian.datasources.WallpaperRepository.CachePolicy.PRIORITIZE_NETWORK
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -27,24 +25,22 @@ class WallpaperRepositoryTest {
         private lateinit var repository: WallpaperRepository
         private lateinit var api: FakeWallpaperApi
         private lateinit var local: WallpaperMemoryDataSource
-
         @BeforeEach
         fun setUp() = runTest {
             api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA_DTO)) }
-            local = WallpaperMemoryDataSource()
-            local.saveMetadata(listOf(SECOND_METADATA))
+            local = WallpaperMemoryDataSource(scope = TestScope()).also { it.saveMetadata(listOf(SECOND_METADATA)) }
             repository = WallpaperRepository(api, local)
         }
 
         @ParameterizedTest
         @EnumSource(names = ["OFFLINE", "PRIORITIZE_LOCAL"])
-        fun `retreives the metadata from cache`(policy: WallpaperRepository.CachePolicy) = runTest {
+        fun `retreives the metadata from cache`(policy: CachePolicy) = runTest {
             repository.getAllMetadata(policy).matchWithSnapshot("retrieves the metadata from cache when policy is ${policy}")
         }
 
         @ParameterizedTest
         @EnumSource(names = ["NETWORK_ONLY", "PRIORITIZE_NETWORK"])
-        fun `retreives the metadata from network`(policy: WallpaperRepository.CachePolicy) = runTest {
+        fun `retreives the metadata from network`(policy: CachePolicy) = runTest {
             repository.getAllMetadata(policy).matchWithSnapshot("retrieves the metadata from cache when policy is ${policy}")
         }
     }
@@ -52,40 +48,42 @@ class WallpaperRepositoryTest {
     @Nested
     @DisplayName("when getting all the wallpapers")
     inner class GetWallpapersOnErrors {
+        private val local =  WallpaperMemoryDataSource(scope = TestScope())
 
         @Test
         fun `empty local cache defaults to network on PRIORITIZE_LOCAL`() = runTest {
             val api = FakeWallpaperApi { WallpaperResponse(listOf(FIRST_METADATA_DTO)) }
-            val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
+            val repository = WallpaperRepository(api, local)
 
-            repository.getAllMetadata(WallpaperRepository.CachePolicy.PRIORITIZE_LOCAL).matchWithSnapshot()
+            repository.getAllMetadata(CachePolicy.PRIORITIZE_LOCAL).matchWithSnapshot()
         }
 
         @Test
         fun `a network error defaults to existing information in cache with PRIORITIZE_NETWORK`() = runTest {
             val api = FakeWallpaperApi { throw java.lang.RuntimeException() }
-            val local = WallpaperMemoryDataSource()
             val repository = WallpaperRepository(api, local)
 
             local.saveMetadata(listOf(SECOND_METADATA))
 
-            repository.getAllMetadata(PRIORITIZE_NETWORK).matchWithSnapshot()
+            repository.getAllMetadata(CachePolicy.PRIORITIZE_NETWORK).matchWithSnapshot()
         }
 
         @Test
-        fun `a network error will return a NetworkingError error with NETWORK_ONLY`() = runTest {
-            val api = FakeWallpaperApi { throw java.lang.RuntimeException() }
-            val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
+        fun `a network error will return a NetworkingError error with NETWORK_ONLY`() {
+            runTest {
+                val api = FakeWallpaperApi { throw java.lang.RuntimeException() }
+                val repository = WallpaperRepository(api, local)
 
-            repository.getAllMetadata(NETWORK_ONLY).matchWithSnapshot()
+                repository.getAllMetadata(CachePolicy.NETWORK_ONLY).matchWithSnapshot()
+            }
         }
 
         @Test
         fun `an empty cache will return a NotFound error with OFFLINE`() = runTest {
             val api = FakeWallpaperApi { throw java.lang.RuntimeException() }
-            val repository = WallpaperRepository(api, WallpaperMemoryDataSource())
+            val repository = WallpaperRepository(api, local)
 
-            repository.getAllMetadata(OFFLINE).matchWithSnapshot()
+            repository.getAllMetadata(CachePolicy.OFFLINE).matchWithSnapshot()
         }
 
     }

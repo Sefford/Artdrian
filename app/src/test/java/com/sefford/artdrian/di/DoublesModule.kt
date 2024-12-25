@@ -7,7 +7,9 @@ import com.sefford.artdrian.common.WallpaperAdapter
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.test.TestScope
 import javax.inject.Singleton
 
 @Module
@@ -26,4 +28,9 @@ class DoublesModule(
 
     @Provides
     fun provideTestDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    @Singleton
+    @Memory
+    fun provideMemoryTestDispatcher(): CoroutineScope = TestScope()
 }

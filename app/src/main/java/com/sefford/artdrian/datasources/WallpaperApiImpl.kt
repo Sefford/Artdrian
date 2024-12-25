@@ -9,9 +9,8 @@ import javax.inject.Inject
 
 class WallpaperApiImpl @Inject constructor(private val httpClient: HttpClient) : WallpaperApi {
 
-    override suspend fun getAllMetadata(): WallpaperResponse = httpClient.get(METADATA).body<WallpaperResponse>()
+    private val metadataUrl = Endpoints.ENDPOINT + "index.json"
 
-    companion object {
-        const val METADATA = Endpoints.ENDPOINT + "index.json"
-    }
+    override suspend fun getAllMetadata(): WallpaperResponse = httpClient.get(metadataUrl).body<WallpaperResponse>()
+
 }
