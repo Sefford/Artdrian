@@ -11,7 +11,6 @@ import com.sefford.artdrian.data.dto.WallpapersResponse
 import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.model.Source
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.model.WallpaperList
 import io.ktor.client.HttpClient
@@ -32,14 +31,14 @@ class WallpaperNetworkDataSource @Inject constructor(private val httpClient: Htt
         flow {
             emit(
                 request({ httpClient.get(metadataUrl) }) { response ->
-                    WallpaperList(response.body<WallpapersResponse>().wallpapers.map(::Metadata), Source.NETWORK)
+                    WallpaperList.FromNetwork(response.body<WallpapersResponse>().wallpapers.map(::Metadata))
                 })
         }
 
     override fun getMetadata(id: String): Flow<SingleMetadataResponse> =
         flow {
             emit(request({ httpClient.get(wallpaperUrl.format(id)) }) { response ->
-                Wallpaper(Metadata(response.body<WallpaperResponse>().wallpaper), Source.NETWORK)
+                Wallpaper.FromNetwork(Metadata(response.body<WallpaperResponse>().wallpaper))
             })
         }
 
