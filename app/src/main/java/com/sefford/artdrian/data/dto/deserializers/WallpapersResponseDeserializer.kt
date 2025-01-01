@@ -1,6 +1,6 @@
 package com.sefford.artdrian.data.dto.deserializers
 
-import com.sefford.artdrian.data.dto.MetadataDto
+import com.sefford.artdrian.data.dto.WallpaperNetworkDto
 import com.sefford.artdrian.data.dto.WallpapersResponse
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
@@ -17,7 +17,7 @@ class WallpapersResponseDeserializer : KSerializer<WallpapersResponse> {
 
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("Response") {
-            element("wallpapers", ListSerializer(MetadataDto.serializer()).descriptor)
+            element("wallpapers", ListSerializer(WallpaperNetworkDto.serializer()).descriptor)
         }
 
     override fun deserialize(decoder: Decoder): WallpapersResponse {

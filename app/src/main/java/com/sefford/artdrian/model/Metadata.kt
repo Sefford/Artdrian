@@ -1,6 +1,6 @@
 package com.sefford.artdrian.model
 
-import com.sefford.artdrian.data.dto.MetadataDto
+import com.sefford.artdrian.data.dto.WallpaperNetworkDto
 import com.sefford.artdrian.data.dto.WallpaperDatabaseDto
 import kotlinx.datetime.LocalDateTime
 import java.util.Locale
@@ -15,7 +15,7 @@ class Metadata(
     val updated: LocalDateTime = created,
 ) {
 
-    constructor(dto: MetadataDto) : this(
+    constructor(dto: WallpaperNetworkDto) : this(
         id = dto.id,
         title = dto.title,
         views = 0,
