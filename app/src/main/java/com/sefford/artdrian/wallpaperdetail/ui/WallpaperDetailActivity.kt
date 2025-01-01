@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,22 +21,13 @@ class WallpaperDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         graph.plus(WallpaperDetailModule(intent.getStringExtra(EXTRA_ID)!!)).inject(viewModel)
-        requestWallpaper(intent.getStringExtra(EXTRA_NAME)!!)
-    }
-
-    private fun requestWallpaper(name: String) {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getWallpaper().collect { viewState ->
-                    setContent {
-                        WallpaperDetailScreen(
-                            viewState = viewState,
-                            name = name,
-                            onSaveClicked = { saveWallpaper() },
-                            onApplyClicked = { applyWallpaper() })
-                    }
-                }
-            }
+        setContent {
+            val state = viewModel.wallpaper.collectAsState(WallpaperDetailViewModel.ViewState.Loading, lifecycleScope.coroutineContext)
+            WallpaperDetailScreen(
+                viewState = state.value,
+                name = "",
+                onSaveClicked = { saveWallpaper() },
+                onApplyClicked = { applyWallpaper() })
         }
     }
 

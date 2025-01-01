@@ -2,50 +2,39 @@ package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
-import com.sefford.artdrian.data.RepositoryError
-import com.sefford.artdrian.model.Wallpaper
-import com.sefford.artdrian.usecases.GetWallpapers
+import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.stores.Store
+import com.sefford.artdrian.wallpapers.store.WallpaperEffects
+import com.sefford.artdrian.wallpapers.store.WallpaperEvents
+import com.sefford.artdrian.wallpapers.store.WallpaperStore
+import com.sefford.artdrian.wallpapers.store.WallpapersState
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class
-WallpaperListViewModel : ViewModel() {
+class WallpaperListViewModel : ViewModel() {
 
     @Inject
-    protected lateinit var getWallpapers: GetWallpapers
+    protected lateinit var store: WallpaperStore
 
-    @Inject
-    protected lateinit var dispatcher: CoroutineDispatcher
-
-    private val wallpapers: MutableList<Wallpaper> = mutableListOf()
-
-    fun getWallpapers(): Flow<ViewState> {
-        return flow {
-            if (wallpapers.isNotEmpty()) {
-                emit(ViewState.Content(wallpapers))
-            } else {
-                emit(ViewState.Loading)
-                when (val response = getWallpapers.getWallpapers()) {
-                    is Either.Left -> when(val error = response.value){
-                        is RepositoryError.NetworkingError -> emit(ViewState.Error(Errors.NetworkError(error.status)))
-                        is RepositoryError.NotFound -> emit(ViewState.Error(Errors.NotFoundError(error.id)))
-                    }
-                    is Either.Right -> {
-                        wallpapers.addAll(response.value)
-                        emit(ViewState.Content(wallpapers))
-                    }
-                }
-            }
-        }.flowOn(dispatcher)
-    }
+    val wallpapers: Flow<ViewState>
+        get() = store.state.map { ViewState(it) }
 
     sealed class ViewState {
-        object Loading : ViewState()
-        class Content(val wallpapers: List<Wallpaper>): ViewState()
+        data object Loading : ViewState()
+        class Content(val wallpapers: List<Metadata>): ViewState()
         class Error(val error: Errors) : ViewState()
+
+        companion object {
+            operator fun invoke(state: WallpapersState): ViewState = when(state) {
+                WallpapersState.Idle -> Loading
+                is WallpapersState.Loaded -> Content(state.wallpapers.map { it.metadata })
+                is WallpapersState.Error -> Error(Errors.NotFoundError(""))
+            }
+        }
     }
 
     sealed class Errors {

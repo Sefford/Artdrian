@@ -69,7 +69,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
 import com.sefford.artdrian.model.Metadata
-import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.ui.theme.Black40
 import com.sefford.artdrian.ui.theme.Black80
@@ -81,6 +80,8 @@ import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.ACTIONS
 import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.INFO
 import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -116,6 +117,7 @@ fun WallpaperDetailScreen(
                             onSaveClicked = onSaveClicked,
                             onApplyClicked = onApplyClicked
                         )
+
                         is ViewState.NotFound -> ShowError()
                     }
                 }
@@ -136,7 +138,7 @@ private fun ShowLoading() {
 
 @Composable
 private fun ShowWallpaper(
-    wallpaper: Wallpaper,
+    wallpaper: Metadata,
     onSaveClicked: () -> Unit = {},
     onApplyClicked: () -> Unit = {}
 ) {
@@ -170,7 +172,7 @@ private fun ShowWallpaper(
 private fun InfoOverlay(
     gradientOrigin: Float,
     mode: ContentMode,
-    wallpaper: Wallpaper
+    wallpaper: Metadata
 ) {
     Column(
         modifier = Modifier
@@ -204,7 +206,7 @@ private fun InfoOverlay(
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
             Text(
-                stringResource(id = R.string.detail_info_downloads, wallpaper.metadata.downloads),
+                stringResource(id = R.string.detail_info_downloads, wallpaper.downloads),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -381,15 +383,13 @@ private fun showLoading() {
 private fun showContent() {
     WallpaperDetailScreen(
         ViewState.Content(
-            Wallpaper(
-                Metadata(
-                    id = "6",
-                    title = "ghost_waves_001",
-                    views = 123,
-                    downloads = 456,
-                    slug = "ghost_waves_001",
-                    created = Clock.System.now().toLocalDateTime(TimeZone.UTC),
-                )
+            Metadata(
+                id = "6",
+                title = "ghost_waves_001",
+                views = 123,
+                downloads = 456,
+                slug = "ghost_waves_001",
+                created = Clock.System.now().toLocalDateTime(TimeZone.UTC),
             )
         ), "Example"
     )
