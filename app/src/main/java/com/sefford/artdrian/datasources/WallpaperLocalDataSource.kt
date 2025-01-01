@@ -6,7 +6,6 @@ import arrow.core.right
 import com.sefford.artdrian.data.DataError
 import com.sefford.artdrian.data.db.WallpaperDao
 import com.sefford.artdrian.data.dto.WallpaperDatabaseDto
-import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
 import com.sefford.artdrian.model.Wallpaper
@@ -23,7 +22,7 @@ class WallpaperLocalDataSource @Inject constructor(private val db: WallpaperDao)
     override fun getMetadata(): Flow<MetadataResponse> = db.getAll()
         .map { results ->
             if (results.isNotEmpty()) {
-                WallpaperList.FromLocal(results.map { entry -> Metadata(entry) }).right()
+                WallpaperList.FromLocal(results.map { entry -> Wallpaper(entry) }).right()
             } else {
                 DataError.Local.NotFound("").left()
             }
@@ -31,14 +30,14 @@ class WallpaperLocalDataSource @Inject constructor(private val db: WallpaperDao)
         .catch { DataError.Local.Critical(it).left() }
 
     override fun getMetadata(id: String): Flow<SingleMetadataResponse> = db.get(id)
-        .map { entry -> Wallpaper.FromLocal(Metadata(entry)).right() }
+        .map { entry -> Wallpaper(entry).right() }
         .catch { DataError.Local.Critical(it) }
 
-    override suspend fun save(metadata: List<Metadata>) {
-        Either.catch { db.add(*metadata.map { WallpaperDatabaseDto(it) }.toTypedArray()) }
+    override suspend fun save(wallpapers: List<Wallpaper>) {
+        Either.catch { db.add(*wallpapers.map { WallpaperDatabaseDto(it) }.toTypedArray()) }
     }
 
-    override suspend fun save(metadata: Metadata) = save(listOf(metadata))
+    override suspend fun save(wallpaper: Wallpaper) = save(listOf(wallpaper))
 
     override suspend fun delete(id: String) {
         Either.catch { db.delete(id) }

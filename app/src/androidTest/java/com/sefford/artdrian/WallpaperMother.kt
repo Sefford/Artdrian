@@ -1,7 +1,6 @@
 package com.sefford.artdrian
 
 import com.sefford.artdrian.data.dto.WallpaperNetworkDto
-import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import kotlinx.datetime.LocalDateTime
 
@@ -30,7 +29,7 @@ object WallpaperMother {
 
     val WALLPAPER_LIST = listOf(
         Wallpaper(
-            Metadata(
+            Wallpaper(
                 id = FIRST_ID,
                 views = 123,
                 slug = "ghost_waves_001",
@@ -41,7 +40,7 @@ object WallpaperMother {
             ),
         ),
         Wallpaper(
-            Metadata(
+            Wallpaper(
                 id = "2",
                 views = 123,
                 slug = "ghost_waves_002",

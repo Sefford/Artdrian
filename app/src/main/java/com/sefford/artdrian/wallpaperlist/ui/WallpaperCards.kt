@@ -29,15 +29,14 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.model.Wallpaper
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.time.LocalDateTime
 
 @Composable
 fun WallpaperCard(
-    wallpaper: Metadata,
+    wallpaper: Wallpaper,
     onItemClicked: () -> Unit = {}
 ) {
     Card(
@@ -79,6 +78,6 @@ fun WallpaperCard(
 @Composable
 fun showPreviewCard() {
     WallpaperCard(
-        Metadata("", "title", 98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
+        Wallpaper.FromLocal("", "title", 98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
     )
 }

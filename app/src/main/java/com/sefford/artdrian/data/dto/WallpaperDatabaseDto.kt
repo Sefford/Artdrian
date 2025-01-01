@@ -3,7 +3,7 @@ package com.sefford.artdrian.data.dto
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.model.Wallpaper
 
 @Entity(tableName = "wallpapers")
 class WallpaperDatabaseDto(
@@ -16,13 +16,13 @@ class WallpaperDatabaseDto(
     @ColumnInfo(name = "updated") val updated: String
 ) {
 
-    constructor(metadata: Metadata) : this(
-        id = metadata.id,
-        title = metadata.title,
-        views = metadata.views,
-        downloads = metadata.downloads,
-        slug = metadata.slug,
-        created = metadata.created.toString(),
-        updated = metadata.updated.toString()
+    constructor(wallpaper: Wallpaper) : this(
+        id = wallpaper.id,
+        title = wallpaper.title,
+        views = wallpaper.views,
+        downloads = wallpaper.downloads,
+        slug = wallpaper.slug,
+        created = wallpaper.created.toString(),
+        updated = wallpaper.updated.toString()
     )
 }
