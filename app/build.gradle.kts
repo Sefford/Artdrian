@@ -63,6 +63,7 @@ android {
 dependencies {
     // KSP dependencies
     ksp(libs.dagger.compiler)
+    ksp(libs.room.compiler)
 
     // Implementation dependencies
     // Android
@@ -93,15 +94,26 @@ dependencies {
     implementation(libs.ktor.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
 
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+
     // Other
     implementation(libs.arrow.core)
     implementation(libs.dagger)
 
     // Test dependencies
-    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.engine)
+    testRuntimeOnly(libs.junit.vintage)
+
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.junit.api)
     testImplementation(libs.jqwik)
     testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.assertions.arrow)
+    testImplementation(libs.ktor.client.mock)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
+    testImplementation(libs.room.testing)
     testImplementation(libs.kotlinx.coroutines.test)
 }

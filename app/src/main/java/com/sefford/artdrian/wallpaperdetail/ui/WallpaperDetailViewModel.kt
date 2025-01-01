@@ -2,23 +2,25 @@ package com.sefford.artdrian.wallpaperdetail.ui
 
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
+import arrow.core.Option
 import arrow.core.toOption
+import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.usecases.DownloadWallpaper
-import com.sefford.artdrian.usecases.GetWallpaper
 import com.sefford.artdrian.usecases.SetWallpaper
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperId
-import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState.Loading
+import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class WallpaperDetailViewModel : ViewModel() {
 
     @Inject
-    protected lateinit var getWallpaper: GetWallpaper
+    protected lateinit var store: WallpaperStore
 
     @Inject
     protected lateinit var downloadWallpaper: DownloadWallpaper
@@ -33,30 +35,17 @@ class WallpaperDetailViewModel : ViewModel() {
     @WallpaperId
     protected lateinit var id: String
 
-    private var wallpaper: Wallpaper? = null
-
-    fun getWallpaper(): Flow<ViewState> {
-        return flow {
-            wallpaper.toOption()
-                .fold({
-                    emit(Loading)
-                    when (val response = getWallpaper.getWallpaper(id)) {
-                        is Either.Left -> ViewState.NotFound(id)
-                        is Either.Right -> {
-                            wallpaper = response.value
-                            emit(ViewState.Content(response.value))
-                        }
-                    }
-                }) { wallpaper -> emit(ViewState.Content(wallpaper)) }
-        }.flowOn(dispatcher)
-    }
+    val wallpaper: Flow<ViewState>
+        get() = store.state.map {
+            ViewState(it[id])
+        }
 
     fun downloadWallpaper(): Flow<DownloadResult> {
         return flow {
-            wallpaper.toOption().fold({
+            store.state.value[id].fold({
                 emit(DownloadResult.Error(IllegalStateException("Wallpaper not ready")))
             }) { wallpaper ->
-                when (val response = downloadWallpaper.download(wallpaper.mobile)) {
+                when (val response = downloadWallpaper.download(wallpaper.metadata.mobile)) {
                     is Either.Left -> emit(DownloadResult.Error(response.value.exception))
                     is Either.Right -> emit(DownloadResult.Response(response.value))
                 }
@@ -81,9 +70,17 @@ class WallpaperDetailViewModel : ViewModel() {
 }
 
 sealed class ViewState {
-    object Loading : ViewState()
-    class Content(val wallpaper: Wallpaper) : ViewState()
+    data object Loading : ViewState()
+    class Content(val wallpaper: Metadata) : ViewState()
     class NotFound(id: String) : ViewState()
+
+    companion object {
+        operator fun invoke(wallpaper: Option<Wallpaper>) = wallpaper.fold({
+            NotFound("")
+        }) {
+            Content(it.metadata)
+        }
+    }
 }
 
 sealed class DownloadResult {

@@ -5,34 +5,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.sefford.artdrian.ui.navigation.goToDetail
 import com.sefford.artdrian.utils.graph
-import kotlinx.coroutines.launch
+import com.sefford.artdrian.wallpapers.store.WallpaperStore
+import javax.inject.Inject
 
 class WallpaperListActivity : ComponentActivity() {
+
+    @Inject
+    protected lateinit var store: WallpaperStore
 
     private val viewModel: WallpaperListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         graph.inject(viewModel)
-        requestWallpapers()
-    }
-
-    private fun requestWallpapers() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getWallpapers().collect { response ->
-                    setContent {
-                        WallpaperListScreen(response) { wallpaperId, wallpaperName ->
-                            goToDetail(wallpaperId, wallpaperName)
-                        }
-                    }
-                }
-            }
+        setContent {
+            WallpaperListScreen(
+                viewModel.wallpapers.collectAsState(
+                    WallpaperListViewModel.ViewState.Loading,
+                    lifecycleScope.coroutineContext
+                ).value
+            )
+            { wallpaperId, wallpaperName -> goToDetail(wallpaperId, wallpaperName) }
         }
     }
 }

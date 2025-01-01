@@ -5,4 +5,4 @@ import kotlinx.serialization.Serializable
 
 @JvmInline
 @Serializable(with = WallpaperResponseDeserializer::class)
-value class WallpaperResponse(val wallpapers: List<MetadataDto>)
+value class WallpaperResponse(val wallpaper: MetadataDto)

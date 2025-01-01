@@ -1,9 +1,9 @@
 package com.sefford.artdrian.datasources
 
-import com.sefford.artdrian.data.dto.WallpaperResponse
+import com.sefford.artdrian.data.dto.WallpapersResponse
 
-class FakeWallpaperApi(private val response: () -> WallpaperResponse) : WallpaperApi {
+class FakeWallpaperApi(private val response: () -> WallpapersResponse) : WallpaperNetworkDataSource {
 
-    override suspend fun getAllMetadata(): WallpaperResponse = response()
+    override suspend fun getAllMetadata(): WallpapersResponse = response()
 
 }

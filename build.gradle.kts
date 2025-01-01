@@ -17,6 +17,7 @@ buildscript {
 
 allprojects {
     tasks.withType<Test> {
+        useJUnitPlatform()
         jvmArgs(
             "--add-opens", "java.base/java.time=ALL-UNNAMED",
             "--add-opens", "java.base/java.lang.reflect=ALL-UNNAMED",

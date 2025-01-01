@@ -1,0 +1,31 @@
+{
+  "__class__": "WallpapersResponse",
+  "wallpapers": [
+    {
+      "__class__": "MetadataDto",
+      "id": "wallpapers/ghost_waves_004.mdx",
+      "slug": "ghost_waves_004",
+      "title": "Ghost waves",
+      "downloads": 29,
+      "created": {
+        "__class__": "LocalDateTime",
+        "value": {
+          "__class__": "LocalDateTime",
+          "date": {
+            "__class__": "LocalDate",
+            "year": 2024,
+            "month": 4,
+            "day": 21
+          },
+          "time": {
+            "__class__": "LocalTime",
+            "hour": 2,
+            "minute": 0,
+            "second": 0,
+            "nano": 0
+          }
+        }
+      }
+    }
+  ]
+}

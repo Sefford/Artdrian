@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sefford.artdrian.R
-import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.wallpaperlist.ui.WallpaperCard
 import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
@@ -77,13 +77,13 @@ private fun ShowLoading() {
 }
 
 @Composable
-private fun ShowWallpapers(wallpapers: List<Wallpaper>, onItemClick: (String, String) -> Unit) {
+private fun ShowWallpapers(wallpapers: List<Metadata>, onItemClick: (String, String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(wallpapers) { wallpaper ->
-            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.metadata.id, wallpaper.name) })
+            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.id, wallpaper.name) })
         }
     }
 }

@@ -1,0 +1,29 @@
+{
+  "pageProps": {
+    "wallpaper": [
+      {
+        "title": "Ghost waves",
+        "edition": "004",
+        "tags": ["6k-ready"],
+        "publishedAt": "2024-04-21T00:00:00.000Z",
+        "image": "/static/images/wallpaper/ghost_waves_004_web_preview.jpg",
+        "imageQuality": 100,
+        "imageUnoptimized": true,
+        "imageObjectPosition": "17% 50%",
+        "imageExtension": "jpg",
+        "description": "",
+        "_id": "wallpapers/ghost_waves_004.mdx",
+        "_raw": {
+          "sourceFilePath": "wallpapers/ghost_waves_004.mdx",
+          "sourceFileName": "ghost_waves_004.mdx",
+          "sourceFileDir": "wallpapers",
+          "contentType": "mdx",
+          "flattenedPath": "wallpapers/ghost_waves_004"
+        },
+        "type": "Wallpaper",
+        "slug": "ghost_waves_004",
+        "totalDownloads": 29
+      }
+    ]
+  }
+}

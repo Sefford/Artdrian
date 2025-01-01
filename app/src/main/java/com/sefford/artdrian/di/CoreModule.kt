@@ -1,13 +1,24 @@
 package com.sefford.artdrian.di
 
+import android.content.Context
 import android.util.Log
-import com.sefford.artdrian.datasources.WallpaperApi
-import com.sefford.artdrian.datasources.WallpaperApiImpl
-import com.sefford.artdrian.datasources.WallpaperMemoryDataSource
+import androidx.room.Room
+import com.sefford.artdrian.data.db.WallpaperDao
+import com.sefford.artdrian.data.db.WallpaperDatabase
+import com.sefford.artdrian.datasources.WallpaperCache
+import com.sefford.artdrian.datasources.WallpaperLocalDataSource
+import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
+import com.sefford.artdrian.model.MetadataResponse
+import com.sefford.artdrian.model.SingleMetadataResponse
+import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
+import com.sefford.artdrian.wallpapers.store.WallpaperEvents
+import com.sefford.artdrian.wallpapers.store.WallpaperStore
+import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.Module
 import dagger.Provides
 import io.ktor.client.HttpClient
+import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -19,18 +30,27 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
 class CoreModule {
-    private val TIME_OUT = 10_000
+    private val TIME_OUT = 10_000L
 
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient {
-        return HttpClient(CIO) {
+    fun provideEngine(): HttpClientEngineFactory<*> = CIO
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(engine: HttpClientEngineFactory<*> = CIO): HttpClient {
+        return HttpClient(engine) {
             install(ContentNegotiation) {
                 json(
                     Json {
@@ -60,26 +80,54 @@ class CoreModule {
             install(DefaultRequest) {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
             }
-
-            engine {
-                requestTimeout = TIME_OUT.toLong()
-            }
         }
     }
 
     @Provides
     @Singleton
-    fun provideApiService(impl: WallpaperApiImpl): WallpaperApi = impl
+    fun provideDatabase(@Application context: Context): WallpaperDatabase = Room.databaseBuilder(
+        context,
+        WallpaperDatabase::class.java, "wallpapers"
+    ).build()
 
     @Provides
     @Singleton
-    fun provideLocalWallpaperCache(@Memory scope: CoroutineScope): WallpaperMemoryDataSource = WallpaperMemoryDataSource(scope = scope)
+    fun provideDao(database: WallpaperDatabase): WallpaperDao = database.dao()
 
     @Provides
     @Singleton
-    fun provideWallpaperRepository(
-        api: WallpaperApi,
-        local: WallpaperMemoryDataSource
-    ): WallpaperRepository =
-        WallpaperRepository(api, local)
+    fun provideRepository(
+        local: WallpaperLocalDataSource,
+        network: WallpaperNetworkDataSource
+    ): WallpaperRepository {
+        val getAllMetadataLocal: () -> Flow<MetadataResponse> = local::getMetadata
+        val getAllMetadataNetwork: () -> Flow<MetadataResponse> = network::getMetadata
+        val getSingleMetadataLocal: (String) -> Flow<SingleMetadataResponse> = local::getMetadata
+        val getSingleMetadataNetwork: (String) -> Flow<SingleMetadataResponse> = network::getMetadata
+        return WallpaperRepository(getAllMetadataLocal, getAllMetadataNetwork, getSingleMetadataLocal, getSingleMetadataNetwork)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWallpaperCache(dataSource: WallpaperLocalDataSource): WallpaperCache = dataSource
+
+    @Provides
+    @Singleton
+    fun provideWallpaperDomainEffectHandler(
+        repository: WallpaperRepository,
+        cache: WallpaperCache
+    ): WallpaperDomainEffectHandler {
+        val getAllMetadata: () -> Flow<MetadataResponse> = repository::getMetadata
+        val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = repository::getMetadata
+        return WallpaperDomainEffectHandler(getAllMetadata, getSingleMetadata, cache::save, cache::clear)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWallpaperStore(domainEffectHandler: WallpaperDomainEffectHandler): WallpaperStore {
+        val store = WallpaperStore(WallpapersState.Idle, MainScope().plus(Dispatchers.Default))
+        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }
+            .launchIn(MainScope().plus(Dispatchers.IO))
+        return store
+    }
 }

@@ -30,14 +30,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sefford.artdrian.model.Metadata
-import com.sefford.artdrian.model.Wallpaper
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import java.time.LocalDateTime
 
 @Composable
 fun WallpaperCard(
-    wallpaper: Wallpaper,
+    wallpaper: Metadata,
     onItemClicked: () -> Unit = {}
 ) {
     Card(
@@ -45,11 +45,14 @@ fun WallpaperCard(
             .fillMaxWidth()
             .aspectRatio(1.7f)
     ) {
-        Box(modifier = Modifier.fillMaxSize().testTag(wallpaper.metadata.id).clickable(onClick = onItemClicked)) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .testTag(wallpaper.id)
+            .clickable(onClick = onItemClicked)) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
                 model = wallpaper.desktop,
-                contentDescription = wallpaper.metadata.slug,
+                contentDescription = wallpaper.slug,
                 contentScale = ContentScale.Crop
             )
             Row(
@@ -63,10 +66,10 @@ fun WallpaperCard(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Icon(Icons.Rounded.Visibility, modifier = Modifier.size(20.dp), contentDescription = "")
-                Text(text = wallpaper.metadata.views.toString())
+                Text(text = wallpaper.views.toString())
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(Icons.Rounded.Download, modifier = Modifier.size(20.dp), contentDescription = "")
-                Text(text = wallpaper.metadata.downloads.toString())
+                Text(text = wallpaper.downloads.toString())
             }
         }
     }
@@ -76,8 +79,6 @@ fun WallpaperCard(
 @Composable
 fun showPreviewCard() {
     WallpaperCard(
-        Wallpaper(
-            Metadata("", "title",98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
-        )
+        Metadata("", "title", 98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
     )
 }

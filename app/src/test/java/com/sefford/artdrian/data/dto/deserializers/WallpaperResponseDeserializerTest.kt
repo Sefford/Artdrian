@@ -1,22 +1,22 @@
 package com.sefford.artdrian.data.dto.deserializers
 
+import com.sefford.artdrian.test.Resources
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.data.dto.WallpaperResponse
-import com.sefford.utils.Files
+import com.sefford.artdrian.data.dto.WallpapersResponse
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Test
 
-class WallpaperResponseDeserializerTest : Files {
+class WallpaperResponseDeserializerTest : Resources {
 
     private val json = Json {
-        ignoreUnknownKeys = true  // optional configurations
+        ignoreUnknownKeys = true
         prettyPrint = true
     }
 
     @Test
     fun deserialize() {
-        val string = this@WallpaperResponseDeserializerTest::class.java.readResourceFromFile("index.json")
-        val response = json.decodeFromString<WallpaperResponse>(string)
+        val response = json.decodeFromString<WallpaperResponse>("single-wallpaper-response.json".asResponse())
 
         response.matchWithSnapshot()
     }

@@ -3,7 +3,6 @@ package com.sefford.artdrian.data.dto.deserializers
 import com.sefford.artdrian.data.dto.MetadataDto
 import com.sefford.artdrian.data.dto.WallpaperResponse
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
@@ -17,19 +16,17 @@ class WallpaperResponseDeserializer : KSerializer<WallpaperResponse> {
 
     override val descriptor: SerialDescriptor =
         buildClassSerialDescriptor("Response") {
-            element("wallpapers", ListSerializer(MetadataDto.serializer()).descriptor)
+            element("wallpaper", MetadataDto.serializer().descriptor)
         }
-
 
     override fun deserialize(decoder: Decoder): WallpaperResponse {
         val jsonDecoder = (decoder as JsonDecoder)
         val jsonObject = jsonDecoder.decodeJsonElement().jsonObject
-        return WallpaperResponse(
-            jsonObject["pageProps"]!!
-                .jsonObject["wallpapers"]!!
-                .jsonArray
-                .map { e -> jsonDecoder.json.decodeFromJsonElement(e) }
-        )
+        return jsonObject["pageProps"]!!
+            .jsonObject["wallpaper"]!!
+            .jsonArray
+            .map { e ->  WallpaperResponse(jsonDecoder.json.decodeFromJsonElement(e)) }
+            .first()
     }
 
     override fun serialize(encoder: Encoder, value: WallpaperResponse) {
