@@ -1,15 +1,13 @@
 package com.sefford.artdrian.datasources
 
-import arrow.core.Either
-import com.sefford.artdrian.data.RepositoryError
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.model.MetadataResponse
+import com.sefford.artdrian.model.SingleMetadataResponse
+import kotlinx.coroutines.flow.Flow
 
 interface WallpaperDataSource {
 
-    suspend fun getAllMetadata(): Either<RepositoryError, List<Metadata>>
+    fun getMetadata(): Flow<MetadataResponse>
 
-    suspend fun saveMetadata(metadata: List<Metadata>)
-
-    suspend fun getWallpaperMetadata(id: String): Either<RepositoryError, Metadata>
+    fun getMetadata(id: String): Flow<SingleMetadataResponse>
 
 }
