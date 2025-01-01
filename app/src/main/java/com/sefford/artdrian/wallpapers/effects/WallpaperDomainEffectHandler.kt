@@ -1,9 +1,8 @@
 package com.sefford.artdrian.wallpapers.effects
 
-import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.model.WallpaperList
+import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.stores.EffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperEffects
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
@@ -20,7 +19,7 @@ import kotlinx.coroutines.plus
 class WallpaperDomainEffectHandler(
     private val getAllMetadata: () -> Flow<MetadataResponse> = { flow {} },
     private val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = { flow {} },
-    private val persistMetadata: suspend (List<Metadata>) -> Unit = {},
+    private val persistMetadata: suspend (List<Wallpaper>) -> Unit = {},
     private val clear: suspend () -> Unit = {},
     scope: CoroutineScope = MainScope().plus(Dispatchers.IO)
 ) : EffectHandler<WallpaperEvents, WallpaperEffects>(scope) {
@@ -45,12 +44,12 @@ class WallpaperDomainEffectHandler(
     private fun load(id: String, event: (WallpaperEvents) -> Unit) {
         getSingleMetadata(id).onEach { response ->
             response.fold({ error -> event(WallpaperEvents.OnErrorReceived(error)) }) { wallpaper ->
-                event(WallpaperEvents.OnResponseReceived(WallpaperList(wallpaper)))
+                event(WallpaperEvents.OnResponseReceived(wallpaper))
             }
         }.launchIn(scope)
     }
 
-    private fun persist(metadata: List<Metadata>) {
+    private fun persist(metadata: List<Wallpaper>) {
         scope.launch { persistMetadata(metadata) }
     }
 }

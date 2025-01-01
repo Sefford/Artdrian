@@ -1,10 +1,9 @@
 package com.sefford.artdrian.wallpapers.store
 
 import com.sefford.artdrian.data.DataError
-import com.sefford.artdrian.model.Source
 import com.sefford.artdrian.model.WallpaperList
 import com.sefford.artdrian.test.StoreStateInstrumentation
-import com.sefford.artdrian.test.mothers.MetadataMother
+import com.sefford.artdrian.test.mothers.WallpaperMother
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContainInOrder
 import io.kotest.matchers.collections.shouldContainOnly
@@ -69,7 +68,7 @@ class WallpaperStoreTest {
         val store = WallpaperStore(WallpapersState.Idle, scope)
         val instrumentation = StoreStateInstrumentation(store, scope)
 
-        store.event(WallpaperEvents.OnResponseReceived(WallpaperList(MetadataMother.generate(), Source.NETWORK)))
+        store.event(WallpaperEvents.OnResponseReceived(WallpaperMother.generateNetwork()))
 
         instrumentation.result.should { (states, effects) ->
             states.shouldHaveSize(1)

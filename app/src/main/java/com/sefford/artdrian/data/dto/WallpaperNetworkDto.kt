@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class MetadataDto(
+class WallpaperNetworkDto(
     @SerialName("_id") val id: String,
     @SerialName("slug") val slug: String,
     @SerialName("title") val title: String,

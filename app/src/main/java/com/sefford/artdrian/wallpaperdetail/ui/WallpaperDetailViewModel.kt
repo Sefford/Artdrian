@@ -3,8 +3,6 @@ package com.sefford.artdrian.wallpaperdetail.ui
 import androidx.lifecycle.ViewModel
 import arrow.core.Either
 import arrow.core.Option
-import arrow.core.toOption
-import com.sefford.artdrian.model.Metadata
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.usecases.DownloadWallpaper
 import com.sefford.artdrian.usecases.SetWallpaper
@@ -45,7 +43,7 @@ class WallpaperDetailViewModel : ViewModel() {
             store.state.value[id].fold({
                 emit(DownloadResult.Error(IllegalStateException("Wallpaper not ready")))
             }) { wallpaper ->
-                when (val response = downloadWallpaper.download(wallpaper.metadata.mobile)) {
+                when (val response = downloadWallpaper.download(wallpaper.mobile)) {
                     is Either.Left -> emit(DownloadResult.Error(response.value.exception))
                     is Either.Right -> emit(DownloadResult.Response(response.value))
                 }
@@ -71,14 +69,14 @@ class WallpaperDetailViewModel : ViewModel() {
 
 sealed class ViewState {
     data object Loading : ViewState()
-    class Content(val wallpaper: Metadata) : ViewState()
+    class Content(val wallpaper: Wallpaper) : ViewState()
     class NotFound(id: String) : ViewState()
 
     companion object {
         operator fun invoke(wallpaper: Option<Wallpaper>) = wallpaper.fold({
             NotFound("")
         }) {
-            Content(it.metadata)
+            Content(it)
         }
     }
 }

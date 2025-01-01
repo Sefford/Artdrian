@@ -1,7 +1,7 @@
 {
   "__class__": "WallpaperResponse",
   "wallpaper": {
-    "__class__": "MetadataDto",
+    "__class__": "WallpaperNetworkDto",
     "id": "wallpapers/ghost_waves_004.mdx",
     "slug": "ghost_waves_004",
     "title": "Ghost waves",

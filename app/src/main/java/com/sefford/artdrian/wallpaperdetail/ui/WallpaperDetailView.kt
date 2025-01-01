@@ -68,7 +68,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
-import com.sefford.artdrian.model.Metadata
+import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.ui.theme.Black40
 import com.sefford.artdrian.ui.theme.Black80
@@ -80,8 +80,6 @@ import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.ACTIONS
 import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.INFO
 import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -138,7 +136,7 @@ private fun ShowLoading() {
 
 @Composable
 private fun ShowWallpaper(
-    wallpaper: Metadata,
+    wallpaper: Wallpaper,
     onSaveClicked: () -> Unit = {},
     onApplyClicked: () -> Unit = {}
 ) {
@@ -172,7 +170,7 @@ private fun ShowWallpaper(
 private fun InfoOverlay(
     gradientOrigin: Float,
     mode: ContentMode,
-    wallpaper: Metadata
+    wallpaper: Wallpaper
 ) {
     Column(
         modifier = Modifier
@@ -383,7 +381,7 @@ private fun showLoading() {
 private fun showContent() {
     WallpaperDetailScreen(
         ViewState.Content(
-            Metadata(
+            Wallpaper.FromLocal(
                 id = "6",
                 title = "ghost_waves_001",
                 views = 123,

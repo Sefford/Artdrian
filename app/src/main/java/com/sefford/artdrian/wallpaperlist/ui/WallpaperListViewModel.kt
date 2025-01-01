@@ -1,17 +1,10 @@
 package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.lifecycle.ViewModel
-import arrow.core.Either
-import com.sefford.artdrian.model.Metadata
-import com.sefford.artdrian.stores.Store
-import com.sefford.artdrian.wallpapers.store.WallpaperEffects
-import com.sefford.artdrian.wallpapers.store.WallpaperEvents
+import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -25,13 +18,13 @@ class WallpaperListViewModel : ViewModel() {
 
     sealed class ViewState {
         data object Loading : ViewState()
-        class Content(val wallpapers: List<Metadata>): ViewState()
+        class Content(val wallpapers: List<Wallpaper>): ViewState()
         class Error(val error: Errors) : ViewState()
 
         companion object {
             operator fun invoke(state: WallpapersState): ViewState = when(state) {
                 WallpapersState.Idle -> Loading
-                is WallpapersState.Loaded -> Content(state.wallpapers.map { it.metadata })
+                is WallpapersState.Loaded -> Content(state.wallpapers.map { it })
                 is WallpapersState.Error -> Error(Errors.NotFoundError(""))
             }
         }

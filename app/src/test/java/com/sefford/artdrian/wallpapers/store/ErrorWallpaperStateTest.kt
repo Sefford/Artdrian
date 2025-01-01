@@ -1,10 +1,8 @@
 package com.sefford.artdrian.wallpapers.store
 
 import com.sefford.artdrian.data.DataError
-import com.sefford.artdrian.model.Source
-import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.model.WallpaperList
-import com.sefford.artdrian.test.mothers.MetadataMother
+import com.sefford.artdrian.test.mothers.WallpaperMother
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -19,7 +17,7 @@ class ErrorWallpaperStateTest {
 
     @Test
     fun `merges with a list of wallpapers`() {
-        (error + WallpaperList(MetadataMother.generate(), source = Source.LOCAL)).should { newState ->
+        (error + WallpaperMother.generateLocal().toList()).should { newState ->
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
@@ -29,7 +27,7 @@ class ErrorWallpaperStateTest {
 
     @Test
     fun `merges with a single wallpaper`() {
-        (error + Wallpaper(MetadataMother.generate(), source = Source.LOCAL)).should { newState ->
+        (error + WallpaperMother.generateLocal().toList()).should { newState ->
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
