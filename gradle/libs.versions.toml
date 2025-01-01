@@ -11,9 +11,10 @@ coroutines-test = "1.10.0"
 core-ktx = "1.15.0"
 dagger = "2.50"
 datetime = "0.6.1"
-junit-bom = "5.9.3"
+junit5 = "5.11.4"
 jqwik = "1.7.1"
-kotest = "5.5.4"
+kotest = "5.8.1"
+kotest-arrow = "2.0.0"
 kotlin = "2.1.0"
 kotlin-serialization = "2.1.0"
 kotlin-snapshot = "2.3.0"
@@ -23,8 +24,10 @@ material3 = "1.3.1"
 material-icons-extended = "1.7.6"
 mockwebserver = "4.9.3"
 robolectric = "4.14.1"
+room = "2.6.1"
 serialization-json = "1.7.3"
 shot = "6.1.0"
+test-core = "1.6.1"
 ktor = "2.3.12"
 ktor-logging = "2.0.0"
 ktor-serialization = "2.3.4"
@@ -66,6 +69,7 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor-serialization" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-logging" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-serialization" }
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-serialization" }
 
@@ -78,13 +82,25 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 # Kotlin Libraries
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
+# Room
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-testing = { module = "androidx.room:room-testing", version.ref = "room" }
+
 # Testing
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit5" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
+junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest-assertions-arrow = { group = "io.kotest.extensions", name = "kotest-assertions-arrow", version.ref = "kotest-arrow" }
 jqwik = { group = "net.jqwik", name = "jqwik", version.ref = "jqwik" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "test-core" }
 
 # Snapshot Plugins
 snapshot = { module = "com.karumi.kotlinsnapshot:plugin", version.ref = "kotlin-snapshot" }
 screenshot = { module = "com.karumi:shot", version.ref = "shot" }
+
