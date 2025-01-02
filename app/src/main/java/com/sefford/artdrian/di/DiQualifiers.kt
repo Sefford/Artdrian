@@ -13,3 +13,6 @@ annotation class Memory
 
 @Qualifier
 annotation class Disk
+
+@Qualifier
+annotation class NetworkCache

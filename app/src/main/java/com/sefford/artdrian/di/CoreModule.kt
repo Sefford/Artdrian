@@ -12,7 +12,6 @@ import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
-import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.Module
@@ -21,6 +20,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.cache.HttpCache
+import io.ktor.client.plugins.cache.storage.FileStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
+import java.io.File
 import javax.inject.Singleton
 
 @Module
@@ -49,7 +51,8 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(engine: HttpClientEngineFactory<*> = CIO): HttpClient {
+    fun provideHttpClient(@NetworkCache httpCacheDir: File, engine: HttpClientEngineFactory<*> = CIO
+    ): HttpClient {
         return HttpClient(engine) {
             install(ContentNegotiation) {
                 json(
@@ -60,7 +63,6 @@ class CoreModule {
                     }, contentType = ContentType.parse("text/x-component")
                 )
             }
-
 
             install(Logging) {
                 logger = object : Logger {
@@ -79,6 +81,11 @@ class CoreModule {
 
             install(DefaultRequest) {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
+            }
+
+            install(HttpCache) {
+                // Configure FileStorage for persistent caching
+                publicStorage(FileStorage(httpCacheDir))
             }
         }
     }

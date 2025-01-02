@@ -31,6 +31,11 @@ class DoublesModule(
 
     @Provides
     @Singleton
+    @NetworkCache
+    fun provideNetworkCache(@Application context: Context) = context.externalCacheDir!!
+
+    @Provides
+    @Singleton
     fun provideFakeFileManager(): FileManager = FakeFileManager(fileManagerResponse)
 
     @Provides
