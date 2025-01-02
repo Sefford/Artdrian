@@ -43,7 +43,7 @@ class WallpaperDetailViewModel : ViewModel() {
             store.state.value[id].fold({
                 emit(DownloadResult.Error(IllegalStateException("Wallpaper not ready")))
             }) { wallpaper ->
-                when (val response = downloadWallpaper.download(wallpaper.mobile)) {
+                when (val response = downloadWallpaper.download(wallpaper.images.mobile)) {
                     is Either.Left -> emit(DownloadResult.Error(response.value.exception))
                     is Either.Right -> emit(DownloadResult.Response(response.value))
                 }

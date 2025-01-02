@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.sefford.artdrian.model.Images
 import com.sefford.artdrian.model.Wallpaper
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -50,7 +51,7 @@ fun WallpaperCard(
             .clickable(onClick = onItemClicked)) {
             AsyncImage(
                 modifier = Modifier.fillMaxSize(),
-                model = wallpaper.desktop,
+                model = wallpaper.images.desktop,
                 contentDescription = wallpaper.slug,
                 contentScale = ContentScale.Crop
             )
@@ -65,7 +66,7 @@ fun WallpaperCard(
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Icon(Icons.Rounded.Visibility, modifier = Modifier.size(20.dp), contentDescription = "")
-                Text(text = wallpaper.views.toString())
+                Text(text = wallpaper.downloads.toString())
                 Spacer(modifier = Modifier.width(8.dp))
                 Icon(Icons.Rounded.Download, modifier = Modifier.size(20.dp), contentDescription = "")
                 Text(text = wallpaper.downloads.toString())
@@ -78,6 +79,15 @@ fun WallpaperCard(
 @Composable
 fun showPreviewCard() {
     WallpaperCard(
-        Wallpaper.FromLocal("", "title", 98, 123, "test", Clock.System.now().toLocalDateTime(TimeZone.UTC))
+        Wallpaper.FromLocal(
+            id = "6",
+            slug = "ghost_waves_001",
+            title = "Ghost Waves",
+            version = "001",
+            downloads = 456,
+            images = Images("", "", ""),
+            tags = listOf("4K-READY"),
+            published = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+        )
     )
 }
