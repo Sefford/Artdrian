@@ -9,22 +9,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.lifecycleScope
 import com.sefford.artdrian.ui.navigation.goToDetail
 import com.sefford.artdrian.utils.graph
-import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import javax.inject.Inject
 
 class WallpaperListActivity : ComponentActivity() {
 
     @Inject
-    protected lateinit var store: WallpaperStore
+    protected lateinit var viewModelFactory: WallpaperListViewModel.Factory
 
-    private val viewModel: WallpaperListViewModel by viewModels()
+    private val viewModel: WallpaperListViewModel by viewModels {
+        WallpaperListViewModel.providesFactory(viewModelFactory, WallpaperListViewModel.ViewState.Loading)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        graph.inject(viewModel)
+        graph.inject(this)
         setContent {
             WallpaperListScreen(
-                viewModel.wallpapers.collectAsState(
+                viewModel.state.collectAsState(
                     WallpaperListViewModel.ViewState.Loading,
                     lifecycleScope.coroutineContext
                 ).value

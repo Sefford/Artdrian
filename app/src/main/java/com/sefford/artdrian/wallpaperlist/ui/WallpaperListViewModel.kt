@@ -1,28 +1,37 @@
 package com.sefford.artdrian.wallpaperlist.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.stores.HoldsState
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
-import kotlinx.coroutines.flow.Flow
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
-class WallpaperListViewModel : ViewModel() {
+class WallpaperListViewModel @AssistedInject constructor(
+    private val wallpaperStore: WallpaperStore,
+    @Assisted initial: ViewState
+) : ViewModel(), HoldsState<WallpaperListViewModel.ViewState> {
 
-    @Inject
-    protected lateinit var store: WallpaperStore
-
-    val wallpapers: Flow<ViewState>
-        get() = store.state.map { ViewState(it) }
+    override val state: StateFlow<ViewState> = wallpaperStore.state.map { ViewState(it) }
+        .stateIn(viewModelScope, SharingStarted.Lazily, initial)
 
     sealed class ViewState {
         data object Loading : ViewState()
-        class Content(val wallpapers: List<Wallpaper>): ViewState()
+        class Content(val wallpapers: List<Wallpaper>) : ViewState()
+
         class Error(val error: Errors) : ViewState()
 
         companion object {
-            operator fun invoke(state: WallpapersState): ViewState = when(state) {
+            operator fun invoke(state: WallpapersState): ViewState = when (state) {
                 WallpapersState.Idle -> Loading
                 is WallpapersState.Loaded -> Content(state.wallpapers.map { it })
                 is WallpapersState.Error -> Error(Errors.NotFoundError(""))
@@ -31,7 +40,27 @@ class WallpaperListViewModel : ViewModel() {
     }
 
     sealed class Errors {
-        class NetworkError(val status: Int): Errors()
-        class NotFoundError(val id: String): Errors()
+        class NetworkError(val status: Int) : Errors()
+        class NotFoundError(val id: String) : Errors()
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            @Assisted initialState: ViewState,
+        ): WallpaperListViewModel
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    companion object {
+
+        fun providesFactory(
+            assistedFactory: Factory,
+            initialState: ViewState
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(initialState) as T
+            }
+        }
     }
 }
