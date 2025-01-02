@@ -25,13 +25,17 @@ import io.ktor.http.headersOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 
 class WallpaperNetworkDataSourceTest : Resources {
+
+    private val cacheDir: File = File("/http_cache")
 
     @Test
     fun `returns the payload`() {
         runTest {
-            val client = CoreModule().provideHttpClient(mockEngine { request ->
+            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { request ->
                 respondOnly(
                     { request.url.encodedPath.endsWith("index.json") },
                     content = "single-wallpaper-list-response.json".asResponse(),
@@ -50,7 +54,7 @@ class WallpaperNetworkDataSourceTest : Resources {
     @Test
     fun `fails returning the status code`() {
         runTest {
-            val client = CoreModule().provideHttpClient(mockEngine { request ->
+            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { request ->
                 respond(
                     content = "",
                     status = HttpStatusCode.ServiceUnavailable
@@ -68,7 +72,7 @@ class WallpaperNetworkDataSourceTest : Resources {
     @Test
     fun `fails critically`() {
         runTest {
-            val client = CoreModule().provideHttpClient(mockEngine { request ->
+            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { request ->
                 throw SOCKET_EXCEPTION
             })
 
