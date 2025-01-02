@@ -11,7 +11,9 @@ import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
+import com.sefford.artdrian.stores.KotlinStore
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
+import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.Module
@@ -132,7 +134,7 @@ class CoreModule {
     @Provides
     @Singleton
     fun provideWallpaperStore(domainEffectHandler: WallpaperDomainEffectHandler): WallpaperStore {
-        val store = WallpaperStore(WallpapersState.Idle, MainScope().plus(Dispatchers.Default))
+        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle)
         store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }
             .launchIn(MainScope().plus(Dispatchers.IO))
         return store

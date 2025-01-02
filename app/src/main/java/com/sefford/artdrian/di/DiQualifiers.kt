@@ -16,3 +16,6 @@ annotation class Disk
 
 @Qualifier
 annotation class NetworkCache
+
+@Qualifier
+annotation class Wallpapers
