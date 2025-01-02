@@ -1,5 +1,6 @@
 package com.sefford.artdrian
 
 object Endpoints {
-    const val ENDPOINT = "https://adrianmato.art/_next/data/jCZPyMoNMuUVfNkZ6NnO4/"
+    const val HOST = "https://adrianmato.art"
+    const val ENDPOINT = "$HOST/_next/data/jCZPyMoNMuUVfNkZ6NnO4/"
 }

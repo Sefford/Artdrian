@@ -68,6 +68,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
+import com.sefford.artdrian.model.Images
 import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.ui.theme.Black40
@@ -151,8 +152,8 @@ private fun ShowWallpaper(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize(),
-            model = wallpaper.mobile,
-            contentDescription = wallpaper.name,
+            model = wallpaper.images.mobile,
+            contentDescription = wallpaper.title,
             contentScale = ContentScale.Crop
         )
         val gradientOrigin: Float by animateFloatAsState(
@@ -192,7 +193,7 @@ private fun InfoOverlay(
             enter = slideInVertically(tween(), initialOffsetY = { it / 2 }) + fadeIn(tween()),
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
-            Text(wallpaper.name, fontWeight = FontWeight.Bold, style = Typography.headlineLarge)
+            Text(wallpaper.title, fontWeight = FontWeight.Bold, style = Typography.headlineLarge)
         }
         Spacer(modifier = Modifier.height(24.dp))
         AnimatedVisibility(
@@ -383,11 +384,13 @@ private fun showContent() {
         ViewState.Content(
             Wallpaper.FromLocal(
                 id = "6",
-                title = "ghost_waves_001",
-                views = 123,
-                downloads = 456,
                 slug = "ghost_waves_001",
-                created = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+                title = "Ghost Waves",
+                version = "001",
+                downloads = 456,
+                images = Images("", "", ""),
+                tags = listOf("4K-READY"),
+                published = Clock.System.now().toLocalDateTime(TimeZone.UTC),
             )
         ), "Example"
     )

@@ -5,9 +5,15 @@
       "__class__": "WallpaperNetworkDto",
       "id": "wallpapers/ghost_waves_004.mdx",
       "slug": "ghost_waves_004",
+      "version": "004",
       "title": "Ghost waves",
       "downloads": 29,
-      "created": {
+      "preview": "/static/images/wallpaper/ghost_waves_004_web_preview.jpg",
+      "extension": "jpg",
+      "tags": [
+        "6k-ready"
+      ],
+      "published": {
         "__class__": "LocalDateTime",
         "value": {
           "__class__": "LocalDateTime",

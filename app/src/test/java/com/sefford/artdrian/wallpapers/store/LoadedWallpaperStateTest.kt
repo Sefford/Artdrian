@@ -56,10 +56,10 @@ class LoadedWallpaperStateTest {
     fun `overrides a network metadata with a network metadata`() {
         val state = WallpapersState.Loaded(WallpaperMother.generateNetwork())
 
-        (state + WallpaperMother.generateNetwork(views = UPDATED_VIEWS)).should { newState ->
+        (state + WallpaperMother.generateNetwork(downloads = UPDATED_DOWNLOADS)).should { newState ->
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.network.shouldBeTrue()
-            newState.wallpapers.first().views shouldBe UPDATED_VIEWS
+            newState.wallpapers.first().downloads shouldBe UPDATED_DOWNLOADS
             newState.source.network.shouldBeTrue()
             newState.next shouldBe WallpapersState.Idle
         }
@@ -69,10 +69,10 @@ class LoadedWallpaperStateTest {
     fun `overrides a local metadata with a local metadata`() {
         val state = WallpapersState.Loaded(WallpaperMother.generateLocal())
 
-        (state + WallpaperMother.generateLocal(views = UPDATED_VIEWS)).should { newState ->
+        (state + WallpaperMother.generateLocal(downloads = UPDATED_DOWNLOADS)).should { newState ->
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
-            newState.wallpapers.first().views shouldBe UPDATED_VIEWS
+            newState.wallpapers.first().downloads shouldBe UPDATED_DOWNLOADS
             newState.source.local.shouldBeTrue()
             newState.next shouldBe WallpapersState.Idle
         }
@@ -186,7 +186,7 @@ class LoadedWallpaperStateTest {
     }
 }
 
-private const val UPDATED_VIEWS = 9999
+private const val UPDATED_DOWNLOADS = 9999
 private const val WALLPAPER_ID = "1"
 private const val UNKNOWN_WALLPAPER_ID = "2"
 

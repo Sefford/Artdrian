@@ -14,7 +14,7 @@ object WallpaperMother {
             slug = "ghost_waves_001",
             title = "ghost_waves_001",
             downloads = 456,
-            created = LocalDateTime.parse("2022-11-05T00:00:00"),
+            published = LocalDateTime.parse("2022-11-05T00:00:00"),
         ),
 
         WallpaperNetworkDto(
@@ -23,7 +23,7 @@ object WallpaperMother {
             title = "ghost_waves_002",
 
             downloads = 200,
-            created = LocalDateTime.parse("2022-11-05T00:00:00"),
+            published = LocalDateTime.parse("2022-11-05T00:00:00"),
         )
     )
 
@@ -35,7 +35,7 @@ object WallpaperMother {
                 slug = "ghost_waves_001",
                 title = "ghost_waves_001",
                 downloads = 456,
-                created = LocalDateTime.parse("2022-11-05T00:00:00"),
+                published = LocalDateTime.parse("2022-11-05T00:00:00"),
                 updated = LocalDateTime.parse("2022-11-05T00:00:00"),
             ),
         ),
@@ -46,7 +46,7 @@ object WallpaperMother {
                 slug = "ghost_waves_002",
                 title = "ghost_waves_002",
                 downloads = 200,
-                created = LocalDateTime.parse("2022-11-05T00:00:00"),
+                published = LocalDateTime.parse("2022-11-05T00:00:00"),
                 updated = LocalDateTime.parse("2022-11-05T00:00:00"),
             )
         )
