@@ -28,9 +28,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.sefford.artdrian.model.Images
 import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.ui.views.ImageRequest
+import com.sefford.artdrian.ui.views.WallpaperImage
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -49,11 +50,13 @@ fun WallpaperCard(
             .fillMaxSize()
             .testTag(wallpaper.id)
             .clickable(onClick = onItemClicked)) {
-            AsyncImage(
+            WallpaperImage(
                 modifier = Modifier.fillMaxSize(),
-                model = wallpaper.images.desktop,
-                contentDescription = wallpaper.slug,
-                contentScale = ContentScale.Crop
+                image = ImageRequest(
+                    wallpaper.images.preview,
+                    wallpaper.title,
+                    ContentScale.Crop
+                )
             )
             Row(
                 modifier = Modifier

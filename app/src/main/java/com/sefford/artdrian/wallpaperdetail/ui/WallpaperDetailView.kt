@@ -64,7 +64,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
@@ -76,6 +75,8 @@ import com.sefford.artdrian.ui.theme.Black80
 import com.sefford.artdrian.ui.theme.Typography
 import com.sefford.artdrian.ui.theme.White20
 import com.sefford.artdrian.ui.theme.White50
+import com.sefford.artdrian.ui.views.ImageRequest
+import com.sefford.artdrian.ui.views.WallpaperImage
 import com.sefford.artdrian.utils.isAtLeastAPI
 import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.ACTIONS
 import com.sefford.artdrian.wallpaperdetail.ui.ContentMode.INFO
@@ -148,13 +149,15 @@ private fun ShowWallpaper(
             .clip(RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.BottomCenter
     ) {
-        AsyncImage(
+        WallpaperImage(
             modifier = Modifier
                 .align(Alignment.Center)
                 .fillMaxSize(),
-            model = wallpaper.images.mobile,
-            contentDescription = wallpaper.title,
-            contentScale = ContentScale.Crop
+            image = ImageRequest(
+                wallpaper.images.mobile,
+                wallpaper.title,
+                ContentScale.Crop
+            )
         )
         val gradientOrigin: Float by animateFloatAsState(
             when (mode) {
