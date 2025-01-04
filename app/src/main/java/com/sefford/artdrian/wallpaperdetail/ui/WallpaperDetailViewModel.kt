@@ -18,20 +18,20 @@ import javax.inject.Inject
 class WallpaperDetailViewModel : ViewModel() {
 
     @Inject
-    protected lateinit var store: WallpaperStore
+    internal lateinit var store: WallpaperStore
 
     @Inject
-    protected lateinit var downloadWallpaper: DownloadWallpaper
+    internal lateinit var downloadWallpaper: DownloadWallpaper
 
     @Inject
-    protected lateinit var setWallpaper: SetWallpaper
+    internal lateinit var setWallpaper: SetWallpaper
 
     @Inject
-    protected lateinit var dispatcher: CoroutineDispatcher
+    internal lateinit var dispatcher: CoroutineDispatcher
 
     @Inject
     @WallpaperId
-    protected lateinit var id: String
+    internal lateinit var id: String
 
     val wallpaper: Flow<ViewState>
         get() = store.state.map {

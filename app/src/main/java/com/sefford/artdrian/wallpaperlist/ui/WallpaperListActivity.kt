@@ -14,7 +14,7 @@ import javax.inject.Inject
 class WallpaperListActivity : ComponentActivity() {
 
     @Inject
-    protected lateinit var viewModelFactory: WallpaperListViewModel.Factory
+    internal lateinit var viewModelFactory: WallpaperListViewModel.Factory
 
     private val viewModel: WallpaperListViewModel by viewModels {
         WallpaperListViewModel.providesFactory(viewModelFactory, WallpaperListViewModel.ViewState.Loading)
