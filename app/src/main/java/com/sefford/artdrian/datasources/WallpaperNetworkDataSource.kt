@@ -14,11 +14,14 @@ import com.sefford.artdrian.model.Wallpaper
 import com.sefford.artdrian.model.WallpaperList.FromNetwork
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.network.sockets.ConnectTimeoutException
+import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.nio.channels.UnresolvedAddressException
 import javax.inject.Inject
 
 class WallpaperNetworkDataSource @Inject constructor(private val httpClient: HttpClient) : WallpaperDataSource {
@@ -51,7 +54,14 @@ class WallpaperNetworkDataSource @Inject constructor(private val httpClient: Htt
         } else {
             DataError.Network.Invalid(response.status.value).left()
         }
-    }.mapLeft { DataError.Network.Critical(it) }
+    }.mapLeft { it.toDataError() }
         .flatten()
 
+    private fun Throwable.toDataError() =
+        when (this) {
+            is UnresolvedAddressException -> DataError.Network.NoConnection
+            is ConnectTimeoutException -> DataError.Network.ConnectTimeout
+            is SocketTimeoutException -> DataError.Network.SocketTimeout
+            else -> DataError.Local.Critical(this)
+        }
 }
