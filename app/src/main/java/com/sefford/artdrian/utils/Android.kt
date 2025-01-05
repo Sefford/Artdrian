@@ -1,6 +1,7 @@
 package com.sefford.artdrian.utils
 
 import android.content.ContentResolver
+import android.content.pm.ApplicationInfo
 import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.ComponentActivity
@@ -33,3 +34,6 @@ fun ContentResolver.getUriFromPath(displayName: String): Boolean {
     cursor.close()
     return size > 0
 }
+
+val ApplicationInfo.debuggable: Boolean
+    get() = (flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0

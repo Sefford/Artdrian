@@ -4,16 +4,16 @@ accompanist-permissions = "0.27.0"
 activity-compose = "1.9.3"
 android-gradle-plugin = "8.7.3"
 arrow = "1.2.4"
-coil-compose = "2.4.0"
+coil = "3.0.4"
 compose-bom = "2024.12.01"
-coroutines = "1.8.0"
+coroutines = "1.9.0"
 coroutines-test = "1.10.0"
 core-ktx = "1.15.0"
-dagger = "2.50"
+dagger = "2.52"
 datetime = "0.6.1"
 junit5 = "5.11.4"
 jqwik = "1.7.1"
-kotest = "5.8.1"
+kotest = "5.9.1"
 kotest-arrow = "2.0.0"
 kotlin = "2.1.0"
 kotlin-serialization = "2.1.0"
@@ -28,9 +28,7 @@ room = "2.6.1"
 serialization-json = "1.7.3"
 shot = "6.1.0"
 test-core = "1.6.1"
-ktor = "2.3.12"
-ktor-logging = "2.0.0"
-ktor-serialization = "2.3.4"
+ktor = "3.0.3"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -58,7 +56,9 @@ compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 # Coil
-coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+coil-core = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
+coil-ktor = { group = "io.coil-kt.coil3", name = "coil-network-ktor3", version.ref = "coil" }
 
 # Dagger
 dagger = { group = "com.google.dagger", name = "dagger", version.ref = "dagger" }
@@ -67,17 +67,17 @@ dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", versi
 # Ktor
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
-ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor-serialization" }
-ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor-logging" }
-ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
-ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor-serialization" }
-ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor-serialization" }
+ktor-client-serialization = { group = "io.ktor", name = "ktor-client-serialization", version.ref = "ktor" }
+ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 # KotlinX
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization-json" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
-kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "coroutines-test" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "coroutines-test" }
 
 # Kotlin Libraries
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }

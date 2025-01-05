@@ -11,7 +11,8 @@ import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.stores.KotlinStore
+import com.sefford.artdrian.utils.Logger
+import com.sefford.artdrian.utils.DefaultLogger
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -26,7 +27,6 @@ import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.cache.storage.FileStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.observer.ResponseObserver
 import io.ktor.client.request.header
@@ -53,7 +53,10 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(@NetworkCache httpCacheDir: File, engine: HttpClientEngineFactory<*> = CIO
+    fun provideHttpClient(
+        @NetworkCache httpCacheDir: File,
+        engine: HttpClientEngineFactory<*> = CIO,
+        logger: Logger = DefaultLogger()
     ): HttpClient {
         return HttpClient(engine) {
             install(ContentNegotiation) {
@@ -67,11 +70,7 @@ class CoreModule {
             }
 
             install(Logging) {
-                logger = object : Logger {
-                    override fun log(message: String) {
-                        Log.v("Logger Ktor =>", message)
-                    }
-                }
+                this.logger = logger
                 level = LogLevel.ALL
             }
 
