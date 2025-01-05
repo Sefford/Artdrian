@@ -14,7 +14,9 @@ sealed class DataError : Sourced {
         class Invalid(val status: Int = 0) : Network() {
             constructor(status: HttpStatusCode) : this(status.value)
         }
-
+        data object NoConnection: Network()
+        data object ConnectTimeout: Network()
+        data object SocketTimeout: Network()
         class Critical(val error: Throwable) : Network()
 
     }
