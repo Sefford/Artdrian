@@ -3,6 +3,7 @@ package com.sefford.artdrian.datasources
 import com.sefford.artdrian.data.DataError
 import com.sefford.artdrian.di.CoreModule
 import com.sefford.artdrian.model.WallpaperList
+import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.Resources
 import com.sefford.artdrian.test.respondOnly
 import io.kotest.assertions.arrow.core.shouldBeLeft
@@ -31,6 +32,7 @@ import java.io.File
 class WallpaperNetworkDataSourceTest : Resources {
 
     private val cacheDir: File = File("/http_cache")
+    private val logger = FakeLogger()
 
     @Test
     fun `returns the payload`() {
@@ -41,7 +43,7 @@ class WallpaperNetworkDataSourceTest : Resources {
                     content = "single-wallpaper-list-response.json".asResponse(),
                     headers = headersOf("Content-Type", "text/x-component")
                 )
-            })
+            }, logger)
 
             WallpaperNetworkDataSource(client).getMetadata().first().should { response ->
                 response.shouldBeRight()
@@ -54,12 +56,12 @@ class WallpaperNetworkDataSourceTest : Resources {
     @Test
     fun `fails returning the status code`() {
         runTest {
-            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { request ->
+            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { _ ->
                 respond(
                     content = "",
                     status = HttpStatusCode.ServiceUnavailable
                 )
-            })
+            }, logger)
 
             WallpaperNetworkDataSource(client).getMetadata().first().should { response ->
                 response.shouldBeLeft()
@@ -72,9 +74,9 @@ class WallpaperNetworkDataSourceTest : Resources {
     @Test
     fun `fails critically`() {
         runTest {
-            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { request ->
+            val client = CoreModule().provideHttpClient(cacheDir, mockEngine { _ ->
                 throw SOCKET_EXCEPTION
-            })
+            }, logger)
 
             WallpaperNetworkDataSource(client).getMetadata().first().should { response ->
                 response.shouldBeLeft()

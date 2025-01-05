@@ -6,6 +6,8 @@ import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.common.WallpaperAdapterImpl
+import com.sefford.artdrian.utils.DefaultLogger
+import com.sefford.artdrian.utils.Logger
 import dagger.Module
 import dagger.Provides
 import io.ktor.client.HttpClient
@@ -31,4 +33,8 @@ class AndroidModule {
     @Provides
     @Singleton
     fun provideWallpaperAdapter(wallpaperManager: WallpaperManager): WallpaperAdapter = WallpaperAdapterImpl(wallpaperManager)
+
+    @Provides
+    @Singleton
+    fun provideLogger(logger: DefaultLogger): Logger = logger
 }

@@ -6,6 +6,8 @@ import com.sefford.artdrian.common.FakeFileManager
 import com.sefford.artdrian.common.FakeWallpaperAdapter
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
+import com.sefford.artdrian.test.FakeLogger
+import com.sefford.artdrian.utils.Logger
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -61,4 +63,8 @@ class DoublesModule(
     @Singleton
     @Memory
     fun provideWallpaperStore(): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle, TestScope())
+
+    @Provides
+    @Singleton
+    fun providesLogger(): Logger = FakeLogger()
 }
