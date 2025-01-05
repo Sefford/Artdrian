@@ -11,8 +11,10 @@ import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.utils.Logger
 import com.sefford.artdrian.utils.DefaultLogger
+import com.sefford.artdrian.utils.Logger
+import com.sefford.artdrian.utils.forceCache
+import com.sefford.artdrian.utils.isFromCache
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -23,6 +25,7 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.cache.storage.FileStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -85,8 +88,16 @@ class CoreModule {
             }
 
             install(HttpCache) {
-                // Configure FileStorage for persistent caching
                 publicStorage(FileStorage(httpCacheDir))
+            }
+
+            install(HttpRequestRetry) {
+                retryOnExceptionIf { request, _ ->
+                    !request.headers.isFromCache
+                }
+                modifyRequest { request ->
+                    request.headers.forceCache()
+                }
             }
         }
     }
@@ -96,7 +107,9 @@ class CoreModule {
     fun provideDatabase(@Application context: Context): WallpaperDatabase = Room.databaseBuilder(
         context,
         WallpaperDatabase::class.java, "wallpapers"
-    ).build()
+    ).fallbackToDestructiveMigration()
+        .fallbackToDestructiveMigrationOnDowngrade()
+        .build()
 
     @Provides
     @Singleton
