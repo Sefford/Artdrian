@@ -1,8 +1,5 @@
 package com.sefford.artdrian.di
 
-import android.content.Context
-import android.util.Log
-import androidx.room.Room
 import com.sefford.artdrian.data.db.WallpaperDao
 import com.sefford.artdrian.data.db.WallpaperDatabase
 import com.sefford.artdrian.datasources.WallpaperCache
@@ -27,7 +24,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.cache.storage.FileStorage
+import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -43,7 +40,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
-import java.io.File
 import javax.inject.Singleton
 
 @Module
@@ -52,24 +48,23 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideEngine(): HttpClientEngineFactory<*> = CIO
+    protected fun provideDeserialization(): Json = Json {
+        prettyPrint = true
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
 
     @Provides
     @Singleton
     fun provideHttpClient(
-        @NetworkCache httpCacheDir: File,
+        deserialization: Json,
         engine: HttpClientEngineFactory<*> = CIO,
+        storage: CacheStorage,
         logger: Logger = DefaultLogger()
     ): HttpClient {
         return HttpClient(engine) {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }, contentType = ContentType.parse("text/x-component")
-                )
+                json(json = deserialization, contentType = ContentType.parse("text/x-component"))
             }
 
             install(Logging) {
@@ -79,7 +74,7 @@ class CoreModule {
 
             install(ResponseObserver) {
                 onResponse { response ->
-                    Log.d("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
+                    logger.debug("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
                 }
             }
 
@@ -88,7 +83,7 @@ class CoreModule {
             }
 
             install(HttpCache) {
-                publicStorage(FileStorage(httpCacheDir))
+                publicStorage(storage)
             }
 
             install(HttpRequestRetry) {
@@ -101,15 +96,6 @@ class CoreModule {
             }
         }
     }
-
-    @Provides
-    @Singleton
-    fun provideDatabase(@Application context: Context): WallpaperDatabase = Room.databaseBuilder(
-        context,
-        WallpaperDatabase::class.java, "wallpapers"
-    ).fallbackToDestructiveMigration()
-        .fallbackToDestructiveMigrationOnDowngrade()
-        .build()
 
     @Provides
     @Singleton
