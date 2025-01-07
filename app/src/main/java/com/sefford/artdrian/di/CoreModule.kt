@@ -2,6 +2,7 @@ package com.sefford.artdrian.di
 
 import com.sefford.artdrian.data.db.WallpaperDao
 import com.sefford.artdrian.data.db.WallpaperDatabase
+import com.sefford.artdrian.data.network.DelegatedHttpClient
 import com.sefford.artdrian.datasources.WallpaperCache
 import com.sefford.artdrian.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
@@ -41,6 +42,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
+import com.sefford.artdrian.data.network.HttpClient as DelegatedClient
 
 @Module
 class CoreModule {
@@ -85,17 +87,12 @@ class CoreModule {
             install(HttpCache) {
                 publicStorage(storage)
             }
-
-            install(HttpRequestRetry) {
-                retryOnExceptionIf { request, _ ->
-                    !request.headers.isFromCache
-                }
-                modifyRequest { request ->
-                    request.headers.forceCache()
-                }
-            }
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideDelegatedClient(client: HttpClient): DelegatedClient = DelegatedHttpClient(client)
 
     @Provides
     @Singleton
