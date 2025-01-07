@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.room)
     id("com.karumi.kotlin-snapshot")
 }
 
@@ -52,6 +53,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
     testOptions {
         unitTests {
