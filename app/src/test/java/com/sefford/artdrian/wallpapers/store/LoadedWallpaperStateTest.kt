@@ -24,7 +24,7 @@ class LoadedWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -36,7 +36,7 @@ class LoadedWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.network.shouldBeTrue()
             newState.source.network.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -48,7 +48,7 @@ class LoadedWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.network.shouldBeTrue()
             newState.source.network.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -61,7 +61,7 @@ class LoadedWallpaperStateTest {
             newState.wallpapers.first().source.network.shouldBeTrue()
             newState.wallpapers.first().downloads shouldBe UPDATED_DOWNLOADS
             newState.source.network.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -74,7 +74,7 @@ class LoadedWallpaperStateTest {
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.wallpapers.first().downloads shouldBe UPDATED_DOWNLOADS
             newState.source.local.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -86,7 +86,7 @@ class LoadedWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.network.shouldBeTrue()
             newState.source.network.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -98,7 +98,7 @@ class LoadedWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -149,30 +149,6 @@ class LoadedWallpaperStateTest {
             newState.next.shouldBeInstanceOf<WallpapersState.Error>()
             (newState.next as WallpapersState.Error).error.shouldBeInstanceOf<DataError.Network.Invalid>()
         }
-    }
-
-    @Test
-    fun `transient items are the ones from network`() {
-        WallpapersState.Loaded(
-            listOf(
-                WallpaperMother.generateLocal(),
-                WallpaperMother.generateNetwork()
-            ),
-            Sourced.Network,
-            WallpapersState.Error(DataError.Network.Invalid(HttpStatusCode.BadRequest.value))
-        ).transient.shouldHaveSize(1)
-    }
-
-    @Test
-    fun `transient items are empty if the response is from Cache`() {
-        WallpapersState.Loaded(
-            listOf(
-                WallpaperMother.generateLocal(),
-                WallpaperMother.generateLocal()
-            ),
-            Sourced.Network,
-            WallpapersState.Error(DataError.Network.Invalid(HttpStatusCode.BadRequest.value))
-        ).transient.shouldBeEmpty()
     }
 
     @Test

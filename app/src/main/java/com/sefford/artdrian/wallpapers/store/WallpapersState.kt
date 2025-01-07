@@ -10,8 +10,8 @@ import com.sefford.artdrian.model.WallpaperList
 
 sealed class WallpapersState : Sourced {
 
-    data object Idle : WallpapersState(), Sourced by Sourced.Local {
-        override val transient: List<Wallpaper> = emptyList()
+    sealed class Idle : WallpapersState(), Sourced by Sourced.Local {
+        override fun get(id: String): Option<Wallpaper> = None
 
         override fun plus(list: WallpaperList): WallpapersState =
             Loaded(list)
@@ -19,29 +19,29 @@ sealed class WallpapersState : Sourced {
         override fun plus(wallpaper: Wallpaper): WallpapersState =
             Loaded(wallpaper)
 
-        override fun plus(error: DataError): WallpapersState = if (error.network) Error(error) else this
+        data object Empty : Idle() {
+            override fun plus(error: DataError): WallpapersState = if (error.network) OnNetworkError(error) else OnLocalError(error)
+        }
 
-        override fun get(id: String): Option<Wallpaper> = None
+        // This serves to hold the error until we wait for the other half to arrive
+        class OnNetworkError(val error: DataError) : Idle() {
+            override fun plus(error: DataError): WallpapersState = if (error.local) Error(this.error) else OnNetworkError(error)
+        }
 
+        class OnLocalError(val error: DataError) : Idle() {
+            override fun plus(error: DataError): WallpapersState = if (error.network) Error(error) else OnLocalError(error)
+        }
     }
 
     class Loaded(
         val wallpapers: List<Wallpaper>,
         private val sourced: Sourced,
-        val next: WallpapersState = Idle,
+        val next: WallpapersState = Idle.Empty,
     ) : WallpapersState(), Sourced by sourced {
 
         constructor(list: WallpaperList) : this(list.wallpapers, list.source)
 
         constructor(wallpaper: Wallpaper) : this(wallpaper.toList())
-
-        override val transient: List<Wallpaper> by lazy {
-            if (local) {
-                emptyList()
-            } else {
-                wallpapers.filter { wallpaper -> wallpaper.network }
-            }
-        }
 
         override fun plus(list: WallpaperList): WallpapersState {
             val merged = LinkedHashMap<String, Wallpaper>()
@@ -54,7 +54,7 @@ sealed class WallpapersState : Sourced {
                     merged[wallpaper.id] = wallpaper
                 }
             }
-            return Loaded(merged.values.toList(), if (source.network) source else list.source, Idle)
+            return Loaded(merged.values.toList(), if (source.network) source else list.source, Idle.Empty)
         }
 
         override fun plus(wallpaper: Wallpaper): WallpapersState =
@@ -77,8 +77,6 @@ sealed class WallpapersState : Sourced {
 
     class Error(val error: DataError) : WallpapersState(), Sourced by error.source {
 
-        override val transient: List<Wallpaper> = emptyList()
-
         // Should be set the next to Error?
         override fun plus(list: WallpaperList): WallpapersState =
             Loaded(list)
@@ -98,8 +96,6 @@ sealed class WallpapersState : Sourced {
             return "Error(error=$error, source=$source)"
         }
     }
-
-    abstract val transient: List<Wallpaper>
 
     abstract operator fun plus(list: WallpaperList): WallpapersState
 

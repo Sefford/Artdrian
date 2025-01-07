@@ -24,7 +24,7 @@ class WallpaperStoreTest {
 
     @Test
     fun `attempts to load the wallpapers`() {
-        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle)
+        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
 
         store.event(WallpaperEvents.Load)
 
@@ -36,7 +36,7 @@ class WallpaperStoreTest {
 
     @Test
     fun `attempts to refresh the wallpapers`() = runTest {
-        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle)
+        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
 
         store.event(WallpaperEvents.Refresh)
 
@@ -49,20 +49,35 @@ class WallpaperStoreTest {
 
     @Test
     fun `receives an error loading all the wallpapers`() = runTest {
-        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle)
+        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
 
         store.event(WallpaperEvents.OnErrorReceived(DataError.Network.Invalid(HttpStatusCode.BadRequest)))
 
         store.result.should { (states, effects) ->
             states.shouldHaveSize(1)
-            states.first().shouldBeInstanceOf<WallpapersState.Error>()
+            states.first().shouldBeInstanceOf<WallpapersState.Idle.OnNetworkError>()
             effects.shouldBeEmpty()
         }
     }
 
     @Test
     fun `loads wallpapers`() = runTest {
-        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle)
+        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
+
+        store.event(WallpaperEvents.OnResponseReceived(WallpaperMother.generateNetwork()))
+
+        store.result.should { (states, effects) ->
+            states.shouldHaveSize(1)
+            states.first().shouldBeInstanceOf<WallpapersState.Loaded>()
+            effects.shouldHaveSize(1)
+            effects.first().shouldBeInstanceOf<WallpaperEffects.Persist>()
+            (effects.first() as WallpaperEffects.Persist).metadata.shouldHaveSize(1)
+        }
+    }
+
+    @Test
+    fun `does not persist a cache response`() = runTest {
+        val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
 
         store.event(WallpaperEvents.OnResponseReceived(WallpaperMother.generateNetwork()))
 

@@ -21,7 +21,7 @@ class ErrorWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -31,7 +31,7 @@ class ErrorWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Loaded>()
             newState.wallpapers.first().source.local.shouldBeTrue()
             newState.source.local.shouldBeTrue()
-            newState.next shouldBe WallpapersState.Idle
+            newState.next shouldBe WallpapersState.Idle.Empty
         }
     }
 
@@ -59,11 +59,6 @@ class ErrorWallpaperStateTest {
             newState.shouldBeInstanceOf<WallpapersState.Error>()
             newState.error.shouldBeInstanceOf<DataError.Network.Invalid>()
         }
-    }
-
-    @Test
-    fun `transient items are empty`() {
-        (WallpapersState.Error(DataError.Local.NotFound("1234"))).transient.shouldBeEmpty()
     }
 
     @Test

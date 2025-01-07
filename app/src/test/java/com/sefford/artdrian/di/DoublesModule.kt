@@ -69,7 +69,7 @@ class DoublesModule(
     @Provides
     @Singleton
     @Memory
-    fun provideWallpaperStore(): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle, TestScope())
+    fun provideWallpaperStore(): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, TestScope())
 
     @Provides
     @Singleton

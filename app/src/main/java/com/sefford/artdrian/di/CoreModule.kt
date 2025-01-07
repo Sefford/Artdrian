@@ -129,7 +129,7 @@ class CoreModule {
     @Provides
     @Singleton
     fun provideWallpaperStore(domainEffectHandler: WallpaperDomainEffectHandler): WallpaperStore {
-        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle)
+        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty)
         store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }
             .launchIn(MainScope().plus(Dispatchers.IO))
         return store
