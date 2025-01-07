@@ -1,5 +1,6 @@
 package com.sefford.artdrian.di
 
+import com.sefford.artdrian.datasources.WallpaperLocalDataSourceTest
 import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForListsTest
 import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForSingleWallpapersTest
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailComponent
@@ -21,6 +22,9 @@ interface TestComponent {
     fun inject(viewModel: WallpaperListViewModel)
 
     fun inject(test: WallpaperNetworkDataSourceForListsTest)
+
     fun inject(test: WallpaperNetworkDataSourceForSingleWallpapersTest)
+
+    fun inject(test: WallpaperLocalDataSourceTest)
 
 }

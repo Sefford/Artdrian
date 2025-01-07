@@ -77,8 +77,8 @@ class DoublesModule(
 
     @Provides
     @Singleton
-    fun providesDatabase(@Application context: Context) =
-        Room.inMemoryDatabaseBuilder(context, WallpaperDatabase::class.java).build()
+    fun providesDatabase(@Application context: Context): WallpaperDatabase =
+        Room.inMemoryDatabaseBuilder(context, WallpaperDatabase::class.java).allowMainThreadQueries().build()
 
     @Provides
     @Singleton
@@ -95,4 +95,5 @@ class DoublesModule(
     @Provides
     @Singleton
     fun provideEngine(handlers: LazyMockEngineHandler): HttpClientEngineFactory<*> = MockEngineFactory(handlers)
+
 }
