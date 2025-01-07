@@ -15,7 +15,7 @@ interface WallpaperDao {
     fun getAll(): Flow<List<WallpaperDatabaseDto>>
 
     @Query("SELECT * FROM wallpapers WHERE id == :id")
-    fun get(id: String): Flow<WallpaperDatabaseDto>
+    fun get(id: String): Flow<WallpaperDatabaseDto?>
 
     @Query("DELETE FROM wallpapers WHERE id = :id")
     fun delete(id: String)

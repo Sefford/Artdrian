@@ -5,6 +5,7 @@ import io.ktor.http.HttpStatusCode
 
 sealed class DataError : Sourced {
     sealed class Local : DataError(), Sourced by Sourced.Local {
+        data object Empty: Local()
         class NotFound(val id: String = "") : Local()
         class Critical(val error: Throwable) : Local()
     }
