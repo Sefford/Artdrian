@@ -3,7 +3,7 @@ package com.sefford.artdrian.data.db
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.karumi.kotlinsnapshot.matchWithSnapshot
-import com.sefford.artdrian.test.DatabaseDtoMother
+import com.sefford.artdrian.test.mothers.DatabaseDtoMother
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import kotlinx.coroutines.flow.first

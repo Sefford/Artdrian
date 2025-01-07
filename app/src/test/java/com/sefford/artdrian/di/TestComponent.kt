@@ -1,16 +1,19 @@
 package com.sefford.artdrian.di
 
-import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceTest
-import com.sefford.artdrian.test.InjectableTest
+import com.sefford.artdrian.datasources.WallpaperLocalDataSourceTest
+import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForListsTest
+import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForSingleWallpapersTest
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailComponent
 import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
 import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
 import dagger.Component
 import javax.inject.Singleton
 
-@Component(modules = [
-    CoreModule::class,
-    DoublesModule::class])
+@Component(
+    modules = [
+        CoreModule::class,
+        DoublesModule::class]
+)
 @Singleton
 interface TestComponent {
 
@@ -18,8 +21,10 @@ interface TestComponent {
 
     fun inject(viewModel: WallpaperListViewModel)
 
-    fun inject(test: InjectableTest)
+    fun inject(test: WallpaperNetworkDataSourceForListsTest)
 
-    fun inject(test: WallpaperNetworkDataSourceTest)
+    fun inject(test: WallpaperNetworkDataSourceForSingleWallpapersTest)
+
+    fun inject(test: WallpaperLocalDataSourceTest)
 
 }

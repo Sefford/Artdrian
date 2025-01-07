@@ -32,7 +32,7 @@ class WallpaperListViewModel @AssistedInject constructor(
 
         companion object {
             operator fun invoke(state: WallpapersState): ViewState = when (state) {
-                WallpapersState.Idle -> Loading
+                is WallpapersState.Idle -> Loading
                 is WallpapersState.Loaded -> Content(state.wallpapers.map { it })
                 is WallpapersState.Error -> Error(Errors.NotFoundError(""))
             }

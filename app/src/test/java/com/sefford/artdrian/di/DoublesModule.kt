@@ -1,12 +1,17 @@
 package com.sefford.artdrian.di
 
 import android.content.Context
+import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.sefford.artdrian.common.FakeFileManager
 import com.sefford.artdrian.common.FakeWallpaperAdapter
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
+import com.sefford.artdrian.data.db.WallpaperDatabase
 import com.sefford.artdrian.test.FakeLogger
+import com.sefford.artdrian.test.MemoryStorage
+import com.sefford.artdrian.test.LazyMockEngineHandler
+import com.sefford.artdrian.test.MockEngineFactory
 import com.sefford.artdrian.utils.Logger
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
@@ -14,6 +19,8 @@ import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.Module
 import dagger.Provides
+import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.plugins.cache.storage.CacheStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,9 +69,31 @@ class DoublesModule(
     @Provides
     @Singleton
     @Memory
-    fun provideWallpaperStore(): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle, TestScope())
+    fun provideWallpaperStore(): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, TestScope())
 
     @Provides
     @Singleton
     fun providesLogger(): Logger = FakeLogger()
+
+    @Provides
+    @Singleton
+    fun providesDatabase(@Application context: Context): WallpaperDatabase =
+        Room.inMemoryDatabaseBuilder(context, WallpaperDatabase::class.java).allowMainThreadQueries().build()
+
+    @Provides
+    @Singleton
+    fun provideMemoryHttpStorage() = MemoryStorage()
+
+    @Provides
+    @Singleton
+    fun provideHttpStorage(cache: MemoryStorage): CacheStorage = cache
+
+    @Provides
+    @Singleton
+    fun provideMockEngineLazyConfiguration(): LazyMockEngineHandler = LazyMockEngineHandler()
+
+    @Provides
+    @Singleton
+    fun provideEngine(handlers: LazyMockEngineHandler): HttpClientEngineFactory<*> = MockEngineFactory(handlers)
+
 }

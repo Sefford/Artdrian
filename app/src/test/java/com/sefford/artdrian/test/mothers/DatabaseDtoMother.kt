@@ -1,4 +1,4 @@
-package com.sefford.artdrian.test
+package com.sefford.artdrian.test.mothers
 
 import com.sefford.artdrian.data.dto.WallpaperDatabaseDto
 

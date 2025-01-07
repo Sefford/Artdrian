@@ -5,6 +5,7 @@ import io.ktor.http.HttpStatusCode
 
 sealed class DataError : Sourced {
     sealed class Local : DataError(), Sourced by Sourced.Local {
+        data object Empty: Local()
         class NotFound(val id: String = "") : Local()
         class Critical(val error: Throwable) : Local()
     }
@@ -14,7 +15,9 @@ sealed class DataError : Sourced {
         class Invalid(val status: Int = 0) : Network() {
             constructor(status: HttpStatusCode) : this(status.value)
         }
-
+        data object NoConnection: Network()
+        data object ConnectTimeout: Network()
+        data object SocketTimeout: Network()
         class Critical(val error: Throwable) : Network()
 
     }

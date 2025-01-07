@@ -8,17 +8,19 @@ val WallpaperStateMachine: StateMachine<WallpaperEvents, WallpapersState, Wallpa
     }
 
     fun refresh() {
-        state { WallpapersState.Idle }
+        state { WallpapersState.Idle.Empty }
         effect(WallpaperEffects.Clear)
         load()
     }
 
     fun onResponseReceived(event: WallpaperEvents.OnResponseReceived) {
         state { it + event.response }
-        effect(WallpaperEffects.Persist(current().transient))
+        if (event.response.network) {
+            effect(WallpaperEffects.Persist(event.response.transient))
+        }
     }
 
-    when(event) {
+    when (event) {
         WallpaperEvents.Load -> load()
         WallpaperEvents.Refresh -> refresh()
         is WallpaperEvents.OnErrorReceived -> state { it + event.error }

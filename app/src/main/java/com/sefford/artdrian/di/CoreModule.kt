@@ -1,18 +1,18 @@
 package com.sefford.artdrian.di
 
-import android.content.Context
-import android.util.Log
-import androidx.room.Room
 import com.sefford.artdrian.data.db.WallpaperDao
 import com.sefford.artdrian.data.db.WallpaperDatabase
+import com.sefford.artdrian.data.network.DelegatedHttpClient
 import com.sefford.artdrian.datasources.WallpaperCache
 import com.sefford.artdrian.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.datasources.WallpaperRepository
 import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.utils.Logger
 import com.sefford.artdrian.utils.DefaultLogger
+import com.sefford.artdrian.utils.Logger
+import com.sefford.artdrian.utils.forceCache
+import com.sefford.artdrian.utils.isFromCache
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -23,8 +23,9 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.cache.HttpCache
-import io.ktor.client.plugins.cache.storage.FileStorage
+import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
@@ -40,8 +41,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
-import java.io.File
 import javax.inject.Singleton
+import com.sefford.artdrian.data.network.HttpClient as DelegatedClient
 
 @Module
 class CoreModule {
@@ -49,24 +50,23 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideEngine(): HttpClientEngineFactory<*> = CIO
+    protected fun provideDeserialization(): Json = Json {
+        prettyPrint = true
+        isLenient = true
+        ignoreUnknownKeys = true
+    }
 
     @Provides
     @Singleton
     fun provideHttpClient(
-        @NetworkCache httpCacheDir: File,
+        deserialization: Json,
         engine: HttpClientEngineFactory<*> = CIO,
+        storage: CacheStorage,
         logger: Logger = DefaultLogger()
     ): HttpClient {
         return HttpClient(engine) {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        prettyPrint = true
-                        isLenient = true
-                        ignoreUnknownKeys = true
-                    }, contentType = ContentType.parse("text/x-component")
-                )
+                json(json = deserialization, contentType = ContentType.parse("text/x-component"))
             }
 
             install(Logging) {
@@ -76,7 +76,7 @@ class CoreModule {
 
             install(ResponseObserver) {
                 onResponse { response ->
-                    Log.d("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
+                    logger.debug("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
                 }
             }
 
@@ -85,18 +85,14 @@ class CoreModule {
             }
 
             install(HttpCache) {
-                // Configure FileStorage for persistent caching
-                publicStorage(FileStorage(httpCacheDir))
+                publicStorage(storage)
             }
         }
     }
 
     @Provides
     @Singleton
-    fun provideDatabase(@Application context: Context): WallpaperDatabase = Room.databaseBuilder(
-        context,
-        WallpaperDatabase::class.java, "wallpapers"
-    ).build()
+    fun provideDelegatedClient(client: HttpClient): DelegatedClient = DelegatedHttpClient(client)
 
     @Provides
     @Singleton
@@ -133,7 +129,7 @@ class CoreModule {
     @Provides
     @Singleton
     fun provideWallpaperStore(domainEffectHandler: WallpaperDomainEffectHandler): WallpaperStore {
-        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle)
+        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty)
         store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }
             .launchIn(MainScope().plus(Dispatchers.IO))
         return store
