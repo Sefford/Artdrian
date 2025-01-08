@@ -2,8 +2,8 @@ package com.sefford.artdrian.wallpapers.effects
 
 import arrow.core.left
 import arrow.core.right
-import com.sefford.artdrian.data.DataError
-import com.sefford.artdrian.model.WallpaperList
+import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.wallpapers.domain.model.WallpaperList
 import com.sefford.artdrian.test.mothers.WallpaperMother
 import com.sefford.artdrian.wallpapers.store.WallpaperEffects
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents

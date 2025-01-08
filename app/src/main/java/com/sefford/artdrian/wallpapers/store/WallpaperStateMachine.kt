@@ -1,6 +1,6 @@
 package com.sefford.artdrian.wallpapers.store
 
-import com.sefford.artdrian.stores.StateMachine
+import com.sefford.artdrian.common.stores.StateMachine
 
 val WallpaperStateMachine: StateMachine<WallpaperEvents, WallpapersState, WallpaperEffects> = { event ->
     fun load() {

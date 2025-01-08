@@ -1,17 +1,15 @@
 package com.sefford.artdrian.wallpaperlist.ui
 
-import WallpaperListScreen
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListScreen
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
 import com.sefford.artdrian.WallpaperMother
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel.Errors.NetworkError
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel.Errors.NotFoundError
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel.ViewState.Error
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel.ViewState.Loading
-import org.junit.Before
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel.Errors.NetworkError
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel.Errors.NotFoundError
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel.ViewState.Error
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel.ViewState.Loading
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

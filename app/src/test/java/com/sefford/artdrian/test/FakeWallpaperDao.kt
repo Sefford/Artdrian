@@ -1,7 +1,7 @@
 package com.sefford.artdrian.test
 
-import com.sefford.artdrian.data.db.WallpaperDao
-import com.sefford.artdrian.data.dto.WallpaperDatabaseDto
+import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
+import com.sefford.artdrian.wallpapers.data.dto.WallpaperDatabaseDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

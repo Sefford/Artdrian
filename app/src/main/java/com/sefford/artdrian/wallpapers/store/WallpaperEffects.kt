@@ -1,6 +1,6 @@
 package com.sefford.artdrian.wallpapers.store
 
-import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 
 sealed class WallpaperEffects {
 

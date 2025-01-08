@@ -7,12 +7,15 @@ import com.sefford.artdrian.common.FakeFileManager
 import com.sefford.artdrian.common.FakeWallpaperAdapter
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
-import com.sefford.artdrian.data.db.WallpaperDatabase
+import com.sefford.artdrian.common.data.db.WallpaperDatabase
+import com.sefford.artdrian.common.di.Application
+import com.sefford.artdrian.common.di.Memory
+import com.sefford.artdrian.common.di.NetworkCache
 import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.MemoryStorage
 import com.sefford.artdrian.test.LazyMockEngineHandler
 import com.sefford.artdrian.test.MockEngineFactory
-import com.sefford.artdrian.utils.Logger
+import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore

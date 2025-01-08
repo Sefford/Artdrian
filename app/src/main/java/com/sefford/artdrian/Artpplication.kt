@@ -6,11 +6,11 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
 import coil3.util.DebugLogger
-import com.sefford.artdrian.connectivity.ConnectivityStore
-import com.sefford.artdrian.di.ApplicationModule
-import com.sefford.artdrian.di.CoreModule
-import com.sefford.artdrian.di.DaggerApplicationComponent
-import com.sefford.artdrian.utils.debuggable
+import com.sefford.artdrian.common.di.ApplicationModule
+import com.sefford.artdrian.common.di.CoreModule
+import com.sefford.artdrian.common.di.DaggerApplicationComponent
+import com.sefford.artdrian.common.di.TopComponentHolder
+import com.sefford.artdrian.common.utils.debuggable
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import javax.inject.Inject

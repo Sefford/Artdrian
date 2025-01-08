@@ -1,6 +1,6 @@
 package com.sefford.artdrian.test
 
-import com.sefford.artdrian.di.CoreModule
+import com.sefford.artdrian.common.di.CoreModule
 import com.sefford.artdrian.di.DaggerTestComponent
 import com.sefford.artdrian.di.DoublesModule
 import com.sefford.artdrian.di.TestComponent

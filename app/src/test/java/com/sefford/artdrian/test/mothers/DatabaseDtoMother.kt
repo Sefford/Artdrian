@@ -1,6 +1,6 @@
 package com.sefford.artdrian.test.mothers
 
-import com.sefford.artdrian.data.dto.WallpaperDatabaseDto
+import com.sefford.artdrian.wallpapers.data.dto.WallpaperDatabaseDto
 
 object DatabaseDtoMother {
     fun createWallpaper(

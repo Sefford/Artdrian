@@ -1,11 +1,12 @@
 package com.sefford.artdrian.di
 
-import com.sefford.artdrian.datasources.WallpaperLocalDataSourceTest
-import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForListsTest
-import com.sefford.artdrian.datasources.WallpaperNetworkDataSourceForSingleWallpapersTest
-import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailComponent
-import com.sefford.artdrian.wallpaperdetail.di.WallpaperDetailModule
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListViewModel
+import com.sefford.artdrian.common.di.CoreModule
+import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSourceTest
+import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSourceForListsTest
+import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSourceForSingleWallpapersTest
+import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailComponent
+import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailModule
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel
 import dagger.Component
 import javax.inject.Singleton
 

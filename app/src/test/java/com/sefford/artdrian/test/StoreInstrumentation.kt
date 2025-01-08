@@ -1,8 +1,8 @@
 package com.sefford.artdrian.test
 
-import com.sefford.artdrian.stores.ReceivesEvents
-import com.sefford.artdrian.stores.StateMachine
-import com.sefford.artdrian.stores.StoreEventProcessor
+import com.sefford.artdrian.common.stores.ReceivesEvents
+import com.sefford.artdrian.common.stores.StateMachine
+import com.sefford.artdrian.common.stores.StoreEventProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
