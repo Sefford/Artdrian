@@ -6,6 +6,7 @@ import coil3.PlatformContext
 import coil3.SingletonImageLoader
 import coil3.request.crossfade
 import coil3.util.DebugLogger
+import com.sefford.artdrian.connectivity.ConnectivityStore
 import com.sefford.artdrian.di.ApplicationModule
 import com.sefford.artdrian.di.CoreModule
 import com.sefford.artdrian.di.DaggerApplicationComponent
@@ -17,7 +18,10 @@ import javax.inject.Inject
 class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Factory {
 
     @Inject
-    internal lateinit var store: WallpaperStore
+    internal lateinit var wallpapers: WallpaperStore
+
+    @Inject
+    internal lateinit var connectivity: ConnectivityStore
 
     override val graph = DaggerApplicationComponent.builder()
         .applicationModule(ApplicationModule(this))
@@ -27,7 +31,7 @@ class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Fa
     override fun onCreate() {
         super.onCreate()
         graph.inject(this)
-        store.event(WallpaperEvents.Load)
+        wallpapers.event(WallpaperEvents.Load)
     }
 
     override fun newImageLoader(context: PlatformContext): ImageLoader =
