@@ -1,9 +1,9 @@
 package com.sefford.artdrian.wallpapers.effects
 
-import com.sefford.artdrian.model.MetadataResponse
-import com.sefford.artdrian.model.SingleMetadataResponse
-import com.sefford.artdrian.model.Wallpaper
-import com.sefford.artdrian.stores.EffectHandler
+import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
+import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
+import com.sefford.artdrian.common.stores.EffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperEffects
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import kotlinx.coroutines.CoroutineScope

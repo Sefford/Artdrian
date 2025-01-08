@@ -1,7 +1,7 @@
 package com.sefford.artdrian.test.mothers
 
-import com.sefford.artdrian.model.Images
-import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.wallpapers.domain.model.Images
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toKotlinLocalDateTime
 import java.time.LocalDateTime as JavaLocalDateTime

@@ -8,9 +8,9 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
-import com.sefford.artdrian.di.Application
-import com.sefford.artdrian.utils.getUriFromPath
-import com.sefford.artdrian.utils.isAtLeastAPI
+import com.sefford.artdrian.common.di.Application
+import com.sefford.artdrian.common.utils.getUriFromPath
+import com.sefford.artdrian.common.utils.isAtLeastAPI
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.readBytes

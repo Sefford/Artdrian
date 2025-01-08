@@ -8,8 +8,9 @@ import androidx.compose.ui.test.performClick
 import com.karumi.shot.ScreenshotTest
 import com.sefford.artdrian.R
 import com.sefford.artdrian.WallpaperMother
-import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState.Content
-import com.sefford.artdrian.wallpaperdetail.ui.WallpaperDetailViewModel.ViewState.Loading
+import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailScreen
+import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState.Content
+import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState.Loading
 import org.junit.Rule
 import org.junit.Test
 

@@ -1,7 +1,7 @@
 package com.sefford.artdrian.wallpapers.store
 
-import com.sefford.artdrian.data.DataError
-import com.sefford.artdrian.model.WallpaperList
+import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.wallpapers.domain.model.WallpaperList
 import com.sefford.artdrian.test.mothers.WallpaperMother
 import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.matchers.booleans.shouldBeTrue

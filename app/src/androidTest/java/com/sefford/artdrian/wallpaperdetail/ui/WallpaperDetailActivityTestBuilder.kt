@@ -5,23 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Environment
-import android.util.Log
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.espresso.idling.CountingIdlingResource
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.karumi.shot.ScreenshotTest
 import com.sefford.artdrian.R
 import com.sefford.artdrian.WallpaperMother
 import com.sefford.artdrian.test.idlingresources.CountdownIdlingResource
 import com.sefford.artdrian.test.idlingresources.FileIdlingResource
-import com.sefford.artdrian.wallpaperlist.ui.WallpaperListActivity
+import com.sefford.artdrian.wallpapers.ui.list.WallpaperListActivity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.util.concurrent.CountDownLatch
 
 @RunWith(AndroidJUnit4::class)
 class WallpaperDetailActivityTestBuilder : ScreenshotTest {

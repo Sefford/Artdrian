@@ -1,7 +1,7 @@
 package com.sefford.artdrian
 
-import com.sefford.artdrian.data.dto.WallpaperNetworkDto
-import com.sefford.artdrian.model.Wallpaper
+import com.sefford.artdrian.wallpapers.data.dto.WallpaperNetworkDto
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import kotlinx.datetime.LocalDateTime
 
 object WallpaperMother {

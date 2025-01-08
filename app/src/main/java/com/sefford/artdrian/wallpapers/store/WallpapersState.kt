@@ -3,10 +3,10 @@ package com.sefford.artdrian.wallpapers.store
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.toOption
-import com.sefford.artdrian.data.DataError
-import com.sefford.artdrian.model.Sourced
-import com.sefford.artdrian.model.Wallpaper
-import com.sefford.artdrian.model.WallpaperList
+import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.wallpapers.domain.model.Sourced
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
+import com.sefford.artdrian.wallpapers.domain.model.WallpaperList
 
 sealed class WallpapersState : Sourced {
 

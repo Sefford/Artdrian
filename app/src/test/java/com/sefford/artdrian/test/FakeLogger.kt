@@ -1,6 +1,6 @@
 package com.sefford.artdrian.test
 
-import com.sefford.artdrian.utils.Logger
+import com.sefford.artdrian.common.utils.Logger
 
 class FakeLogger: Logger {
     override fun debug(tag: String, message: String) {
