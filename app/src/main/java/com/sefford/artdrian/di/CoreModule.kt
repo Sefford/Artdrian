@@ -1,5 +1,8 @@
 package com.sefford.artdrian.di
 
+import com.sefford.artdrian.connectivity.Connectivity
+import com.sefford.artdrian.connectivity.ConnectivityStore
+import com.sefford.artdrian.connectivity.ConnectivitySubscription
 import com.sefford.artdrian.data.db.WallpaperDao
 import com.sefford.artdrian.data.db.WallpaperDatabase
 import com.sefford.artdrian.data.network.DelegatedHttpClient
@@ -11,8 +14,6 @@ import com.sefford.artdrian.model.MetadataResponse
 import com.sefford.artdrian.model.SingleMetadataResponse
 import com.sefford.artdrian.utils.DefaultLogger
 import com.sefford.artdrian.utils.Logger
-import com.sefford.artdrian.utils.forceCache
-import com.sefford.artdrian.utils.isFromCache
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -23,7 +24,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.cache.storage.CacheStorage
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -134,4 +134,9 @@ class CoreModule {
             .launchIn(MainScope().plus(Dispatchers.IO))
         return store
     }
+
+    @Provides
+    @Singleton
+    fun provideConnectivityStore(initial: Connectivity, subscription: ConnectivitySubscription): ConnectivityStore =
+        ConnectivityStore(initial).also { subscription.start(it) }
 }

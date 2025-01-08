@@ -2,10 +2,14 @@ package com.sefford.artdrian.di
 
 import android.app.WallpaperManager
 import android.content.Context
+import android.net.ConnectivityManager
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.common.WallpaperAdapterImpl
+import com.sefford.artdrian.connectivity.Connectivity
+import com.sefford.artdrian.connectivity.ConnectivitySubscription
+import com.sefford.artdrian.connectivity.DefaultConnectivitySubscription
 import com.sefford.artdrian.utils.DefaultLogger
 import com.sefford.artdrian.utils.Logger
 import dagger.Module
@@ -37,4 +41,18 @@ class AndroidModule {
     @Provides
     @Singleton
     fun provideLogger(logger: DefaultLogger): Logger = logger
+
+    @Provides
+    @Singleton
+    fun provideConnectivityManager(@Application context: Context): ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    @Provides
+    @Singleton
+    fun provideConnectivitySubscription(manager: ConnectivityManager): ConnectivitySubscription =
+        DefaultConnectivitySubscription(manager)
+
+    @Provides
+    fun provideDefaultConnectivity(manager: ConnectivityManager): Connectivity =
+        manager.getNetworkCapabilities(manager.activeNetwork)?.let { Connectivity(it) } ?: Connectivity.Undetermined
 }
