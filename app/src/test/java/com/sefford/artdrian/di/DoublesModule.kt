@@ -7,7 +7,7 @@ import com.sefford.artdrian.common.FakeFileManager
 import com.sefford.artdrian.common.FakeWallpaperAdapter
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
-import com.sefford.artdrian.common.data.db.WallpaperDatabase
+import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.common.di.Application
 import com.sefford.artdrian.common.di.Memory
 import com.sefford.artdrian.common.di.NetworkCache

@@ -7,8 +7,8 @@ import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import com.sefford.artdrian.TopComponentHolder
 import com.sefford.artdrian.common.di.ApplicationComponent
+import com.sefford.artdrian.common.di.TopComponentHolder
 
 val ComponentActivity.graph: ApplicationComponent
     get() = (this.application as TopComponentHolder).graph!!

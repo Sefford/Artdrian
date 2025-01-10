@@ -2,7 +2,7 @@ package com.sefford.artdrian.common.di
 
 import android.content.Context
 import androidx.room.Room
-import com.sefford.artdrian.common.data.db.WallpaperDatabase
+import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

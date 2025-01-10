@@ -1,8 +1,7 @@
-package com.sefford.artdrian.common.data.db
+package com.sefford.artdrian.wallpapers.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
 import com.sefford.artdrian.wallpapers.data.dto.WallpaperDatabaseDto
 
 @Database(entities = [WallpaperDatabaseDto::class], version = 1)

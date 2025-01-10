@@ -1,16 +1,19 @@
 package com.sefford.artdrian.common.di
 
-import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
-import com.sefford.artdrian.common.data.db.WallpaperDatabase
 import com.sefford.artdrian.common.data.network.DelegatedHttpClient
+import com.sefford.artdrian.common.utils.DefaultLogger
+import com.sefford.artdrian.common.utils.Logger
+import com.sefford.artdrian.connectivity.Connectivity
+import com.sefford.artdrian.connectivity.ConnectivityStore
+import com.sefford.artdrian.connectivity.ConnectivitySubscription
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperRepository
+import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
+import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
-import com.sefford.artdrian.common.utils.DefaultLogger
-import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
