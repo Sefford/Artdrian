@@ -9,6 +9,9 @@ import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.common.WallpaperAdapterImpl
 import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.common.utils.Logger
+import com.sefford.artdrian.connectivity.Connectivity
+import com.sefford.artdrian.connectivity.ConnectivitySubscription
+import com.sefford.artdrian.connectivity.DefaultConnectivitySubscription
 import dagger.Module
 import dagger.Provides
 import io.ktor.client.HttpClient

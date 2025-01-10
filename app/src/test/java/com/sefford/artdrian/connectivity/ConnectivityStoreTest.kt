@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.test.core.app.ApplicationProvider
-import com.sefford.artdrian.stores.StoreStateStorage
+import com.sefford.artdrian.common.stores.StoreStateStorage
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf

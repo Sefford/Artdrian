@@ -2,7 +2,7 @@ package com.sefford.artdrian.test.mothers
 
 import com.sefford.artdrian.wallpapers.data.dto.WallpaperDatabaseDto
 
-object DatabaseDtoMother {
+object WallpaperDtoMother {
     fun createWallpaper(
         id: String = "1",
         slug: String = "ghost_waves_001",

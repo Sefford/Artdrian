@@ -1,11 +1,9 @@
-package com.sefford.artdrian.wallpapers.data.datasources
+package com.sefford.artdrian.wallpapers.data.db
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.karumi.kotlinsnapshot.matchWithSnapshot
-import com.sefford.artdrian.common.data.db.WallpaperDatabase
-import com.sefford.artdrian.test.mothers.DatabaseDtoMother
-import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
+import com.sefford.artdrian.test.mothers.WallpaperDtoMother
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import kotlinx.coroutines.flow.first
@@ -17,7 +15,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class WallpaperDatabaseTest {
+class WallpapersDatabaseTest {
     private lateinit var database: WallpaperDatabase
     private lateinit var dao: WallpaperDao
 
@@ -38,28 +36,28 @@ class WallpaperDatabaseTest {
 
     @Test
     fun `adds an element`() = runTest {
-        dao.add(DatabaseDtoMother.createWallpaper())
+        dao.add(WallpaperDtoMother.createWallpaper())
 
         dao.getAll().first().shouldHaveSize(1)
     }
 
     @Test
     fun `retrieves all elements`() = runTest {
-        dao.add(DatabaseDtoMother.createWallpaper(), DatabaseDtoMother.createWallpaper("2"))
+        dao.add(WallpaperDtoMother.createWallpaper(), WallpaperDtoMother.createWallpaper("2"))
 
         dao.getAll().first().shouldHaveSize(2)
     }
 
     @Test
     fun `retrieves an element`() = runTest {
-        dao.add(DatabaseDtoMother.createWallpaper(), DatabaseDtoMother.createWallpaper("2"))
+        dao.add(WallpaperDtoMother.createWallpaper(), WallpaperDtoMother.createWallpaper("2"))
 
         dao.get("1").first().matchWithSnapshot()
     }
 
     @Test
     fun `deletes an element`() = runTest {
-        dao.add(DatabaseDtoMother.createWallpaper(), DatabaseDtoMother.createWallpaper("2"))
+        dao.add(WallpaperDtoMother.createWallpaper(), WallpaperDtoMother.createWallpaper("2"))
 
         dao.delete("1")
 
@@ -68,7 +66,7 @@ class WallpaperDatabaseTest {
 
     @Test
     fun `clears the database`() = runTest {
-        dao.add(DatabaseDtoMother.createWallpaper(), DatabaseDtoMother.createWallpaper("2"))
+        dao.add(WallpaperDtoMother.createWallpaper(), WallpaperDtoMother.createWallpaper("2"))
 
         dao.clear()
 

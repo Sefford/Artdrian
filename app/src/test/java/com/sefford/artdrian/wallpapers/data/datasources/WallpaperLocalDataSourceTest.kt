@@ -3,7 +3,7 @@ package com.sefford.artdrian.wallpapers.data.datasources
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.test.FakeWallpaperDao
 import com.sefford.artdrian.test.InjectableTest
-import com.sefford.artdrian.test.mothers.DatabaseDtoMother
+import com.sefford.artdrian.test.mothers.WallpaperDtoMother
 import com.sefford.artdrian.test.mothers.WallpaperMother
 import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
@@ -35,7 +35,7 @@ class WallpaperLocalDataSourceTest : InjectableTest() {
 
     @Test
     fun `retrieves the payload`() = runTest {
-        db.add(DatabaseDtoMother.createWallpaper())
+        db.add(WallpaperDtoMother.createWallpaper())
 
         WallpaperLocalDataSource(db).getMetadata().first().should { response ->
             response.shouldBeRight()
@@ -64,7 +64,7 @@ class WallpaperLocalDataSourceTest : InjectableTest() {
 
     @Test
     fun `retrieves a single wallpaper`() = runTest {
-        db.add(DatabaseDtoMother.createWallpaper())
+        db.add(WallpaperDtoMother.createWallpaper())
 
         WallpaperLocalDataSource(db).getMetadata(WALLPAPER_ID).first().should { response ->
             response.shouldBeRight()
