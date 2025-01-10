@@ -1,9 +1,0 @@
-{
-  "__class__": "Left",
-  "value": {
-    "__class__": "NotFound",
-    "id": "1"
-  },
-  "isLeft": true,
-  "isRight": false
-}
