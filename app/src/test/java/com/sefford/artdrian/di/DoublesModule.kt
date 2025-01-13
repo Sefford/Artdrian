@@ -16,6 +16,7 @@ import com.sefford.artdrian.test.MemoryStorage
 import com.sefford.artdrian.test.LazyMockEngineHandler
 import com.sefford.artdrian.test.MockEngineFactory
 import com.sefford.artdrian.common.utils.Logger
+import com.sefford.artdrian.downloads.db.DownloadsDatabase
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -80,8 +81,13 @@ class DoublesModule(
 
     @Provides
     @Singleton
-    fun providesDatabase(@Application context: Context): WallpaperDatabase =
+    fun providesWallpaperDatabase(@Application context: Context): WallpaperDatabase =
         Room.inMemoryDatabaseBuilder(context, WallpaperDatabase::class.java).allowMainThreadQueries().build()
+
+    @Provides
+    @Singleton
+    fun providesDownloadsDatabase(@Application context: Context): DownloadsDatabase =
+        Room.inMemoryDatabaseBuilder(context, DownloadsDatabase::class.java).allowMainThreadQueries().build()
 
     @Provides
     @Singleton

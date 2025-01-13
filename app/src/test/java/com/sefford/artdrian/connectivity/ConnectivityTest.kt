@@ -5,6 +5,7 @@ import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlinx.coroutines.flow.flow
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -80,4 +81,3 @@ class ConnectivityTest {
 private const val LOW_SPEED = 10_000
 private const val MEDIUM_SPEED = 25_000
 private const val HIGH_SPEED = 100_000
-
