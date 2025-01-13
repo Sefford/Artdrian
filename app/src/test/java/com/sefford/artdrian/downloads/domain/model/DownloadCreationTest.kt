@@ -31,7 +31,7 @@ class DownloadCreationTest {
     @Test
     fun `creates in progress`() {
         DownloadsDtoMother.createOngoing().toDomain().should { download ->
-            download.shouldBeInstanceOf<Download.InProgress>()
+            download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ONGOING_ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH

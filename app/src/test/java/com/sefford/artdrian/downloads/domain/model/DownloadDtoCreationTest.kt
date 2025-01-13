@@ -34,7 +34,7 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates ongoing`() {
-        Download.InProgress(ID, IMAGE, HASH, TOTAL, PROGRESS, URI).toDto().should { dto ->
+        Download.Ongoing(ID, IMAGE, HASH, TOTAL, PROGRESS, URI).toDto().should { dto ->
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
