@@ -7,6 +7,8 @@ sealed class Download(
     val url: String,
 ) {
 
+    val finished: Boolean by lazy { order == Order.FINISHED.ordinal }
+
     class Pending(id: String, url: String) : Download(id, url) {
         override val order: Int = 0
 
@@ -174,4 +176,6 @@ sealed class Download(
                 else -> throw IllegalStateException("This is an unreachable condition")
             }
     }
+
+    private enum class Order { PENDING, PRIMED, ONGOING, FINISHED }
 }
