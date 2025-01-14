@@ -41,7 +41,7 @@ class DownloadsDataSourceTest : InjectableTest() {
         DownloadsDataSource(db).getAll().first().should { response ->
             response.shouldBeRight()
             response.value.shouldBeInstanceOf<Downloads>()
-            (response.value as Downloads).downloads.filterIsInstance<Download.Pending>().shouldHaveSize(3)
+            (response.value as Downloads).filterIsInstance<Download.Pending>().shouldHaveSize(3)
         }
     }
 
@@ -82,7 +82,7 @@ class DownloadsDataSourceTest : InjectableTest() {
         dataSource.getAll().first().should { response ->
             response.shouldBeRight()
             response.value.shouldBeInstanceOf<Downloads>()
-            (response.value as Downloads).downloads.shouldHaveSize(1)
+            (response.value as Downloads).shouldHaveSize(1)
         }
     }
 }
