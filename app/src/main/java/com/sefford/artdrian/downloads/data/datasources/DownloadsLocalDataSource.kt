@@ -6,7 +6,6 @@ import arrow.core.right
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.domain.model.Download
-import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.DownloadsResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -26,7 +25,7 @@ class DownloadsDataSource @Inject constructor(private val db: DownloadsDao) {
         Either.catch {
             db.getAll().map { response ->
                 if (response.isNotEmpty()) {
-                    Downloads(response.map { Download(it) }.filterNot { it.finished }).right()
+                    response.map { Download(it) }.filterNot { it.finished }.right()
                 } else {
                     DataError.Local.Empty.left<DataError>()
                 }

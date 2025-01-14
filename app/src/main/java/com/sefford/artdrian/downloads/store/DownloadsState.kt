@@ -29,7 +29,6 @@ sealed class DownloadsState {
         override fun plus(list: List<Download>): DownloadsState {
             TODO("Not yet implemented")
         }
-
     }
 
     abstract operator fun plus(error: DataError): DownloadsState

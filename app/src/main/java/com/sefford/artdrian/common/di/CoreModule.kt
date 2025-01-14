@@ -9,6 +9,7 @@ import com.sefford.artdrian.connectivity.ConnectivitySubscription
 import com.sefford.artdrian.downloads.data.datasources.DownloadsDataSource
 import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.db.DownloadsDatabase
+import com.sefford.artdrian.downloads.effects.DownloadsDomainEffectHandler
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
@@ -148,4 +149,13 @@ class CoreModule {
     fun provideConnectivityStore(initial: Connectivity, subscription: ConnectivitySubscription): ConnectivityStore =
         ConnectivityStore(initial).also { subscription.start(it) }
 
+    @Provides
+    @Singleton
+    fun provideDownloadsDomainEffectHandler(
+        cache: DownloadsDataSource
+    ): DownloadsDomainEffectHandler {
+        return DownloadsDomainEffectHandler(cache::getAll, cache::save)
+    }
+
 }
+

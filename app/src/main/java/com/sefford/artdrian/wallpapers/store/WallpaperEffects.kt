@@ -1,6 +1,5 @@
 package com.sefford.artdrian.wallpapers.store
 
-import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 
