@@ -38,7 +38,7 @@ class DownloadsDomainEffectHandlerTest {
         }
 
         DownloadsDomainEffectHandler(persistDownloads = persistDownloads, scope = this)
-            .handle(DownloadsEffects.Preload(ALL_DOWNLOADS)) { }
+            .handle(DownloadsEffects.Register(ALL_DOWNLOADS)) { }
     }
 }
 

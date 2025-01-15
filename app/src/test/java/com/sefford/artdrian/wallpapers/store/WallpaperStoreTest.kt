@@ -19,9 +19,6 @@ import org.junit.jupiter.api.Test
 
 class WallpaperStoreTest {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val scope = MainScope().plus(UnconfinedTestDispatcher())
-
     @Test
     fun `attempts to load the wallpapers`() {
         val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
