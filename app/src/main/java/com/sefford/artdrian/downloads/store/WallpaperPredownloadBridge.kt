@@ -13,8 +13,7 @@ fun StateFlow<WallpapersState>.bridgeToDownload(event: (DownloadsEvents) -> Unit
     filterIsInstance<WallpapersState.Loaded>()
         .map {
             it.wallpapers.flatMap { wallpaper ->
-                listOf(Download.Pending(wallpaper.images.mobile))
-                listOf(Download.Pending(wallpaper.images.desktop))
+                listOf(Download.Pending(wallpaper.images.mobile), Download.Pending(wallpaper.images.desktop))
             }
         }.onEach { event(DownloadsEvents.Register(it)) }
         .launchIn(scope)
