@@ -6,8 +6,8 @@ import arrow.core.Option
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.domain.usecases.DownloadWallpaper
 import com.sefford.artdrian.wallpapers.domain.usecases.SetWallpaper
-import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperId
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
+import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

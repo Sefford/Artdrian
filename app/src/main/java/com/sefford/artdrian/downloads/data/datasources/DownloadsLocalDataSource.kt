@@ -6,6 +6,7 @@ import arrow.core.right
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.domain.model.Download
+import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.DownloadsResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
