@@ -10,6 +10,9 @@ sealed class Download(
     val finished: Boolean by lazy { order == Order.FINISHED.ordinal }
 
     class Pending(id: String, url: String) : Download(id, url) {
+
+        constructor(url: String): this(url.hashCode().toString(), url)
+
         override val order: Int = 0
 
         override fun toDto(): DownloadDto = DownloadDto(id, url)

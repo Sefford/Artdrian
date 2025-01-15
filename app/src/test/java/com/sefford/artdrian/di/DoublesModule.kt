@@ -9,6 +9,8 @@ import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.common.di.Application
+import com.sefford.artdrian.common.di.Default
+import com.sefford.artdrian.common.di.IO
 import com.sefford.artdrian.common.di.Memory
 import com.sefford.artdrian.common.di.NetworkCache
 import com.sefford.artdrian.test.FakeLogger
@@ -64,6 +66,16 @@ class DoublesModule(
     @Singleton
     @Memory
     fun provideMemoryTestDispatcher(): CoroutineScope = TestScope()
+
+    @Provides
+    @Singleton
+    @Default
+    fun provideStoreDefaultTestDispatcher(): CoroutineScope = TestScope()
+
+    @Provides
+    @Singleton
+    @IO
+    fun provideStoreIoTestDispatcher(): CoroutineScope = TestScope()
 
     @Provides
     @Singleton

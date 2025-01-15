@@ -19,3 +19,9 @@ annotation class NetworkCache
 
 @Qualifier
 annotation class Wallpapers
+
+@Qualifier
+annotation class Default
+
+@Qualifier
+annotation class IO

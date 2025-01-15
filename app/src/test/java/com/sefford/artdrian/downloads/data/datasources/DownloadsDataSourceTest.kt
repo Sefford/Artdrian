@@ -34,6 +34,7 @@ class DownloadsDataSourceTest : InjectableTest() {
         graph.inject(this)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun `retrieves the downloads`() = runTest {
         db.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"), DownloadsDtoMother.create("3"))
