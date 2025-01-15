@@ -1,6 +1,7 @@
 package com.sefford.artdrian.wallpapers.store
 
 import com.sefford.artdrian.common.stores.StateMachine
+import com.sefford.artdrian.downloads.domain.model.Download
 
 val WallpaperStateMachine: StateMachine<WallpaperEvents, WallpapersState, WallpaperEffects> = { event ->
     fun load() {
@@ -17,6 +18,11 @@ val WallpaperStateMachine: StateMachine<WallpaperEvents, WallpapersState, Wallpa
         state { it + event.response }
         if (event.response.network) {
             effect(WallpaperEffects.Persist(event.response.transient))
+            effect(WallpaperEffects.PrepareDownloads(
+                event.response.wallpapers.flatMap { wallpaper ->
+                    listOf(wallpaper.images.mobile, wallpaper.images.desktop)
+                }.map { url -> Download.Pending(url.hashCode().toString(), url) })
+            )
         }
     }
 

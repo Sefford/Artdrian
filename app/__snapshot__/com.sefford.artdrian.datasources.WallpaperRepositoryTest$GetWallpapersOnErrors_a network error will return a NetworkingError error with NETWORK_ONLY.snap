@@ -1,9 +1,0 @@
-{
-  "__class__": "Left",
-  "value": {
-    "__class__": "NetworkingError",
-    "status": 0
-  },
-  "isLeft": true,
-  "isRight": false
-}

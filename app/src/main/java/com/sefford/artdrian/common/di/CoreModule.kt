@@ -6,6 +6,14 @@ import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.connectivity.Connectivity
 import com.sefford.artdrian.connectivity.ConnectivityStore
 import com.sefford.artdrian.connectivity.ConnectivitySubscription
+import com.sefford.artdrian.downloads.data.datasources.DownloadsDataSource
+import com.sefford.artdrian.downloads.db.DownloadsDao
+import com.sefford.artdrian.downloads.db.DownloadsDatabase
+import com.sefford.artdrian.downloads.effects.DownloadsDomainEffectHandler
+import com.sefford.artdrian.downloads.store.DownloadsState
+import com.sefford.artdrian.downloads.store.DownloadsStateMachine
+import com.sefford.artdrian.downloads.store.DownloadsStore
+import com.sefford.artdrian.downloads.store.bridgeToDownload
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
@@ -34,12 +42,10 @@ import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.plus
 import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 import com.sefford.artdrian.common.data.network.HttpClient as DelegatedClient
@@ -50,7 +56,7 @@ class CoreModule {
 
     @Provides
     @Singleton
-    protected fun provideDeserialization(): Json = Json {
+    fun provideDeserialization(): Json = Json {
         prettyPrint = true
         isLenient = true
         ignoreUnknownKeys = true
@@ -96,13 +102,17 @@ class CoreModule {
 
     @Provides
     @Singleton
-    fun provideDao(database: WallpaperDatabase): WallpaperDao = database.dao()
+    fun provideWallpaperDao(database: WallpaperDatabase): WallpaperDao = database.dao()
+
+    @Provides
+    @Singleton
+    fun provideDownloadsDao(database: DownloadsDatabase): DownloadsDao = database.dao()
 
     @Provides
     @Singleton
     fun provideRepository(
         local: WallpaperLocalDataSource,
-        network: WallpaperNetworkDataSource
+        network: WallpaperNetworkDataSource,
     ): WallpaperRepository {
         val getAllMetadataLocal: () -> Flow<MetadataResponse> = local::getMetadata
         val getAllMetadataNetwork: () -> Flow<MetadataResponse> = network::getMetadata
@@ -119,24 +129,54 @@ class CoreModule {
     @Singleton
     fun provideWallpaperDomainEffectHandler(
         repository: WallpaperRepository,
-        cache: WallpaperCache
+        cache: WallpaperCache,
+        downloads: DownloadsDataSource
     ): WallpaperDomainEffectHandler {
         val getAllMetadata: () -> Flow<MetadataResponse> = repository::getMetadata
         val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = repository::getMetadata
-        return WallpaperDomainEffectHandler(getAllMetadata, getSingleMetadata, cache::save, cache::clear)
+        return WallpaperDomainEffectHandler(getAllMetadata, getSingleMetadata, cache::save, downloads::save, cache::clear)
     }
 
     @Provides
     @Singleton
-    fun provideWallpaperStore(domainEffectHandler: WallpaperDomainEffectHandler): WallpaperStore {
-        val store = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty)
-        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }
-            .launchIn(MainScope().plus(Dispatchers.IO))
-        return store
+    fun provideWallpaperStore(
+        domainEffectHandler: WallpaperDomainEffectHandler,
+        @IO ioScope: CoroutineScope,
+        @Default defaultScope: CoroutineScope
+    ): WallpaperStore {
+        return WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope).also { store ->
+            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+        }
     }
 
     @Provides
     @Singleton
-    fun provideConnectivityStore(initial: Connectivity, subscription: ConnectivitySubscription): ConnectivityStore =
+    fun provideConnectivityStore(
+        initial: Connectivity,
+        subscription: ConnectivitySubscription,
+    ): ConnectivityStore =
         ConnectivityStore(initial).also { subscription.start(it) }
+
+    @Provides
+    @Singleton
+    fun provideDownloadsDomainEffectHandler(
+        cache: DownloadsDataSource
+    ): DownloadsDomainEffectHandler {
+        return DownloadsDomainEffectHandler(cache::getAll, cache::save)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDownloadsStore(
+        domainEffectHandler: DownloadsDomainEffectHandler,
+        wallpaperStore: WallpaperStore,
+        @IO ioScope: CoroutineScope,
+        @Default defaultScope: CoroutineScope,
+    ): DownloadsStore {
+        return DownloadsStore(DownloadsStateMachine, DownloadsState.Empty, defaultScope).also { store ->
+            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+            wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
+        }
+    }
 }
+

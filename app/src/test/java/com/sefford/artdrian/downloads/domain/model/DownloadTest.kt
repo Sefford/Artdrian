@@ -1,5 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.should
@@ -23,7 +24,7 @@ class DownloadTest {
     @Test
     fun starts() {
         Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI).should { download ->
-            download.shouldBeInstanceOf<Download.InProgress>()
+            download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
@@ -36,7 +37,7 @@ class DownloadTest {
     @Test
     fun appends() {
         (Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI) + PROGRESS).should { download ->
-            download.shouldBeInstanceOf<Download.InProgress>()
+            download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
@@ -64,6 +65,35 @@ class DownloadTest {
         shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI).finish() }
     }
 
+    @Test
+    fun `Primed returns total size`() {
+        DownloadsMother.createPrimed().total shouldBe TOTAL
+    }
+
+    @Test
+    fun `Primed progress is zero`() {
+        DownloadsMother.createPrimed().progress.shouldBeZero()
+    }
+
+    @Test
+    fun `Ongoing returns total size`() {
+        DownloadsMother.createOngoing().total shouldBe TOTAL
+    }
+
+    @Test
+    fun `Ongoing returns progress`() {
+        DownloadsMother.createOngoing().progress shouldBe PROGRESS
+    }
+
+    @Test
+    fun `Finished returns total size`() {
+        DownloadsMother.createFinished().total shouldBe TOTAL
+    }
+
+    @Test
+    fun `Finished returns progress`() {
+        DownloadsMother.createFinished().progress shouldBe TOTAL
+    }
 }
 
 private const val ID = "pending"

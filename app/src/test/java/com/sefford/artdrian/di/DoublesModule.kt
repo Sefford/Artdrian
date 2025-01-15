@@ -9,6 +9,8 @@ import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.common.di.Application
+import com.sefford.artdrian.common.di.Default
+import com.sefford.artdrian.common.di.IO
 import com.sefford.artdrian.common.di.Memory
 import com.sefford.artdrian.common.di.NetworkCache
 import com.sefford.artdrian.test.FakeLogger
@@ -16,6 +18,7 @@ import com.sefford.artdrian.test.MemoryStorage
 import com.sefford.artdrian.test.LazyMockEngineHandler
 import com.sefford.artdrian.test.MockEngineFactory
 import com.sefford.artdrian.common.utils.Logger
+import com.sefford.artdrian.downloads.db.DownloadsDatabase
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
@@ -66,6 +69,16 @@ class DoublesModule(
 
     @Provides
     @Singleton
+    @Default
+    fun provideStoreDefaultTestDispatcher(): CoroutineScope = TestScope()
+
+    @Provides
+    @Singleton
+    @IO
+    fun provideStoreIoTestDispatcher(): CoroutineScope = TestScope()
+
+    @Provides
+    @Singleton
     @Memory
     fun provideDomainEffect(): WallpaperDomainEffectHandler = WallpaperDomainEffectHandler({ flow { } }, { flow { } })
 
@@ -80,8 +93,13 @@ class DoublesModule(
 
     @Provides
     @Singleton
-    fun providesDatabase(@Application context: Context): WallpaperDatabase =
+    fun providesWallpaperDatabase(@Application context: Context): WallpaperDatabase =
         Room.inMemoryDatabaseBuilder(context, WallpaperDatabase::class.java).allowMainThreadQueries().build()
+
+    @Provides
+    @Singleton
+    fun providesDownloadsDatabase(@Application context: Context): DownloadsDatabase =
+        Room.inMemoryDatabaseBuilder(context, DownloadsDatabase::class.java).allowMainThreadQueries().build()
 
     @Provides
     @Singleton

@@ -14,6 +14,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -49,6 +50,16 @@ class WallpaperLocalDataSourceTest : InjectableTest() {
         WallpaperLocalDataSource(db).getMetadata().first().should { response ->
             response.shouldBeLeft()
             response.value.shouldBeInstanceOf<DataError.Local.Empty>()
+        }
+    }
+
+    @Test
+    fun `handles mapping errors`() = runTest {
+        WallpaperLocalDataSource(FakeWallpaperDao(
+            getAllBehavior = { flow { throw IllegalStateException() } }
+        )).getMetadata().first().should { response ->
+            response.shouldBeLeft()
+            response.value.shouldBeInstanceOf<DataError.Local.Critical>()
         }
     }
 

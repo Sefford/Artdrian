@@ -1,0 +1,9 @@
+{
+  "__class__": "DownloadDto",
+  "id": "1",
+  "url": "http://example.com/image.jpg",
+  "hash": "",
+  "total": 1000,
+  "downloaded": 250,
+  "uri": "file://target/1234"
+}

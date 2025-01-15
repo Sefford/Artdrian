@@ -4,13 +4,13 @@ import arrow.core.Either
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import com.sefford.artdrian.common.data.Endpoints
 import com.sefford.artdrian.common.data.DataError
-import com.sefford.artdrian.wallpapers.data.dto.WallpaperResponse
-import com.sefford.artdrian.wallpapers.data.dto.WallpapersResponse
+import com.sefford.artdrian.common.data.Endpoints
 import com.sefford.artdrian.common.data.network.HttpCache
 import com.sefford.artdrian.common.data.network.HttpClient
 import com.sefford.artdrian.common.language.flatMapLeft
+import com.sefford.artdrian.wallpapers.data.dto.WallpaperResponse
+import com.sefford.artdrian.wallpapers.data.dto.WallpapersResponse
 import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper

@@ -19,9 +19,6 @@ import org.junit.jupiter.api.Test
 
 class WallpaperStoreTest {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val scope = MainScope().plus(UnconfinedTestDispatcher())
-
     @Test
     fun `attempts to load the wallpapers`() {
         val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
@@ -69,9 +66,11 @@ class WallpaperStoreTest {
         store.result.should { (states, effects) ->
             states.shouldHaveSize(1)
             states.first().shouldBeInstanceOf<WallpapersState.Loaded>()
-            effects.shouldHaveSize(1)
+            effects.shouldHaveSize(2)
             effects.first().shouldBeInstanceOf<WallpaperEffects.Persist>()
             (effects.first() as WallpaperEffects.Persist).metadata.shouldHaveSize(1)
+            effects.last().shouldBeInstanceOf<WallpaperEffects.PrepareDownloads>()
+            (effects.last() as WallpaperEffects.PrepareDownloads).downloads.shouldHaveSize(2)
         }
     }
 
@@ -79,14 +78,12 @@ class WallpaperStoreTest {
     fun `does not persist a cache response`() = runTest {
         val store = StoreInstrumentation(WallpaperStateMachine, WallpapersState.Idle.Empty)
 
-        store.event(WallpaperEvents.OnResponseReceived(WallpaperMother.generateNetwork()))
+        store.event(WallpaperEvents.OnResponseReceived(WallpaperMother.generateLocal()))
 
         store.result.should { (states, effects) ->
             states.shouldHaveSize(1)
             states.first().shouldBeInstanceOf<WallpapersState.Loaded>()
-            effects.shouldHaveSize(1)
-            effects.first().shouldBeInstanceOf<WallpaperEffects.Persist>()
-            (effects.first() as WallpaperEffects.Persist).metadata.shouldHaveSize(1)
+            effects.shouldBeEmpty()
         }
     }
 }

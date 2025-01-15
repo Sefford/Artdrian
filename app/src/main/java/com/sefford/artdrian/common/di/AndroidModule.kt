@@ -55,4 +55,5 @@ class AndroidModule {
     @Provides
     fun provideDefaultConnectivity(manager: ConnectivityManager): Connectivity =
         manager.getNetworkCapabilities(manager.activeNetwork)?.let { Connectivity(it) } ?: Connectivity.Undetermined
+
 }

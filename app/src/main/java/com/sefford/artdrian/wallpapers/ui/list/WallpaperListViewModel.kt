@@ -3,8 +3,8 @@ package com.sefford.artdrian.wallpapers.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.common.stores.HoldsState
+import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.assisted.Assisted

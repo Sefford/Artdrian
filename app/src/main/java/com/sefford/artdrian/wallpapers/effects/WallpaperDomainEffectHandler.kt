@@ -1,9 +1,11 @@
 package com.sefford.artdrian.wallpapers.effects
 
+import com.sefford.artdrian.common.stores.EffectHandler
+import com.sefford.artdrian.downloads.domain.model.Download
+import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
-import com.sefford.artdrian.common.stores.EffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperEffects
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +22,7 @@ class WallpaperDomainEffectHandler(
     private val getAllMetadata: () -> Flow<MetadataResponse> = { flow {} },
     private val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = { flow {} },
     private val persistMetadata: suspend (List<Wallpaper>) -> Unit = {},
+    private val persistDownloads: suspend (Downloads) -> Unit = {},
     private val clear: suspend () -> Unit = {},
     private val scope: CoroutineScope = MainScope().plus(Dispatchers.IO)
 ) : EffectHandler<WallpaperEvents, WallpaperEffects> {
@@ -28,7 +31,8 @@ class WallpaperDomainEffectHandler(
         when (effect) {
             WallpaperEffects.LoadAll -> loadAll(event)
             is WallpaperEffects.Load -> load(effect.id, event)
-            is WallpaperEffects.Persist -> persist(effect.metadata)
+            is WallpaperEffects.Persist -> scope.launch { persistMetadata(effect.metadata) }
+            is WallpaperEffects.PrepareDownloads ->  scope.launch { persistDownloads(effect.downloads) }
             WallpaperEffects.Clear -> scope.launch { clear() }
         }
     }
@@ -47,9 +51,5 @@ class WallpaperDomainEffectHandler(
                 event(WallpaperEvents.OnResponseReceived(wallpaper))
             }
         }.launchIn(scope)
-    }
-
-    private fun persist(metadata: List<Wallpaper>) {
-        scope.launch { persistMetadata(metadata) }
     }
 }
