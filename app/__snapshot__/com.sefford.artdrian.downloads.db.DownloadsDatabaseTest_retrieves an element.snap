@@ -3,6 +3,7 @@
   "id": "1",
   "url": "http://example.com/image.jpg",
   "hash": "",
+  "name": "",
   "total": 1000,
   "downloaded": 250,
   "uri": "file://target/1234"
