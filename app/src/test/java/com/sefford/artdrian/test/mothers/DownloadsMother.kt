@@ -1,5 +1,6 @@
 package com.sefford.artdrian.test.mothers
 
+import com.sefford.artdrian.common.language.units.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.wallpapers.domain.model.Sourced
 
@@ -15,7 +16,7 @@ object DownloadsMother {
         url: String = "http://example.com/image.jpg",
         hash: String = "1234",
         total: Long = 1000,
-    ) = Download.Primed(id = id, url = url, hash = hash, total = total)
+    ) = Download.Primed(id = id, url = url, hash = hash, total = total.bytes)
 
     fun createOngoing(
         id: String = "1",
@@ -24,7 +25,7 @@ object DownloadsMother {
         total: Long = 1000,
         downloaded: Long = 250,
         uri: String = "file://target/1234",
-    ) = Download.Ongoing(id, url, hash, total, downloaded, uri)
+    ) = Download.Ongoing(id, url, hash, total.bytes, downloaded.bytes, uri)
 
     fun createFinished(
         id: String = "1",
@@ -32,5 +33,5 @@ object DownloadsMother {
         hash: String = "1234",
         total: Long = 1000,
         uri: String = "file://target/1234",
-    ) = Download.Finished(id, url, hash, total, uri)
+    ) = Download.Finished(id, url, hash, total.bytes, uri)
 }

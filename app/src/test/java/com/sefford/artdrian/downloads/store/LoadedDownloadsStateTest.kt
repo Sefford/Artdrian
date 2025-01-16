@@ -1,6 +1,7 @@
 package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.common.language.units.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.matchers.collections.shouldHaveSize
@@ -98,6 +99,6 @@ class LoadedDownloadsStateTest {
 }
 
 private val ERROR = DataError.Local.Critical(RuntimeException())
-private val TOTAL_DOWNLOAD_SIZE = 3000
-private val TOTAL_PROGRESS_SIZE = 1250
+private val TOTAL_DOWNLOAD_SIZE = 3000L.bytes
+private val TOTAL_PROGRESS_SIZE = 1250.bytes
 

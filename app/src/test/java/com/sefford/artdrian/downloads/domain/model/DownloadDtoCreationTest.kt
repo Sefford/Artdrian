@@ -1,5 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.common.language.units.Size.Companion.bytes
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -26,7 +27,7 @@ class DownloadDtoCreationTest {
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
-            dto.total shouldBe TOTAL
+            dto.total shouldBe TOTAL.inBytes
             dto.downloaded.shouldBeZero()
             dto.uri.shouldBeEmpty()
         }
@@ -38,8 +39,8 @@ class DownloadDtoCreationTest {
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
-            dto.total shouldBe TOTAL
-            dto.downloaded shouldBe PROGRESS
+            dto.total shouldBe TOTAL.inBytes
+            dto.downloaded shouldBe PROGRESS.inBytes
             dto.uri shouldBe URI
         }
     }
@@ -50,8 +51,8 @@ class DownloadDtoCreationTest {
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
-            dto.total shouldBe TOTAL
-            dto.downloaded shouldBe TOTAL
+            dto.total shouldBe TOTAL.inBytes
+            dto.downloaded shouldBe TOTAL.inBytes
             dto.uri shouldBe URI
         }
     }
@@ -60,7 +61,7 @@ class DownloadDtoCreationTest {
 private const val ID = "pending"
 private const val HASH = "1234"
 private const val IMAGE = "http://example.com/image.jpg"
-private const val TOTAL = 1000L
-private const val PROGRESS = 250L
+private val TOTAL = 1000L.bytes
+private val PROGRESS = 250L.bytes
 private const val URI = "file://target/1234"
 private const val INVALID = -1L

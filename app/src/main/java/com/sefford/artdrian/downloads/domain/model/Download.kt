@@ -1,5 +1,7 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.common.language.units.Size
+import com.sefford.artdrian.common.language.units.Size.Companion.bytes
 import com.sefford.artdrian.downloads.data.dto.DownloadDto
 
 sealed class Download(
@@ -11,7 +13,7 @@ sealed class Download(
 
     class Pending(id: String, url: String) : Download(id, url) {
 
-        constructor(url: String): this(url.hashCode().toString(), url)
+        constructor(url: String) : this(url.hashCode().toString(), url)
 
         override val order: Int = 0
 
@@ -19,14 +21,14 @@ sealed class Download(
 
         override fun plus(other: Download): Download = other
 
-        fun prime(hash: String, total: Long) = Primed(id, url, hash, total)
+        fun prime(hash: String, total: Size) = Primed(id, url, hash, total)
     }
 
-    class Primed(id: String, url: String, val hash: String, override val total: Long) : Download(id, url),
+    class Primed(id: String, url: String, val hash: String, override val total: Size) : Download(id, url),
         Measured {
         override val order: Int = 1
 
-        override val progress: Long = 0
+        override val progress: Size = 0.bytes
 
         override fun plus(other: Download): Download = if (this == other) {
             this
@@ -36,7 +38,7 @@ sealed class Download(
             super.plus(other)
         }
 
-        override fun toDto(): DownloadDto = DownloadDto(id, url, hash = hash, total = total, downloaded = 0)
+        override fun toDto(): DownloadDto = DownloadDto(id, url, hash = hash, total = total.inBytes, downloaded = 0)
 
         fun start(uri: String) = Ongoing(id, url, hash, total, progress, uri)
 
@@ -63,19 +65,20 @@ sealed class Download(
         id: String,
         url: String,
         val hash: String,
-        override val total: Long,
-        override val progress: Long,
+        override val total: Size,
+        override val progress: Size,
         val uri: String
     ) :
         Download(id, url), Measured {
 
         override val order: Int = 2
 
-        override fun toDto(): DownloadDto = DownloadDto(id, url, hash = hash, total = total, downloaded = progress, uri = uri)
+        override fun toDto(): DownloadDto =
+            DownloadDto(id = id, url = url, hash = hash, total = total.inBytes, downloaded = progress.inBytes, uri = uri)
 
-        operator fun plus(downloaded: Long) = Ongoing(
-            id, url, hash, total, progress + downloaded, uri
-        )
+        operator fun plus(downloaded: Long) = Ongoing(id, url, hash, total, progress + downloaded, uri)
+
+        operator fun plus(size: Size) = Ongoing(id, url, hash, total, progress + size, uri)
 
         override fun plus(other: Download): Download = when {
             this == other && this < other as Ongoing -> other
@@ -115,16 +118,23 @@ sealed class Download(
         }
     }
 
-    class Finished(id: String, url: String, val hash: String, override val total: Long, val uri: String) :
+    class Finished(id: String, url: String, val hash: String, override val total: Size, val uri: String) :
         Download(id, url), Measured {
 
         override val order: Int = 3
 
-        override val progress: Long = total
+        override val progress: Size = total
 
         override fun plus(other: Download): Download = if (this == other) this else super.plus(other)
 
-        override fun toDto(): DownloadDto = DownloadDto(id, url, hash = hash, total = total, downloaded = total, uri = uri)
+        override fun toDto(): DownloadDto = DownloadDto(
+            id = id,
+            url = url,
+            hash = hash,
+            total = total.inBytes,
+            downloaded = total.inBytes,
+            uri = uri
+        )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -173,9 +183,9 @@ sealed class Download(
         operator fun invoke(dto: DownloadDto): Download =
             when {
                 dto.pending -> Pending(dto.id, dto.url)
-                dto.primed -> Primed(dto.id, dto.url, dto.hash, dto.total)
-                dto.inProgress -> Ongoing(dto.id, dto.url, dto.hash, dto.total, dto.downloaded, dto.uri)
-                dto.completed -> Finished(dto.id, dto.url, dto.hash, dto.total, dto.uri)
+                dto.primed -> Primed(dto.id, dto.url, dto.hash, dto.total.bytes)
+                dto.inProgress -> Ongoing(dto.id, dto.url, dto.hash, dto.total.bytes, dto.downloaded.bytes, dto.uri)
+                dto.completed -> Finished(dto.id, dto.url, dto.hash, dto.total.bytes, dto.uri)
                 else -> throw IllegalStateException("This is an unreachable condition")
             }
     }

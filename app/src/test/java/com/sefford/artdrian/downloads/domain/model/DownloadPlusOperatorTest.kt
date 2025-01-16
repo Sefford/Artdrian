@@ -1,5 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.test.assertions.shouldBeOfSize
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -32,7 +33,7 @@ class DownloadPlusOperatorTest {
     fun `primed gets updated by a different total`() {
         (DownloadsMother.createPrimed() + DownloadsMother.createPrimed(total = 1250)).should { download ->
             download.shouldBeInstanceOf<Download.Primed>()
-            download.total shouldBe 1250
+            download.total shouldBeOfSize 1250
         }
     }
 
@@ -63,7 +64,7 @@ class DownloadPlusOperatorTest {
     fun `ongoing gets updated by an updated ongoing`() {
         (DownloadsMother.createOngoing() + DownloadsMother.createOngoing(downloaded = 500)).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
-            download.progress shouldBe 500
+            download.progress shouldBeOfSize  500
         }
     }
 
@@ -71,7 +72,7 @@ class DownloadPlusOperatorTest {
     fun `ongoing keeps the higher progress`() {
         (DownloadsMother.createOngoing(downloaded = 500) + DownloadsMother.createOngoing()).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
-            download.progress shouldBe 500
+            download.progress shouldBeOfSize 500
         }
     }
 
