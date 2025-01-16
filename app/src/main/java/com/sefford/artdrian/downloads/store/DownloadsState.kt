@@ -1,8 +1,8 @@
 package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.data.DataError
-import com.sefford.artdrian.common.language.units.Size
-import com.sefford.artdrian.common.language.units.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.Size
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.Measured

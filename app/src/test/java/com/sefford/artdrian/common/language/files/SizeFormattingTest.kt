@@ -1,10 +1,10 @@
-package com.sefford.artdrian.common.language.units
+package com.sefford.artdrian.common.language.files
 
-import com.sefford.artdrian.common.language.units.Size.Companion.GBs
-import com.sefford.artdrian.common.language.units.Size.Companion.MBs
-import com.sefford.artdrian.common.language.units.Size.Companion.PBs
-import com.sefford.artdrian.common.language.units.Size.Companion.bytes
-import com.sefford.artdrian.common.language.units.Size.Companion.kBs
+import com.sefford.artdrian.common.language.files.Size.Companion.GBs
+import com.sefford.artdrian.common.language.files.Size.Companion.MBs
+import com.sefford.artdrian.common.language.files.Size.Companion.PBs
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.Size.Companion.kBs
 import com.sefford.artdrian.downloads.store.extensions.LocaleExtension
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test

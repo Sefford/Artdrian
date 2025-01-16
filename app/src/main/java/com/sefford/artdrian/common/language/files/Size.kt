@@ -1,4 +1,4 @@
-package com.sefford.artdrian.common.language.units
+package com.sefford.artdrian.common.language.files
 
 class Size(private val size: Double, private val unit: SizeUnit) {
 

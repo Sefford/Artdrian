@@ -1,6 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
-import com.sefford.artdrian.common.language.units.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.test.assertions.shouldBeZero
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.assertions.throwables.shouldThrow
@@ -13,7 +13,7 @@ class DownloadTest {
 
     @Test
     fun primes() {
-        Download.Pending(ID, IMAGE).prime(HASH, TOTAL).should { download ->
+        Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).should { download ->
             download.id shouldBe ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
@@ -24,7 +24,7 @@ class DownloadTest {
 
     @Test
     fun starts() {
-        Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI).should { download ->
+        Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
@@ -37,7 +37,7 @@ class DownloadTest {
 
     @Test
     fun appends() {
-        (Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI) + PROGRESS).should { download ->
+        (Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI) + PROGRESS).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
@@ -50,7 +50,7 @@ class DownloadTest {
 
     @Test
     fun finishes() {
-        (Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI) + TOTAL).finish().should { download ->
+        (Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI) + TOTAL).finish().should { download ->
             download.shouldBeInstanceOf<Download.Finished>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
@@ -63,7 +63,7 @@ class DownloadTest {
 
     @Test
     fun `fails if the file is not completely downloaded`() {
-        shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).prime(HASH, TOTAL).start(URI).finish() }
+        shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI).finish() }
     }
 
     @Test
@@ -100,6 +100,7 @@ class DownloadTest {
 private const val ID = "pending"
 private const val HASH = "1234"
 private const val IMAGE = "http://example.com/image.jpg"
+private const val NAME = "ghost_waves.jpg"
 private val TOTAL = 1000L.bytes
 private val PROGRESS = 250L.bytes
 private const val URI = "file://target/1234"

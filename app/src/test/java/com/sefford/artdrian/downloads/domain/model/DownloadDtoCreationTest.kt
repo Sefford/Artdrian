@@ -1,6 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
-import com.sefford.artdrian.common.language.units.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import io.kotest.matchers.longs.shouldBeZero
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -15,6 +15,7 @@ class DownloadDtoCreationTest {
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash.shouldBeEmpty()
+            dto.name.shouldBeEmpty()
             dto.total shouldBe INVALID
             dto.downloaded shouldBe INVALID
             dto.uri.shouldBeEmpty()
@@ -23,10 +24,11 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates primed`() {
-        Download.Primed(ID, IMAGE, HASH, TOTAL).toDto().should { dto ->
+        Download.Primed(ID, IMAGE, HASH, NAME, TOTAL).toDto().should { dto ->
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
+            dto.name shouldBe NAME
             dto.total shouldBe TOTAL.inBytes
             dto.downloaded.shouldBeZero()
             dto.uri.shouldBeEmpty()
@@ -35,10 +37,11 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates ongoing`() {
-        Download.Ongoing(ID, IMAGE, HASH, TOTAL, PROGRESS, URI).toDto().should { dto ->
+        Download.Ongoing(ID, IMAGE, HASH, NAME, TOTAL, PROGRESS, URI).toDto().should { dto ->
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
+            dto.name shouldBe NAME
             dto.total shouldBe TOTAL.inBytes
             dto.downloaded shouldBe PROGRESS.inBytes
             dto.uri shouldBe URI
@@ -47,10 +50,11 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates finished`() {
-        Download.Finished(ID, IMAGE, HASH, TOTAL, URI).toDto().should { dto ->
+        Download.Finished(ID, IMAGE, HASH, NAME, TOTAL, URI).toDto().should { dto ->
             dto.id shouldBe ID
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
+            dto.name shouldBe NAME
             dto.total shouldBe TOTAL.inBytes
             dto.downloaded shouldBe TOTAL.inBytes
             dto.uri shouldBe URI
@@ -61,6 +65,7 @@ class DownloadDtoCreationTest {
 private const val ID = "pending"
 private const val HASH = "1234"
 private const val IMAGE = "http://example.com/image.jpg"
+private const val NAME = "ghost_waves.jpg"
 private val TOTAL = 1000L.bytes
 private val PROGRESS = 250L.bytes
 private const val URI = "file://target/1234"

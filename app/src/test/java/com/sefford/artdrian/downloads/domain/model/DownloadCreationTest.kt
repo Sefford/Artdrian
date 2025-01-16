@@ -1,6 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
-import com.sefford.artdrian.common.language.units.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.test.assertions.shouldBeZero
 import com.sefford.artdrian.test.mothers.DownloadsDtoMother
 import io.kotest.matchers.should
