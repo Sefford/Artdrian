@@ -23,6 +23,9 @@ class WallpaperListViewModel @AssistedInject constructor(
     override val state: StateFlow<ViewState> = wallpaperStore.state.map { ViewState(it) }
         .stateIn(viewModelScope, SharingStarted.Lazily, initial)
 
+    override val current: ViewState
+        get() = state.value
+
     sealed class ViewState {
         data object Loading : ViewState()
         class Content(val wallpapers: List<Wallpaper>) : ViewState()
