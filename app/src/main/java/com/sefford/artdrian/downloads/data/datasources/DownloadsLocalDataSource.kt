@@ -34,4 +34,6 @@ class DownloadsDataSource @Inject constructor(private val db: DownloadsDao) {
         }.fold({
             flow { emit(DataError.Local.Critical(it).left()) }
         }) { it }
+
+    suspend fun get(id: String) = db.get(id)
 }

@@ -52,7 +52,7 @@ class DownloadsDatabaseTest {
     fun `retrieves an element`() = runTest {
         dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"))
 
-        dao.get("1").first().matchWithSnapshot()
+        dao.get("1").matchWithSnapshot()
     }
 
     @Test
