@@ -1,6 +1,8 @@
 package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.common.language.files.Size
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.Measured
@@ -36,9 +38,9 @@ sealed class DownloadsState {
 
     class Loaded(val downloads: Downloads) : DownloadsState(), Measured {
 
-        override val total: Long by lazy { downloads.filterIsInstance<Measured>().sumOf { it.total } }
+        override val total: Size by lazy { downloads.filterIsInstance<Measured>().sumOf { it.total } }
 
-        override val progress: Long by lazy { downloads.filterIsInstance<Measured>().sumOf { it.progress } }
+        override val progress: Size by lazy { downloads.filterIsInstance<Measured>().sumOf { it.progress } }
 
         val pending: List<Download.Pending> = downloads.filterIsInstance<Download.Pending>()
 
@@ -54,5 +56,10 @@ sealed class DownloadsState {
     abstract operator fun plus(list: Downloads): DownloadsState
 
     abstract operator fun plus(preloads: Preload): DownloadsState
+}
 
+private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Size): Size {
+    var sum: Size = 0.bytes
+    forEach { element -> sum += selector(element) }
+    return sum
 }

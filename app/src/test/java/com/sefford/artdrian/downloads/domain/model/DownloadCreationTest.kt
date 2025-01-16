@@ -1,5 +1,7 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.test.assertions.shouldBeZero
 import com.sefford.artdrian.test.mothers.DownloadsDtoMother
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -25,7 +27,7 @@ class DownloadCreationTest {
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
             download.total shouldBe TOTAL
-            download.progress shouldBe 0
+            download.progress.shouldBeZero()
         }
     }
     @Test
@@ -62,6 +64,6 @@ private const val ONGOING_ID = "ongoing"
 private const val FINISHED_ID = "finished"
 private const val HASH = "1234"
 private const val IMAGE = "http://example.com/image.jpg"
-private const val TOTAL = 1000L
-private const val PROGRESS = 250L
+private val TOTAL = 1000L.bytes
+private val PROGRESS = 250L.bytes
 private const val URI = "file://target/1234"

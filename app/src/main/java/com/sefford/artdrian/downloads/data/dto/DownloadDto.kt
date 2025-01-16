@@ -10,6 +10,7 @@ class DownloadDto(
     @PrimaryKey val id: String,
     @ColumnInfo(name = "url") val url: String,
     @ColumnInfo(name = "hash") val hash: String = "",
+    @ColumnInfo(name = "name") val name: String = "",
     @ColumnInfo(name = "total") val total: Long = -1L,
     @ColumnInfo(name = "downloaded") val downloaded: Long = -1L,
     @ColumnInfo(name = "uri") val uri: String = ""

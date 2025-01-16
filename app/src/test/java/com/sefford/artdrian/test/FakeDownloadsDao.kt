@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flowOf
 class FakeDownloadsDao(
     private val addBehavior: (Array<out DownloadDto>) -> Unit = {},
     private val getAllBehavior: () -> Flow<List<DownloadDto>> = { flowOf(emptyList()) },
-    private val getSingleBehavior: (String) -> Flow<DownloadDto> = { flowOf() },
+    private val getSingleBehavior: (String) -> DownloadDto? = { null },
     private val deleteBehavior: (String) -> Unit = {},
     private val clearBehavior: () -> Unit = {}
 ) : DownloadsDao {
@@ -21,7 +21,7 @@ class FakeDownloadsDao(
 
     override fun getAll(): Flow<List<DownloadDto>> = getAllBehavior()
 
-    override fun get(id: String): Flow<DownloadDto?> = getSingleBehavior(id)
+    override suspend fun get(id: String): DownloadDto? = getSingleBehavior(id)
 
     override fun delete(id: String) = deleteBehavior(id)
 
