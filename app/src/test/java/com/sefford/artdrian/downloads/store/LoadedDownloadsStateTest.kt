@@ -2,6 +2,7 @@ package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.writeString
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.matchers.collections.shouldHaveSize
@@ -9,6 +10,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
+import java.nio.file.Files
 
 class LoadedDownloadsStateTest {
 
@@ -32,9 +34,7 @@ class LoadedDownloadsStateTest {
     fun `Loaded plus Preload equals Loaded`() {
         (DownloadsState.Loaded(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(
             listOf(
-                DownloadsMother.createPending(
-                    "2"
-                )
+                DownloadsMother.createPending("2")
             )
         )).should { loaded ->
             loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
@@ -77,7 +77,6 @@ class LoadedDownloadsStateTest {
         DownloadsState.Loaded(
             listOf(
                 DownloadsMother.createPending(),
-                DownloadsMother.createPrimed(),
                 DownloadsMother.createOngoing(),
                 DownloadsMother.createFinished()
             )
@@ -86,12 +85,16 @@ class LoadedDownloadsStateTest {
 
     @Test
     fun `returns total progress size`() {
+        val ongoing = Files.createTempFile("ongoing", ".download").toFile()
+        ongoing.writeString("a".repeat(ONGOING_FILE_PROGRESS.inBytes.toInt()))
+        val finishedFile = Files.createTempFile("finished", ".download").toFile()
+        finishedFile.writeString("a".repeat(FINISHED_FILE_PROGRESS.inBytes.toInt()))
+
         DownloadsState.Loaded(
             listOf(
                 DownloadsMother.createPending(),
-                DownloadsMother.createPrimed(),
-                DownloadsMother.createOngoing(),
-                DownloadsMother.createFinished()
+                DownloadsMother.createOngoing(file = ongoing),
+                DownloadsMother.createFinished(file = finishedFile)
             )
         ).progress shouldBe TOTAL_PROGRESS_SIZE
     }
@@ -99,6 +102,8 @@ class LoadedDownloadsStateTest {
 }
 
 private val ERROR = DataError.Local.Critical(RuntimeException())
-private val TOTAL_DOWNLOAD_SIZE = 3000L.bytes
-private val TOTAL_PROGRESS_SIZE = 1250.bytes
+private val TOTAL_DOWNLOAD_SIZE = 2000L.bytes
+private val ONGOING_FILE_PROGRESS = 250.bytes
+private val FINISHED_FILE_PROGRESS = 1000.bytes
+private val TOTAL_PROGRESS_SIZE = ONGOING_FILE_PROGRESS + FINISHED_FILE_PROGRESS
 

@@ -36,7 +36,8 @@ object DownloadsDtoMother {
     fun createOngoing(
         id: String = "ongoing",
         hash: String = "1234",
-    ) = create(id = id, hash = hash)
+        uri: String = "file://target/1234"
+    ) = create(id = id, hash = hash, uri = uri)
 
     fun createFinished(
         id: String = "finished",
