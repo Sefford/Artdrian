@@ -13,6 +13,8 @@ import com.sefford.artdrian.downloads.domain.model.Measured
 sealed class DownloadsState {
 
     data object Idle : DownloadsState() {
+        override fun viabilityOf(id: String): Viability = Viability.WAIT
+
         override fun plus(error: DataError): DownloadsState = Empty
 
         override fun plus(list: Downloads): DownloadsState = if (list.isNotEmpty()) Loaded(list) else Empty
@@ -23,6 +25,9 @@ sealed class DownloadsState {
     }
 
     data object Empty : DownloadsState() {
+
+        override fun viabilityOf(id: String): Viability = Viability.FAILURE
+
         override fun plus(error: DataError): DownloadsState = this
 
         override fun plus(list: Downloads): DownloadsState = if (list.isNotEmpty()) Loaded(list) else Empty
@@ -33,7 +38,10 @@ sealed class DownloadsState {
     }
 
     class Preload(val downloads: Downloads) : DownloadsState() {
+
         val empty: Boolean = downloads.isEmpty()
+
+        override fun viabilityOf(id: String): Viability = Viability.WAIT
 
         override fun plus(error: DataError): DownloadsState = Loaded(downloads)
 
@@ -46,6 +54,8 @@ sealed class DownloadsState {
     }
 
     class Loaded(val downloads: Downloads) : DownloadsState(), Measured {
+
+        override fun viabilityOf(id: String): Viability = if (this[id].isNone()) Viability.FAILURE else Viability.PROCEED
 
         override val total: Size by lazy { downloads.filterIsInstance<Measured>().sumOf { it.total } }
 
@@ -62,6 +72,8 @@ sealed class DownloadsState {
         override fun get(id: String): Option<Download> = downloads.find { it.id == id }.toOption()
     }
 
+    abstract fun viabilityOf(id: String): Viability
+
     abstract operator fun plus(error: DataError): DownloadsState
 
     abstract operator fun plus(list: Downloads): DownloadsState
@@ -69,6 +81,8 @@ sealed class DownloadsState {
     abstract operator fun plus(preloads: Preload): DownloadsState
 
     abstract operator fun get(id: String): Option<Download>
+
+    enum class Viability { FAILURE, WAIT, PROCEED}
 }
 
 private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Size): Size {

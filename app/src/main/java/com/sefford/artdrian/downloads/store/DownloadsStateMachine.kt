@@ -25,6 +25,7 @@ val DownloadsStateMachine: StateMachine<DownloadsEvents, DownloadsState, Downloa
         is DownloadsEvents.OnDownloadsReceived -> onDownloadsReceived(event.downloads)
         is DownloadsEvents.OnErrorReceived -> onErrorReceived(event)
         DownloadsEvents.LoadAll -> effect(DownloadsEffects.LoadAll)
+        is DownloadsEvents.Update -> effect(DownloadsEffects.Update(event.download))
     }
 }
 
