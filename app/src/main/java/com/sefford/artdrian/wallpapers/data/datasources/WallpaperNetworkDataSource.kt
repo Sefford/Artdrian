@@ -8,6 +8,7 @@ import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.common.data.Endpoints
 import com.sefford.artdrian.common.data.network.HttpCache
 import com.sefford.artdrian.common.data.network.HttpClient
+import com.sefford.artdrian.common.data.toDataError
 import com.sefford.artdrian.common.language.flatMapLeft
 import com.sefford.artdrian.wallpapers.data.dto.WallpaperResponse
 import com.sefford.artdrian.wallpapers.data.dto.WallpapersResponse
@@ -77,12 +78,4 @@ class WallpaperNetworkDataSource @Inject constructor(
 
     private suspend inline fun <reified T> HttpResponse.retrieve(): T = body<T>()
 
-    private fun <R> Either<Throwable, R>.toDataError() = mapLeft { error ->
-        when (error) {
-            is UnresolvedAddressException -> DataError.Network.NoConnection
-            is ConnectTimeoutException -> DataError.Network.ConnectTimeout
-            is SocketTimeoutException -> DataError.Network.SocketTimeout
-            else -> DataError.Local.Critical(error)
-        }
-    }
 }
