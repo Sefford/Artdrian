@@ -10,7 +10,7 @@ import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.core.toByteArray
 
 fun MockRequestHandleScope.respondOnly(
-    matcher: () -> Boolean,
+    matcher: () -> Boolean = { true },
     content: String,
     status: HttpStatusCode = HttpStatusCode.OK,
     headers: Headers = headersOf()

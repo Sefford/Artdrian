@@ -14,6 +14,12 @@ import org.junit.jupiter.api.extension.ExtendWith
 class SizeFormattingTest {
 
     @Test
+    fun `formats 0 bytes`() {
+        0L.bytes.toString() shouldBe "0 bytes"
+    }
+
+
+    @Test
     fun `formats a byte`() {
         1L.bytes.toString() shouldBe "1 byte"
     }
