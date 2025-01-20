@@ -74,6 +74,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
+    implementation(libs.workmanager)
 
     // Compose
     implementation(platform(libs.compose.bom))
@@ -99,6 +100,9 @@ dependencies {
     implementation(libs.ktor.client.logging)
     implementation(libs.ktor.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
+
+    // Okio
+    implementation(libs.okio)
 
     // Room
     implementation(libs.room.runtime)

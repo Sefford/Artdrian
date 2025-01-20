@@ -1,11 +1,11 @@
 [versions]
 accompanist = "0.34.0"
 accompanist-permissions = "0.27.0"
-activity-compose = "1.9.3"
+activity-compose = "1.10.0"
 android-gradle-plugin = "8.7.3"
 arrow = "1.2.4"
 coil = "3.0.4"
-compose-bom = "2024.12.01"
+compose-bom = "2025.01.00"
 coroutines = "1.9.0"
 coroutines-test = "1.10.0"
 core-ktx = "1.15.0"
@@ -19,16 +19,18 @@ kotlin = "2.1.0"
 kotlin-serialization = "2.1.0"
 kotlin-snapshot = "2.3.0"
 ksp = "2.1.0-1.0.29"
+ktor = "3.0.3"
 lifecycle-runtime-ktx = "2.8.7"
 material3 = "1.3.1"
 material-icons-extended = "1.7.6"
 mockwebserver = "4.9.3"
+okio = "3.7.0"
 robolectric = "4.14.1"
 room = "2.6.1"
 serialization-json = "1.7.3"
 shot = "6.1.0"
 test-core = "1.6.1"
-ktor = "3.0.3"
+workmanager = "2.10.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
@@ -83,6 +85,9 @@ kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coro
 # Kotlin Libraries
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
+# Okio
+okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+
 # Room
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -105,3 +110,5 @@ androidx-test-core = { module = "androidx.test:core", version.ref = "test-core" 
 snapshot = { module = "com.karumi.kotlinsnapshot:plugin", version.ref = "kotlin-snapshot" }
 screenshot = { module = "com.karumi:shot", version.ref = "shot" }
 
+# Workmanager
+workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
