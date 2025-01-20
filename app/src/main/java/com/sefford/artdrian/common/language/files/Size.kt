@@ -9,9 +9,9 @@ class Size(private val size: Double, private val unit: SizeUnit) {
     val inWholePBs: Long by lazy { SizeUnit.PETABYTE.asWhole(inBytes) }
 
     private val readable: String by lazy {
-        SizeUnit.entries.asSequence()
+        (SizeUnit.entries.asSequence()
             .map { unit -> toDouble(unit) to unit }
-            .last { (size, _) -> size >= 1 }
+            .lastOrNull { (size, _) -> size >= 1 } ?: (0.0 to SizeUnit.BYTE))
             .let { (size, unit) -> unit.format(size) }
     }
 
