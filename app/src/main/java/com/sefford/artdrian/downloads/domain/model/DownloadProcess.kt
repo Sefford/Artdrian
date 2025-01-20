@@ -101,6 +101,7 @@ sealed class DownloadProcess {
                         response.bodyAsChannel(),
                         download.start(response.headers, directory)
                     ).right()
+
                     is Download.Ongoing -> download.confirm()
                     is Download.Finished -> Results.Success.left()
                 }
@@ -192,5 +193,6 @@ sealed class DownloadProcess {
         data object Retry : Results()
 
         data object Success : Results()
+
     }
 }
