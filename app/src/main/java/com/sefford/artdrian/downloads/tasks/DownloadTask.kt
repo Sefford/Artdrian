@@ -47,6 +47,8 @@ class DownloadTask(context: Context, params: WorkerParameters) : CoroutineWorker
             Retry -> Result.retry()
             Success -> Result.success()
         }
-}
 
-private const val ID = "id"
+    companion object {
+        const val ID = "id"
+    }
+}
