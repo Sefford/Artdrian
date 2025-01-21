@@ -7,11 +7,15 @@ import android.provider.MediaStore
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.work.CoroutineWorker
 import com.sefford.artdrian.common.di.ApplicationComponent
 import com.sefford.artdrian.common.di.TopComponentHolder
 
 val ComponentActivity.graph: ApplicationComponent
     get() = (this.application as TopComponentHolder).graph!!
+
+val CoroutineWorker.graph: ApplicationComponent
+    get() = (applicationContext as TopComponentHolder).graph!!
 
 fun Color.toHex(): String = Integer.toHexString(this.toArgb())
 

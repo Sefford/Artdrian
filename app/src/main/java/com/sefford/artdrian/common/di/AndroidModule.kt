@@ -28,6 +28,11 @@ class AndroidModule {
 
     @Provides
     @Singleton
+    @Downloads
+    fun provideExternalCacheDirForDownloads(@Application context: Context) = File(context.externalCacheDir, "downloads")
+
+    @Provides
+    @Singleton
     fun providesWallpaperManager(@Application context: Context): WallpaperManager = WallpaperManager.getInstance(context)
 
     @Provides

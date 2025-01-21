@@ -15,11 +15,6 @@ class DownloadPlusOperatorTest {
     }
 
     @Test
-    fun `pending gets overridden by a primed`() {
-        (DownloadsMother.createPending() + DownloadsMother.createPrimed()).shouldBeInstanceOf<Download.Primed>()
-    }
-
-    @Test
     fun `pending gets overridden by a ongoing`() {
         (DownloadsMother.createPending() + DownloadsMother.createOngoing()).shouldBeInstanceOf<Download.Ongoing>()
     }
@@ -30,60 +25,13 @@ class DownloadPlusOperatorTest {
     }
 
     @Test
-    fun `primed gets updated by a different total`() {
-        (DownloadsMother.createPrimed() + DownloadsMother.createPrimed(total = 1250)).should { download ->
-            download.shouldBeInstanceOf<Download.Primed>()
-            download.total shouldBeOfSize 1250
-        }
-    }
-
-    @Test
-    fun `primed gets updated by a different hash`() {
-        (DownloadsMother.createPrimed() + DownloadsMother.createPrimed(hash = "4321")).should { download ->
-            download.shouldBeInstanceOf<Download.Primed>()
-            download.hash shouldBe "4321"
-        }
-    }
-
-    @Test
-    fun `primed does not get overridden by a pending`() {
-        (DownloadsMother.createPrimed() + DownloadsMother.createPending()).shouldBeInstanceOf<Download.Primed>()
-    }
-
-    @Test
-    fun `primed gets overridden by an ongoing`() {
-        (DownloadsMother.createPrimed() + DownloadsMother.createOngoing()).shouldBeInstanceOf<Download.Ongoing>()
-    }
-
-    @Test
     fun `primed gets overridden by a finished`() {
         (DownloadsMother.createPending() + DownloadsMother.createFinished()).shouldBeInstanceOf<Download.Finished>()
     }
 
     @Test
-    fun `ongoing gets updated by an updated ongoing`() {
-        (DownloadsMother.createOngoing() + DownloadsMother.createOngoing(downloaded = 500)).should { download ->
-            download.shouldBeInstanceOf<Download.Ongoing>()
-            download.progress shouldBeOfSize  500
-        }
-    }
-
-    @Test
-    fun `ongoing keeps the higher progress`() {
-        (DownloadsMother.createOngoing(downloaded = 500) + DownloadsMother.createOngoing()).should { download ->
-            download.shouldBeInstanceOf<Download.Ongoing>()
-            download.progress shouldBeOfSize 500
-        }
-    }
-
-    @Test
     fun `ongoing does not get overridden by a pending`() {
         (DownloadsMother.createOngoing() + DownloadsMother.createPending()).shouldBeInstanceOf<Download.Ongoing>()
-    }
-
-    @Test
-    fun `ongoing does not get overridden by a primed`() {
-        (DownloadsMother.createOngoing() + DownloadsMother.createPrimed()).shouldBeInstanceOf<Download.Ongoing>()
     }
 
     @Test
@@ -94,11 +42,6 @@ class DownloadPlusOperatorTest {
     @Test
     fun `finished does not get overridden by a pending`() {
         (DownloadsMother.createFinished() + DownloadsMother.createPending()).shouldBeInstanceOf<Download.Finished>()
-    }
-
-    @Test
-    fun `finished does not get overridden by a primed`() {
-        (DownloadsMother.createFinished() + DownloadsMother.createPrimed()).shouldBeInstanceOf<Download.Finished>()
     }
 
     @Test

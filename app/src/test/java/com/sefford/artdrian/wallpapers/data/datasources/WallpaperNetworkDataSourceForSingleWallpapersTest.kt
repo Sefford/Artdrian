@@ -4,11 +4,11 @@ import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.common.data.Endpoints
 import com.sefford.artdrian.common.data.network.HttpCache
 import com.sefford.artdrian.common.data.network.HttpClient
-import com.sefford.artdrian.test.FakeHttpClient
+import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.test.InjectableTest
-import com.sefford.artdrian.test.LazyMockEngineHandler
+import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import com.sefford.artdrian.test.Resources
-import com.sefford.artdrian.test.respondOnly
+import com.sefford.artdrian.test.networking.respondOnly
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight

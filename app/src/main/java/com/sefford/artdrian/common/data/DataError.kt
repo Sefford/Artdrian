@@ -1,7 +1,11 @@
 package com.sefford.artdrian.common.data
 
+import arrow.core.Either
 import com.sefford.artdrian.wallpapers.domain.model.Sourced
+import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.http.HttpStatusCode
+import java.net.SocketTimeoutException
+import java.nio.channels.UnresolvedAddressException
 
 sealed class DataError : Sourced {
     sealed class Local : DataError(), Sourced by Sourced.Local {
@@ -20,5 +24,14 @@ sealed class DataError : Sourced {
         data object SocketTimeout: Network()
         class Critical(val error: Throwable) : Network()
 
+    }
+}
+
+fun <R> Either<Throwable, R>.toDataError() = mapLeft { error ->
+    when (error) {
+        is UnresolvedAddressException -> DataError.Network.NoConnection
+        is ConnectTimeoutException -> DataError.Network.ConnectTimeout
+        is SocketTimeoutException -> DataError.Network.SocketTimeout
+        else -> DataError.Local.Critical(error)
     }
 }

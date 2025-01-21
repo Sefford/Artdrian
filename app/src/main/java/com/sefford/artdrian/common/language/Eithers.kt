@@ -15,3 +15,10 @@ inline fun <A, B, C> Either<A, B>.flatMapLeft(f: (left: A) -> Either<C, B>): Eit
         is Right -> this
     }
 }
+
+inline fun <A, B> Either<A, A>.fold(block: (element: A) -> B): B {
+    return when (this) {
+        is Right -> block(value)
+        is Left -> block(value)
+    }
+}

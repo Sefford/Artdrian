@@ -7,4 +7,6 @@ sealed class DownloadsEffects {
     data object LoadAll: DownloadsEffects()
 
     class Register(val downloads: List<Download>) : DownloadsEffects()
+
+    class Update(val download: Download): DownloadsEffects()
 }

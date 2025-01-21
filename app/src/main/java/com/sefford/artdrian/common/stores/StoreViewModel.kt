@@ -14,6 +14,9 @@ class StoreViewModel<Event, State, Effect>(
         KotlinStore(logic, initial, viewModelScope)
     }
 
+    override val current: State
+        get() = store.current
+
     override fun event(event: Event) = store.event(event)
 
     override val state: StateFlow<State>

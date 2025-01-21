@@ -13,4 +13,6 @@ sealed class DownloadsEvents {
     class OnDownloadsReceived(val downloads: Downloads): DownloadsEvents()
 
     class OnErrorReceived(val error: DataError) : DownloadsEvents()
+
+    class Update(val download: Download): DownloadsEvents()
 }

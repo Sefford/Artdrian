@@ -18,6 +18,9 @@ annotation class Disk
 annotation class NetworkCache
 
 @Qualifier
+annotation class Downloads
+
+@Qualifier
 annotation class Wallpapers
 
 @Qualifier

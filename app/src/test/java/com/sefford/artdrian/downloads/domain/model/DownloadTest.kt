@@ -1,79 +1,52 @@
 package com.sefford.artdrian.downloads.domain.model
 
 import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.common.language.files.writeString
 import com.sefford.artdrian.test.assertions.shouldBeZero
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.ktor.http.HttpHeaders
+import io.ktor.http.headers
 import org.junit.Test
+import java.nio.file.Files
 
 class DownloadTest {
 
-    @Test
-    fun primes() {
-        Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).should { download ->
-            download.id shouldBe ID
-            download.url shouldBe IMAGE
-            download.hash shouldBe HASH
-            download.total shouldBe TOTAL
-            download.progress.shouldBeZero()
-        }
-    }
+    private val cache = Files.createTempDirectory("downloads").toFile()
 
     @Test
     fun starts() {
-        Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI).should { download ->
+        Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
             download.total shouldBe TOTAL
             download.progress.shouldBeZero()
-            download.uri shouldBe URI
-        }
-    }
-
-    @Test
-    fun appends() {
-        (Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI) + PROGRESS).should { download ->
-            download.shouldBeInstanceOf<Download.Ongoing>()
-            download.id shouldBe ID
-            download.url shouldBe IMAGE
-            download.hash shouldBe HASH
-            download.total shouldBe TOTAL
-            download.progress shouldBe PROGRESS
-            download.uri shouldBe URI
         }
     }
 
     @Test
     fun finishes() {
-        (Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI) + TOTAL).finish().should { download ->
+        val file = Files.createFile(cache.toPath().resolve("${DownloadsMother.createOngoing().name}.download")).toFile()
+        file.writeString("a".repeat(TOTAL.inBytes.toInt()))
+
+        Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).finish().should { download ->
             download.shouldBeInstanceOf<Download.Finished>()
             download.id shouldBe ID
             download.url shouldBe IMAGE
             download.hash shouldBe HASH
             download.total shouldBe TOTAL
             download.progress shouldBe TOTAL
-            download.uri shouldBe URI
         }
     }
 
     @Test
     fun `fails if the file is not completely downloaded`() {
-        shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).prime(HASH, NAME, TOTAL).start(URI).finish() }
-    }
-
-    @Test
-    fun `Primed returns total size`() {
-        DownloadsMother.createPrimed().total shouldBe TOTAL
-    }
-
-    @Test
-    fun `Primed progress is zero`() {
-        DownloadsMother.createPrimed().progress.shouldBeZero()
+        shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).finish() }
     }
 
     @Test
@@ -83,7 +56,10 @@ class DownloadTest {
 
     @Test
     fun `Ongoing returns progress`() {
-        DownloadsMother.createOngoing().progress shouldBe PROGRESS
+        val file = Files.createTempFile(DownloadsMother.createOngoing().name, ".download").toFile()
+        file.writeString("a".repeat(PROGRESS.inBytes.toInt()))
+
+        DownloadsMother.createOngoing(file = file).progress shouldBe PROGRESS
     }
 
     @Test
@@ -98,10 +74,12 @@ class DownloadTest {
 }
 
 private const val ID = "pending"
-private const val HASH = "1234"
+private const val HASH = "9cc769f284bba4616668623ca2c22f3e"
 private const val IMAGE = "http://example.com/image.jpg"
-private const val NAME = "ghost_waves.jpg"
 private val TOTAL = 1000L.bytes
 private val PROGRESS = 250L.bytes
-private const val URI = "file://target/1234"
-private const val INVALID = -1L
+private val HEADERS_RESPONSE = headers {
+    append(HttpHeaders.ETag, HASH)
+    append(HttpHeaders.ContentDisposition, "inline; filename=\"ghost_waves_004.jpg\"")
+    append(HttpHeaders.ContentLength, "1000")
+}

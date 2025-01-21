@@ -1,3 +1,3 @@
 package com.sefford.artdrian.common.language
 
-inline fun <T> Any?.orElse(block: () -> T) = this ?: block()
+inline fun <T> T?.orElse(block: () -> T) = this ?: block()

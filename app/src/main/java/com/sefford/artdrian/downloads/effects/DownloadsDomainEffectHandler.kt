@@ -25,7 +25,8 @@ class DownloadsDomainEffectHandler(
     override fun handle(effect: DownloadsEffects, event: (DownloadsEvents) -> Unit) {
         when (effect) {
             DownloadsEffects.LoadAll -> loadAll(event)
-            is DownloadsEffects.Register -> scope.launch { persistDownloads(effect.downloads)  }
+            is DownloadsEffects.Register -> scope.launch { persistDownloads(effect.downloads) }
+            is DownloadsEffects.Update -> scope.launch { persistDownloads(listOf(effect.download)) }
         }
     }
 
