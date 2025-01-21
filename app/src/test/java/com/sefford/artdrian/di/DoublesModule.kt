@@ -15,8 +15,8 @@ import com.sefford.artdrian.common.di.Memory
 import com.sefford.artdrian.common.di.NetworkCache
 import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.MemoryStorage
-import com.sefford.artdrian.test.LazyMockEngineHandler
-import com.sefford.artdrian.test.MockEngineFactory
+import com.sefford.artdrian.test.networking.LazyMockEngineHandler
+import com.sefford.artdrian.test.networking.MockEngineFactory
 import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.downloads.db.DownloadsDatabase
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler

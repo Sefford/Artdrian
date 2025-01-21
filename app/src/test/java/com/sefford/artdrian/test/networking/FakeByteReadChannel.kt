@@ -1,4 +1,4 @@
-package com.sefford.artdrian.test
+package com.sefford.artdrian.test.networking
 
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.InternalAPI

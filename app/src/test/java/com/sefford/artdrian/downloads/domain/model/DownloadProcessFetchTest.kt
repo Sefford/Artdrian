@@ -3,9 +3,9 @@ package com.sefford.artdrian.downloads.domain.model
 import com.sefford.artdrian.common.language.files.contentToString
 import com.sefford.artdrian.common.language.files.writeString
 import com.sefford.artdrian.downloads.store.DownloadsEvents
-import com.sefford.artdrian.test.FakeByteReadChannel
+import com.sefford.artdrian.test.networking.FakeByteReadChannel
 import com.sefford.artdrian.test.InjectableTest
-import com.sefford.artdrian.test.LazyMockEngineHandler
+import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient

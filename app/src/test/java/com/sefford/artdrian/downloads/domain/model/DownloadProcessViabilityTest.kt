@@ -1,7 +1,7 @@
 package com.sefford.artdrian.downloads.domain.model
 
 import com.sefford.artdrian.downloads.store.DownloadsState
-import com.sefford.artdrian.test.FakeHttpClient
+import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.test.InjectableTest
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import io.kotest.assertions.arrow.core.shouldBeLeft

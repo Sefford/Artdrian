@@ -1,10 +1,10 @@
 package com.sefford.artdrian.downloads.domain.model
 
-import com.sefford.artdrian.test.FakeHttpClient
+import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.test.InjectableTest
-import com.sefford.artdrian.test.LazyMockEngineHandler
+import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import com.sefford.artdrian.test.mothers.DownloadsMother
-import com.sefford.artdrian.test.respondOnly
+import com.sefford.artdrian.test.networking.respondOnly
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.matchers.should

@@ -1,4 +1,4 @@
-package com.sefford.artdrian.test
+package com.sefford.artdrian.test.networking
 
 import com.sefford.artdrian.common.data.network.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
