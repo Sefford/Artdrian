@@ -1,5 +1,6 @@
 package com.sefford.artdrian.common.di
 
+import androidx.work.WorkManager
 import com.sefford.artdrian.common.data.network.DelegatedHttpClient
 import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.common.utils.Logger
@@ -10,9 +11,11 @@ import com.sefford.artdrian.downloads.data.datasources.DownloadsDataSource
 import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.db.DownloadsDatabase
 import com.sefford.artdrian.downloads.effects.DownloadsDomainEffectHandler
+import com.sefford.artdrian.downloads.store.Downloader
 import com.sefford.artdrian.downloads.store.DownloadsState
 import com.sefford.artdrian.downloads.store.DownloadsStateMachine
 import com.sefford.artdrian.downloads.store.DownloadsStore
+import com.sefford.artdrian.downloads.store.bridgeDownloader
 import com.sefford.artdrian.downloads.store.bridgeToDownload
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
@@ -143,10 +146,8 @@ class CoreModule {
         domainEffectHandler: WallpaperDomainEffectHandler,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope
-    ): WallpaperStore {
-        return WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope).also { store ->
-            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
-        }
+    ): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope).also { store ->
+        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
     }
 
     @Provides
@@ -161,9 +162,7 @@ class CoreModule {
     @Singleton
     fun provideDownloadsDomainEffectHandler(
         cache: DownloadsDataSource
-    ): DownloadsDomainEffectHandler {
-        return DownloadsDomainEffectHandler(cache::getAll, cache::save)
-    }
+    ): DownloadsDomainEffectHandler = DownloadsDomainEffectHandler(cache::getAll, cache::save)
 
     @Provides
     @Singleton
@@ -172,11 +171,20 @@ class CoreModule {
         wallpaperStore: WallpaperStore,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope,
-    ): DownloadsStore {
-        return DownloadsStore(DownloadsStateMachine, DownloadsState.Empty, defaultScope).also { store ->
-            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
-            wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
-        }
+    ): DownloadsStore = DownloadsStore(DownloadsStateMachine, DownloadsState.Empty, defaultScope).also { store ->
+        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+        wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDownloader(
+        workManager: WorkManager,
+        downloads: DownloadsStore,
+        connectivity: ConnectivityStore,
+        @Default scope: CoroutineScope,
+    ) = Downloader(workManager, connectivity, scope).also { downloader ->
+        downloads.state.bridgeDownloader(downloader::queue, scope)
     }
 }
 

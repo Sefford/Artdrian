@@ -3,6 +3,8 @@ package com.sefford.artdrian.common.di
 import android.app.WallpaperManager
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
 import com.sefford.artdrian.common.WallpaperAdapter
@@ -60,5 +62,9 @@ class AndroidModule {
     @Provides
     fun provideDefaultConnectivity(manager: ConnectivityManager): Connectivity =
         manager.getNetworkCapabilities(manager.activeNetwork)?.let { Connectivity(it) } ?: Connectivity.Undetermined
+
+    @Provides
+    @Singleton
+    fun provideWorkManager(@Application context: Context) = WorkManager.getInstance(context)
 
 }
