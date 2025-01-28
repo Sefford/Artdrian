@@ -12,6 +12,8 @@ import com.sefford.artdrian.common.di.DaggerApplicationComponent
 import com.sefford.artdrian.common.di.TopComponentHolder
 import com.sefford.artdrian.common.utils.debuggable
 import com.sefford.artdrian.connectivity.ConnectivityStore
+import com.sefford.artdrian.downloads.store.Downloader
+import com.sefford.artdrian.notifications.NotificationCenter
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import javax.inject.Inject
@@ -23,6 +25,13 @@ class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Fa
 
     @Inject
     internal lateinit var connectivity: ConnectivityStore
+
+    @Inject
+    internal lateinit var downloader: Downloader
+
+    @Inject
+    internal lateinit var notifications: NotificationCenter
+
 
     override val graph = DaggerApplicationComponent.builder()
         .applicationModule(ApplicationModule(this))
