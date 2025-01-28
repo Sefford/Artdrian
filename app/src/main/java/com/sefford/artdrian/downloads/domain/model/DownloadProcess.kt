@@ -11,6 +11,7 @@ import com.sefford.artdrian.common.language.files.Size.Companion.kBs
 import com.sefford.artdrian.common.language.fold
 import com.sefford.artdrian.common.language.orElse
 import com.sefford.artdrian.common.language.orFalse
+import com.sefford.artdrian.common.utils.disableCache
 import com.sefford.artdrian.downloads.store.DownloadsEvents
 import com.sefford.artdrian.downloads.store.DownloadsState
 import com.sefford.artdrian.downloads.store.DownloadsStore
@@ -75,6 +76,7 @@ sealed class DownloadProcess {
             suspend fun analyze(): Either<Results, Prime> =
                 Either.catch {
                     client.get(download.url) {
+                        disableCache()
                         if (download is Download.Ongoing && download.progress > 0) {
                             header(HttpHeaders.Range, "bytes=${download.progress}-")
                         }
@@ -111,7 +113,9 @@ sealed class DownloadProcess {
                 return if (this == refresh) {
                     Fetch(events, response.status, response.bodyAsChannel(), this).right()
                 } else {
-                    Either.catch { client.get(url) }
+                    Either.catch {
+                        client.get(url, disableCache)
+                    }
                         .errorToResult()
                         .statusCheck()
                         .map { response -> Fetch(events, response.status, response.bodyAsChannel(), refresh) }

@@ -57,7 +57,9 @@ class Downloader(
         get() = connectivity.value.speed.parallelDownloads
 
     init {
-        finished.onEach { consumeAttempt() }.launchIn(scope)
+        finished.onEach {
+            consumeAttempt()
+        }.launchIn(scope)
         connectivity.map { connection -> connection is Connectivity.Connected }
             .filter { it }
             .onEach { consumeAttempt() }
@@ -73,14 +75,14 @@ class Downloader(
     private suspend fun consumeAttempt() {
         if (concurrent < maxParallelization && !channel.isEmpty) {
             val download = channel.receive()
-            if (download.isDownloading) {
+            if (!download.isDownloading) {
                 startDownload(download)
             }
         }
     }
 
     private val Download.isDownloading: Boolean
-        get() = running.value.find { task -> task.tags.contains(id) } == null
+        get() = running.value.find { task -> task.tags.contains(id) } != null
 
     private fun startDownload(download: Download) {
         enqueue(

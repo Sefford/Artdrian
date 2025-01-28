@@ -14,7 +14,7 @@ import java.io.File
 sealed class Download(
     val id: String,
     val url: String,
-) {
+): Measured {
 
     val finished: Boolean by lazy { order == Order.FINISHED.ordinal }
 
@@ -22,7 +22,11 @@ sealed class Download(
 
         constructor(url: String) : this(url.hashCode().toString(), url)
 
-        override val order: Int = 0
+        override val order: Int = Order.PENDING.ordinal
+
+        override val progress: Size = 0.bytes
+
+        override val total: Size = 0.bytes
 
         override fun toDto(): DownloadDto = DownloadDto(id, url)
 
@@ -48,9 +52,9 @@ sealed class Download(
         val name: String,
         override val total: Size,
         private val file: File
-    ) : Download(id, url), Measured {
+    ) : Download(id, url) {
 
-        override val order: Int = 2
+        override val order: Int = Order.ONGOING.ordinal
 
         override val progress: Size
             get() = file.length().bytes
@@ -123,9 +127,9 @@ sealed class Download(
     }
 
     class Finished(id: String, url: String, val hash: String, val name: String, override val total: Size, val file: File) :
-        Download(id, url), Measured {
+        Download(id, url) {
 
-        override val order: Int = 3
+        override val order: Int = Order.FINISHED.ordinal
 
         override val progress: Size = total
 
@@ -202,7 +206,7 @@ sealed class Download(
             }
     }
 
-    private enum class Order { PENDING, PRIMED, ONGOING, FINISHED }
+    private enum class Order { PENDING, ONGOING, FINISHED }
 
     protected val FILENAME_REGEX = """filename="([^"]+)"""".toRegex()
 }

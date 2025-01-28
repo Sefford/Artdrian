@@ -11,3 +11,10 @@ operator fun Downloads.plus(other: Downloads): Downloads {
     return (this.intersect(other, equality) { left, right -> left + right } +
         this.difference(other, equality)).toList()
 }
+
+val Downloads.progress: Long
+    get() = filterIsInstance<Measured>().sumOf { download -> download.progress.inBytes }
+
+val Downloads.total: Long
+    get() = filterIsInstance<Measured>().sumOf { download -> download.progress.inBytes }
+

@@ -32,7 +32,6 @@ class DownloadTask(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         graph.inject(this)
 
-
         return DownloadProcess.Step.Viability(client, downloads, cache, inputData.getString(ID)!!)
             .check()
             .flatMap { probe -> probe.analyze() }
