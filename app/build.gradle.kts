@@ -126,4 +126,5 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
     testImplementation(libs.room.testing)
+    testImplementation(libs.workmanager.test)
 }
