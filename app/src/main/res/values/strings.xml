@@ -12,4 +12,10 @@
     <string name="detail_save_saving_error">Something happened trying to download the wallpaper</string>
     <string name="detail_apply_success">Wallpaper has been set</string>
     <string name="detail_apply_error">Something happened trying to set the wallpaper</string>
+    <string name="notification_channel_general_name">Important Updates</string>
+    <string name="notification_channel_general_description">We’ll let you know about things that matter</string>
+    <string name="notification_channel_downloads_name">Active Downloads</string>
+    <string name="notification_channel_downloads_description">Stay updated on the progress of your downloads</string>
+    <string name="notification_download_title">Getting Your Wallpapers Ready!</string>
+    <string name="notification_download_description">Preparing %1$d beautiful wallpapers just for you!</string>
 </resources>
