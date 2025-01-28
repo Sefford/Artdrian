@@ -1,5 +1,7 @@
 package com.sefford.artdrian.common.di
 
+import android.content.Context
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import com.sefford.artdrian.common.data.network.DelegatedHttpClient
 import com.sefford.artdrian.common.stores.monitor
@@ -18,6 +20,8 @@ import com.sefford.artdrian.downloads.store.DownloadsStateMachine
 import com.sefford.artdrian.downloads.store.DownloadsStore
 import com.sefford.artdrian.downloads.store.bridgeDownloader
 import com.sefford.artdrian.downloads.store.bridgeToDownload
+import com.sefford.artdrian.notifications.NotificationCenter
+import com.sefford.artdrian.notifications.bridgeNotifications
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
@@ -187,6 +191,17 @@ class CoreModule {
         @Default scope: CoroutineScope,
     ) = Downloader(workManager, connectivity, scope).also { downloader ->
         downloads.state.bridgeDownloader(downloader::queue, scope)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationCenter(
+        @Application context: Context,
+        notifications: NotificationManagerCompat,
+        downloads: DownloadsStore,
+        @Default scope: CoroutineScope,
+    ) = NotificationCenter(context, context.resources, notifications, ).also { center ->
+        downloads.state.bridgeNotifications(center::notify, scope)
     }
 }
 

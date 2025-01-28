@@ -28,3 +28,6 @@ annotation class Default
 
 @Qualifier
 annotation class IO
+
+@Qualifier
+annotation class Build
