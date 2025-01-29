@@ -2,6 +2,7 @@ package com.sefford.artdrian.common.di
 
 import androidx.work.WorkManager
 import com.sefford.artdrian.common.data.network.DelegatedHttpClient
+import com.sefford.artdrian.common.stores.monitor
 import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.connectivity.Connectivity
@@ -144,19 +145,19 @@ class CoreModule {
     @Singleton
     fun provideWallpaperStore(
         domainEffectHandler: WallpaperDomainEffectHandler,
+        logger: Logger,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope
     ): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope).also { store ->
         store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
-    }
+    }.monitor(logger, "WallpaperStore")
 
     @Provides
     @Singleton
     fun provideConnectivityStore(
         initial: Connectivity,
         subscription: ConnectivitySubscription,
-    ): ConnectivityStore =
-        ConnectivityStore(initial).also { subscription.start(it) }
+    ): ConnectivityStore = ConnectivityStore(initial).also { subscription.start(it) }
 
     @Provides
     @Singleton
@@ -169,12 +170,13 @@ class CoreModule {
     fun provideDownloadsStore(
         domainEffectHandler: DownloadsDomainEffectHandler,
         wallpaperStore: WallpaperStore,
+        logger: Logger,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope,
     ): DownloadsStore = DownloadsStore(DownloadsStateMachine, DownloadsState.Empty, defaultScope).also { store ->
         store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
         wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
-    }
+    }.monitor(logger, "DownloadsStore")
 
     @Provides
     @Singleton
