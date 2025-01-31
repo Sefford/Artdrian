@@ -5,6 +5,8 @@ import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.common.language.files.writeString
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.test.mothers.DownloadsMother
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -33,31 +35,12 @@ class LoadedDownloadsStateTest {
     @Test
     fun `Loaded plus Preload equals Loaded`() {
         (DownloadsState.Loaded(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(
-            listOf(
-                DownloadsMother.createPending("2")
-            )
+            listOf(DownloadsMother.createPending("2"))
         )).should { loaded ->
             loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
-            loaded.downloads.shouldHaveSize(2)
+            loaded.downloads.shouldContainOnly(DownloadsMother.createPending())
         }
     }
-
-    @Test
-    fun `Loaded plus empty Downloads equals Loaded`() {
-        (DownloadsState.Loaded(listOf(DownloadsMother.createPending())) + listOf()).should { loaded ->
-            loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
-            loaded.downloads.shouldHaveSize(1)
-        }
-    }
-
-    @Test
-    fun `Loaded plus Downloads equals Loaded`() {
-        (DownloadsState.Loaded(listOf(DownloadsMother.createPending())) + listOf(DownloadsMother.createPending("2"))).should { loaded ->
-            loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
-            loaded.downloads.shouldHaveSize(2)
-        }
-    }
-
 
     @Test
     fun `returns pending downloads`() {
@@ -98,7 +81,6 @@ class LoadedDownloadsStateTest {
             )
         ).progress shouldBe TOTAL_PROGRESS_SIZE
     }
-
 }
 
 private val ERROR = DataError.Local.Critical(RuntimeException())
@@ -106,4 +88,5 @@ private val TOTAL_DOWNLOAD_SIZE = 2000L.bytes
 private val ONGOING_FILE_PROGRESS = 250.bytes
 private val FINISHED_FILE_PROGRESS = 1000.bytes
 private val TOTAL_PROGRESS_SIZE = ONGOING_FILE_PROGRESS + FINISHED_FILE_PROGRESS
+private val OTHER_DOWNLOAD_URL = "http://example.com/desktop/image.jpg"
 

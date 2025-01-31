@@ -2,10 +2,6 @@ package com.sefford.artdrian.test
 
 import com.sefford.artdrian.downloads.data.dto.DownloadDto
 import com.sefford.artdrian.downloads.db.DownloadsDao
-import com.sefford.artdrian.downloads.domain.model.Download
-import com.sefford.artdrian.downloads.domain.model.Downloads
-import com.sefford.artdrian.wallpapers.data.db.WallpaperDao
-import com.sefford.artdrian.wallpapers.data.dto.WallpaperDatabaseDto
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -21,7 +17,7 @@ class FakeDownloadsDao(
 
     override fun getAll(): Flow<List<DownloadDto>> = getAllBehavior()
 
-    override suspend fun get(id: String): DownloadDto? = getSingleBehavior(id)
+    override suspend fun get(url: String): DownloadDto? = getSingleBehavior(url)
 
     override fun delete(id: String) = deleteBehavior(id)
 

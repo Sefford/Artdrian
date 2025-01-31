@@ -7,6 +7,7 @@ import arrow.core.flatMap
 import com.sefford.artdrian.common.data.network.HttpClient
 import com.sefford.artdrian.common.di.Downloads
 import com.sefford.artdrian.common.language.fold
+import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.common.utils.graph
 import com.sefford.artdrian.downloads.domain.model.DownloadProcess
 import com.sefford.artdrian.downloads.domain.model.DownloadProcess.Results.Failure
@@ -29,10 +30,13 @@ class DownloadTask(context: Context, params: WorkerParameters) : CoroutineWorker
     @Downloads
     internal lateinit var cache: File
 
+    @Inject
+    internal lateinit var logger: Logger
+
     override suspend fun doWork(): Result {
         graph.inject(this)
 
-        return DownloadProcess.Step.Viability(client, downloads, cache, inputData.getString(ID)!!)
+        return DownloadProcess.Step.Viability(client, downloads, cache, logger, inputData.getString(URL)!!)
             .check()
             .flatMap { probe -> probe.analyze() }
             .flatMap { prime -> prime.ready() }
@@ -48,6 +52,6 @@ class DownloadTask(context: Context, params: WorkerParameters) : CoroutineWorker
         }
 
     companion object {
-        const val ID = "id"
+        const val URL = "id"
     }
 }

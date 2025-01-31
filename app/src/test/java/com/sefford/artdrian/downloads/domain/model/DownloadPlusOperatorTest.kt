@@ -1,9 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
-import com.sefford.artdrian.test.assertions.shouldBeOfSize
 import com.sefford.artdrian.test.mothers.DownloadsMother
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
 

@@ -9,7 +9,6 @@ import com.sefford.artdrian.downloads.store.DownloadsState
 import com.sefford.artdrian.notifications.model.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
@@ -18,8 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 
 fun StateFlow<DownloadsState>.bridgeNotifications(notify: (Notifications.DownloadNotification) -> Unit, scope: CoroutineScope) =
-    distinctUntilChanged { _, _ -> false }
-        .filterIsInstance<DownloadsState.Loaded>()
+    filterIsInstance<DownloadsState.Loaded>()
         .map { downloads -> downloads.downloads }
         .scan(emptyList()) { prev: Downloads, next: Downloads ->
             if (prev.isEmpty()) {

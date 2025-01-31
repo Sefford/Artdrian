@@ -14,10 +14,10 @@ interface DownloadsDao {
     @Query("SELECT * FROM downloads")
     fun getAll(): Flow<List<DownloadDto>>
 
-    @Query("SELECT * FROM downloads WHERE id == :id")
-    suspend fun get(id: String): DownloadDto?
+    @Query("SELECT * FROM downloads WHERE url == :url")
+    suspend fun get(url: String): DownloadDto?
 
-    @Query("DELETE FROM downloads WHERE id = :id")
+    @Query("DELETE FROM downloads WHERE url = :id")
     fun delete(id: String)
 
     @Query("DELETE FROM downloads")

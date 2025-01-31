@@ -7,7 +7,7 @@ class FakeLogger(private val _messages: MutableList<Pair<String, String>> = muta
     val messages: List<Pair<String, String>>
         get() = _messages.toList()
 
-    override fun debug(tag: String, message: String) {
+    override fun log(tag: String, message: String) {
         println("$tag: $message")
         _messages.add(tag to message)
     }

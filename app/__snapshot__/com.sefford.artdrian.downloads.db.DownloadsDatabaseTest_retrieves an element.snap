@@ -1,7 +1,6 @@
 {
   "__class__": "DownloadDto",
-  "id": "1",
-  "url": "http://example.com/image.jpg",
+  "url": "http://example.com/mobile/image.jpg",
   "hash": "",
   "name": "",
   "total": 1000,

@@ -3,8 +3,8 @@ package com.sefford.artdrian.common.di
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
+import com.sefford.artdrian.common.Permissions
 import com.sefford.artdrian.common.data.network.DelegatedHttpClient
-import com.sefford.artdrian.common.stores.monitor
 import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.connectivity.Connectivity
@@ -15,6 +15,7 @@ import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.db.DownloadsDatabase
 import com.sefford.artdrian.downloads.effects.DownloadsDomainEffectHandler
 import com.sefford.artdrian.downloads.store.Downloader
+import com.sefford.artdrian.downloads.store.DownloadsEvents
 import com.sefford.artdrian.downloads.store.DownloadsState
 import com.sefford.artdrian.downloads.store.DownloadsStateMachine
 import com.sefford.artdrian.downloads.store.DownloadsStore
@@ -90,7 +91,7 @@ class CoreModule {
 
             install(ResponseObserver) {
                 onResponse { response ->
-                    logger.debug("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
+                    logger.log("TAG_HTTP_STATUS_LOGGER", "${response.status.value}")
                 }
             }
 
@@ -152,9 +153,11 @@ class CoreModule {
         logger: Logger,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope
-    ): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope).also { store ->
-        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
-    }.monitor(logger, "WallpaperStore")
+    ): WallpaperStore = WallpaperStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope)
+        .monitor(logger, "WallpaperStore")
+        .also { store ->
+            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+        }
 
     @Provides
     @Singleton
@@ -177,20 +180,25 @@ class CoreModule {
         logger: Logger,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope,
-    ): DownloadsStore = DownloadsStore(DownloadsStateMachine, DownloadsState.Empty, defaultScope).also { store ->
-        store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
-        wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
-    }.monitor(logger, "DownloadsStore")
+    ): DownloadsStore = DownloadsStore(DownloadsStateMachine, DownloadsState.Idle, defaultScope)
+        .monitor(logger, "DownloadsStore")
+        .also { store ->
+            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+            wallpaperStore.state.bridgeToDownload(store::event, defaultScope)
+            store.event(DownloadsEvents.LoadAll)
+        }
 
     @Provides
     @Singleton
     fun provideDownloader(
         workManager: WorkManager,
-        downloads: DownloadsStore,
+        downloads: DownloadsDomainEffectHandler,
         connectivity: ConnectivityStore,
+        notifications: NotificationCenter,
+        logger: Logger,
         @Default scope: CoroutineScope,
-    ) = Downloader(workManager, connectivity, scope).also { downloader ->
-        downloads.state.bridgeDownloader(downloader::queue, scope)
+    ) = Downloader(workManager, connectivity, notifications::clearDownloadNotification, logger::log, scope).also { downloader ->
+        downloads.downloads.bridgeDownloader(downloader::queue, scope)
     }
 
     @Provides
@@ -199,8 +207,9 @@ class CoreModule {
         @Application context: Context,
         notifications: NotificationManagerCompat,
         downloads: DownloadsStore,
+        permissions: Permissions,
         @Default scope: CoroutineScope,
-    ) = NotificationCenter(context, context.resources, notifications, ).also { center ->
+    ) = NotificationCenter(context, context.resources, notifications, permissions).also { center ->
         downloads.state.bridgeNotifications(center::notify, scope)
     }
 }

@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.scan
 class LoggableStateStorage<State>(
     private val delegate: HoldsState<State>,
     private val logger: Logger,
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     private val tag: String
 ) : HoldsState<State> by delegate {
 
     init {
         state.scan(current) { prev, next ->
-            logger.debug(tag, "State Change: $prev -> $next")
+            logger.log(tag, "State Change: $prev -> $next")
             next
         }.launchIn(scope)
     }

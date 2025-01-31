@@ -5,6 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.karumi.kotlinsnapshot.matchWithSnapshot
 import com.sefford.artdrian.test.mothers.DownloadsDtoMother
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.collections.shouldHaveSize
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -43,33 +44,36 @@ class DownloadsDatabaseTest {
 
     @Test
     fun `retrieves all elements`() = runTest {
-        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"))
+        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create(SECOND_URL))
 
         dao.getAll().first().shouldHaveSize(2)
     }
 
     @Test
     fun `retrieves an element`() = runTest {
-        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"))
+        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create(SECOND_URL))
 
-        dao.get("1").matchWithSnapshot()
+        dao.get(FIRST_URL).matchWithSnapshot()
     }
 
     @Test
     fun `deletes an element`() = runTest {
-        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"))
+        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create(SECOND_URL))
 
-        dao.delete("1")
+        dao.delete(FIRST_URL)
 
-        dao.getAll().first().shouldHaveSize(1)
+        dao.getAll().first().shouldContainOnly(DownloadsDtoMother.create(SECOND_URL))
     }
 
     @Test
     fun `clears the database`() = runTest {
-        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create("2"))
+        dao.add(DownloadsDtoMother.create(), DownloadsDtoMother.create(SECOND_URL))
 
         dao.clear()
 
         dao.getAll().first().shouldBeEmpty()
     }
 }
+
+private const val FIRST_URL = "http://example.com/mobile/image.jpg"
+private const val SECOND_URL = "http://example.com/desktop/image.jpg"

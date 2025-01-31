@@ -14,9 +14,7 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates pending`() {
-
-        Download.Pending(ID, IMAGE).toDto().should { dto ->
-            dto.id shouldBe ID
+        Download.Pending(IMAGE).toDto().should { dto ->
             dto.url shouldBe IMAGE
             dto.hash.shouldBeEmpty()
             dto.name.shouldBeEmpty()
@@ -28,11 +26,10 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates ongoing`() {
-        val downloadFile = Files.createTempFile(DownloadsMother.createOngoing().name, ".download").toFile()
+        val downloadFile = Files.createTempFile(DownloadsMother.createOngoing().fileName, "").toFile()
         downloadFile.writeString("a".repeat(PROGRESS.inBytes.toInt()))
 
-        Download.Ongoing(ID, IMAGE, HASH, NAME, TOTAL, downloadFile).toDto().should { dto ->
-            dto.id shouldBe ID
+        Download.Ongoing(IMAGE, HASH, NAME, TOTAL, downloadFile).toDto().should { dto ->
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
             dto.name shouldBe NAME
@@ -44,10 +41,9 @@ class DownloadDtoCreationTest {
 
     @Test
     fun `creates finished`() {
-        val downloadFile = Files.createTempFile(DownloadsMother.createOngoing().name, ".download").toFile()
+        val downloadFile = Files.createTempFile(DownloadsMother.createOngoing().fileName, "").toFile()
 
-        Download.Finished(ID, IMAGE, HASH, NAME, TOTAL, downloadFile).toDto().should { dto ->
-            dto.id shouldBe ID
+        Download.Finished(IMAGE, HASH, NAME, TOTAL, downloadFile).toDto().should { dto ->
             dto.url shouldBe IMAGE
             dto.hash shouldBe HASH
             dto.name shouldBe NAME
@@ -58,9 +54,8 @@ class DownloadDtoCreationTest {
     }
 }
 
-private const val ID = "pending"
 private const val HASH = "1234"
-private const val IMAGE = "http://example.com/image.jpg"
+private const val IMAGE = "http://example.com/mobile/image.jpg"
 private const val NAME = "ghost_waves.jpg"
 private val TOTAL = 1000L.bytes
 private val PROGRESS = 250L.bytes

@@ -113,6 +113,8 @@ dependencies {
     implementation(libs.dagger)
 
     // Test dependencies
+    kspTest(libs.dagger.compiler)
+
     testRuntimeOnly(libs.junit.engine)
     testRuntimeOnly(libs.junit.vintage)
 
