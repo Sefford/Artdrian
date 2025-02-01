@@ -23,6 +23,7 @@ import com.sefford.artdrian.downloads.store.bridgeDownloader
 import com.sefford.artdrian.downloads.store.bridgeToDownload
 import com.sefford.artdrian.notifications.NotificationCenter
 import com.sefford.artdrian.notifications.bridgeNotifications
+import com.sefford.artdrian.notifications.model.Channels
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
@@ -210,7 +211,11 @@ class CoreModule {
         permissions: Permissions,
         @Default scope: CoroutineScope,
     ) = NotificationCenter(context, context.resources, notifications, permissions).also { center ->
-        downloads.state.bridgeNotifications(center::notify, scope)
+        downloads.state.bridgeNotifications(
+            { center.canNotifyOnChannel(Channels.DOWNLOAD) },
+            center::notify,
+            scope
+        )
     }
 }
 

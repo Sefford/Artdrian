@@ -20,7 +20,7 @@ class NotificationsBridgeTest {
     @Test
     fun `initializes the information the first time`() = runTest {
         MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createPending()))))
-            .bridgeNotifications(events::add, backgroundScope.unconfine())
+            .bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
 
         events.last().should { notification ->
             notification.downloads shouldBe 1
@@ -33,7 +33,15 @@ class NotificationsBridgeTest {
     @Test
     fun `filters out initially finished downloads`() = runTest {
         MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))))
-            .bridgeNotifications(events::add, backgroundScope.unconfine())
+            .bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
+
+        events.shouldBeEmpty()
+    }
+
+    @Test
+    fun `filters out when the notifications are not enabled`() = runTest {
+        MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))))
+            .bridgeNotifications({ false }, events::add, backgroundScope.unconfine())
 
         events.shouldBeEmpty()
     }
@@ -46,7 +54,7 @@ class NotificationsBridgeTest {
 
         val downloads = MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createPending()))))
 
-        downloads.bridgeNotifications(events::add, backgroundScope.unconfine())
+        downloads.bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
 
         downloads.emit(DownloadsState.Loaded(listOf(DownloadsMother.createFinished(file = downloadFile))))
 

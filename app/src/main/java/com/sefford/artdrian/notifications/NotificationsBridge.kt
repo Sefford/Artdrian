@@ -11,13 +11,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 
-fun StateFlow<DownloadsState>.bridgeNotifications(notify: (Notifications.DownloadNotification) -> Unit, scope: CoroutineScope) =
+fun StateFlow<DownloadsState>.bridgeNotifications(
+    canNotify: () -> Boolean,
+    notify: (Notifications.DownloadNotification) -> Unit,
+    scope: CoroutineScope) =
     filterIsInstance<DownloadsState.Loaded>()
+        .filter { canNotify() }
         .map { downloads -> downloads.downloads }
         .scan(emptyList()) { prev: Downloads, next: Downloads ->
             if (prev.isEmpty()) {
