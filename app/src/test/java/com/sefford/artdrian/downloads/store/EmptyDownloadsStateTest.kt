@@ -14,12 +14,12 @@ class EmptyDownloadsStateTest {
 
     @Test
     fun `Empty plus Empty Preload equals Empty`() {
-        (DownloadsState.Empty + DownloadsState.Preload(listOf())).shouldBeInstanceOf<DownloadsState.Empty>()
+        (DownloadsState.Empty + DownloadsState.Preload(emptySet())).shouldBeInstanceOf<DownloadsState.Empty>()
     }
 
     @Test
     fun `Empty plus Preload equals Empty`() {
-        (DownloadsState.Empty + DownloadsState.Preload(listOf(DownloadsMother.createPending())))
+        (DownloadsState.Empty + DownloadsState.Preload(setOf(DownloadsMother.createPending())))
             .shouldBeInstanceOf<DownloadsState.Empty>()
     }
 }

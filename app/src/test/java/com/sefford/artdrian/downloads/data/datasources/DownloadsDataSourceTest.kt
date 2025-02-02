@@ -78,7 +78,7 @@ class DownloadsDataSourceTest : InjectableTest() {
     fun `saves a wallpaper`() = runTest {
         val dataSource = DownloadsDataSource(db)
 
-        dataSource.save(listOf(DownloadsMother.createPending()))
+        dataSource.save(setOf(DownloadsMother.createPending()))
 
         dataSource.getAll().first().should { response ->
             response.shouldBeRight()

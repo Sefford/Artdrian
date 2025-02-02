@@ -8,11 +8,13 @@ sealed class DownloadsEvents {
 
     data object LoadAll: DownloadsEvents()
 
-    class Register(val downloads: List<Download.Pending>): DownloadsEvents()
+    class Register(val downloads: Set<Download.Pending>): DownloadsEvents()
 
     class OnDownloadsReceived(val downloads: Downloads): DownloadsEvents()
 
     class OnErrorReceived(val error: DataError) : DownloadsEvents()
 
     class Update(val download: Download): DownloadsEvents()
+
+    data object Refresh: DownloadsEvents()
 }

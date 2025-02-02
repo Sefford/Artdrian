@@ -15,12 +15,12 @@ class IdleDownloadsStateTest {
 
     @Test
     fun `Idle plus Empty Preload equals Preloads`() {
-        (DownloadsState.Idle + DownloadsState.Preload(listOf())).shouldBeInstanceOf<DownloadsState.Preload>()
+        (DownloadsState.Idle + DownloadsState.Preload(emptySet())).shouldBeInstanceOf<DownloadsState.Preload>()
     }
 
     @Test
     fun `Idle plus Preload equals Idle`() {
-        (DownloadsState.Idle + DownloadsState.Preload(listOf(DownloadsMother.createPending())))
+        (DownloadsState.Idle + DownloadsState.Preload(setOf(DownloadsMother.createPending())))
             .shouldBeInstanceOf<DownloadsState.Preload>()
             .downloads.shouldContainOnly(DownloadsMother.createPending())
     }

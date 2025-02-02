@@ -21,9 +21,9 @@ val DownloadsStateMachine: StateMachine<DownloadsEvents, DownloadsState, Downloa
         state { received }
         if (prev is Preload) {
             effect(DownloadsEffects.Notify(received.downloads))
-            effect(DownloadsEffects.Register((prev - received).filterFinished()))
+            effect(DownloadsEffects.Register((prev - received)))
         } else {
-            effect(DownloadsEffects.Notify(received - prev))
+            effect(DownloadsEffects.Notify((received - prev)))
         }
     }
 
@@ -37,5 +37,6 @@ val DownloadsStateMachine: StateMachine<DownloadsEvents, DownloadsState, Downloa
         is DownloadsEvents.OnErrorReceived -> onErrorReceived(event)
         DownloadsEvents.LoadAll -> effect(DownloadsEffects.LoadAll)
         is DownloadsEvents.Update -> effect(DownloadsEffects.Update(event.download))
+        DownloadsEvents.Refresh -> effect(DownloadsEffects.Refresh)
     }
 }

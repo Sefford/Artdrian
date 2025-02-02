@@ -9,6 +9,7 @@ import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.DownloadsResponse
+import com.sefford.artdrian.downloads.domain.model.filterFinished
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -28,16 +29,11 @@ class DownloadsDataSource constructor(
         logger: Logger,
     ) : this(db, logger::log)
 
-    fun save(downloads: Downloads) {
-        Either.catch { db.add(*downloads.map { it.toDto() }.toTypedArray()) }
-            .mapLeft { log("DownloadsDataSource", "Error: $it") }
-    }
-
     fun getAll(): Flow<DownloadsResponse> =
         Either.catch {
             db.getAll().map { response ->
                 if (response.isNotEmpty()) {
-                    response.map { Download(it) }.right()
+                    response.map { Download(it) }.toSet().right()
                 } else {
                     DataError.Local.Empty.left<DataError>()
                 }
@@ -46,5 +42,12 @@ class DownloadsDataSource constructor(
             flow { emit(DataError.Local.Critical(it).left()) }
         }) { it }
 
+    suspend fun save(downloads: Downloads) {
+        Either.catch { db.add(*downloads.filterFinished().map { it.toDto() }.toTypedArray()) }
+            .mapLeft { log("DownloadsDataSource", "Error: $it") }
+    }
+
     suspend fun get(id: String) = db.get(id)
+
+    suspend fun delete(id: String) = db.delete(id)
 }

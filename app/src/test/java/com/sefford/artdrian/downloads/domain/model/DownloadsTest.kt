@@ -10,7 +10,7 @@ class DownloadsTest {
 
     @Test
     fun `merges two downloads`() {
-        (listOf(DownloadsMother.createPending()) + listOf(DownloadsMother.createFinished())).should { result ->
+        (setOf(DownloadsMother.createPending()) + setOf(DownloadsMother.createFinished())).should { result ->
             result.shouldHaveSize(1)
             result.first().shouldBeInstanceOf<Download.Finished>()
         }
@@ -18,7 +18,7 @@ class DownloadsTest {
 
     @Test
     fun `merges two different downloads`() {
-        (listOf(DownloadsMother.createPending()) + listOf(DownloadsMother.createFinished("2"))).should { result ->
+        (setOf(DownloadsMother.createPending()) + setOf(DownloadsMother.createFinished("2"))).should { result ->
             result.shouldHaveSize(2)
         }
     }

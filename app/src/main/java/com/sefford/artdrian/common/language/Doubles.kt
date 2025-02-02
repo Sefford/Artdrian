@@ -8,4 +8,4 @@ fun Double.toString(decimalPlaces: Int) = if (this % 1.0 == 0.0) {
     String.format(Locale.getDefault(), "%.${decimalPlaces}f", this) // Single decimal
 }
 
-fun Double.isSingleUnit(): Boolean = "%.1f".format(Locale.US,this).also { println(it) } == "1.0"
+fun Double.isSingleUnit(): Boolean = "%.1f".format(Locale.US,this) == "1.0"

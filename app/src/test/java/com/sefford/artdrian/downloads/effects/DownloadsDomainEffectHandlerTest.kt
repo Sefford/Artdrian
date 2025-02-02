@@ -22,18 +22,8 @@ class DownloadsDomainEffectHandlerTest {
     }
 
     @Test
-    fun `filters finished downloads`() = runTest {
-        DownloadsDomainEffectHandler(getAllDownloads = { flowOf(ALL_DOWNLOADS.right()) }, scope = this)
-            .handle(DownloadsEffects.LoadAll) { event ->
-                event.shouldBeInstanceOf<DownloadsEvents.OnDownloadsReceived>()
-                event.downloads.shouldHaveSize(1)
-            }
-    }
-
-
-    @Test
     fun `persist a download`() = runTest {
-        val persistDownloads: suspend (List<Download>) -> Unit = { downloads: List<Download> ->
+        val persistDownloads: suspend (Set<Download>) -> Unit = { downloads: Set<Download> ->
             downloads.shouldHaveSize(2)
         }
 
@@ -42,4 +32,5 @@ class DownloadsDomainEffectHandlerTest {
     }
 }
 
-private val ALL_DOWNLOADS = listOf(DownloadsMother.createPending(), DownloadsMother.createFinished())
+private val SECOND_URL = "http://example.com/2/image.jpg"
+private val ALL_DOWNLOADS = setOf(DownloadsMother.createPending(), DownloadsMother.createFinished(SECOND_URL))
