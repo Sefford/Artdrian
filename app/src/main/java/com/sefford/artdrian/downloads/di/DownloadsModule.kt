@@ -38,16 +38,6 @@ class DownloadsModule {
 
     @Provides
     @Singleton
-    fun provideDownloadsDatabase(@Application context: Context): DownloadsDatabase = Room.databaseBuilder(
-        context,
-        DownloadsDatabase::class.java, "downloads"
-    ).fallbackToDestructiveMigration()
-        .fallbackToDestructiveMigrationOnDowngrade()
-        .fallbackToDestructiveMigrationFrom(1)
-        .build()
-
-    @Provides
-    @Singleton
     fun provideDownloadsDao(database: DownloadsDatabase): DownloadsDao = database.dao()
 
     @Provides

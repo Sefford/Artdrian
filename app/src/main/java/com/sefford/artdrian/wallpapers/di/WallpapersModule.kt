@@ -32,16 +32,6 @@ import javax.inject.Singleton
 class WallpapersModule {
     @Provides
     @Singleton
-    fun provideWallpaperDatabase(@Application context: Context): WallpaperDatabase = Room.databaseBuilder(
-        context,
-        WallpaperDatabase::class.java, "wallpapers"
-    ).fallbackToDestructiveMigration()
-        .fallbackToDestructiveMigrationOnDowngrade()
-        .fallbackToDestructiveMigrationFrom(1)
-        .build()
-
-    @Provides
-    @Singleton
     fun provideWallpaperDao(database: WallpaperDatabase): WallpaperDao = database.dao()
 
     @Provides

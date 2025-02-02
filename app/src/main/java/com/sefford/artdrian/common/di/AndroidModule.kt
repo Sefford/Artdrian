@@ -54,4 +54,8 @@ class AndroidModule {
     @Singleton
     fun providePermissions(@Application context: Context) = Permissions(context)
 
+    @Provides
+    @Singleton
+    fun provideLogger(logger: DefaultLogger): Logger = logger
+
 }
