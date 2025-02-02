@@ -13,7 +13,7 @@ class LoggableEventProcessor<Event>(
     constructor(pair: Pair<ReceivesEvents<Event>, String>, logger: Logger) : this(pair.first, logger, pair.second)
 
     override fun event(event: Event) {
-        logger.debug(tag, "Received Event: $event")
+        logger.log(tag, "Received Event: $event")
         delegate.event(event)
     }
 }

@@ -113,6 +113,8 @@ dependencies {
     implementation(libs.dagger)
 
     // Test dependencies
+    kspTest(libs.dagger.compiler)
+
     testRuntimeOnly(libs.junit.engine)
     testRuntimeOnly(libs.junit.vintage)
 
@@ -126,4 +128,5 @@ dependencies {
     testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
     testImplementation(libs.room.testing)
+    testImplementation(libs.workmanager.test)
 }

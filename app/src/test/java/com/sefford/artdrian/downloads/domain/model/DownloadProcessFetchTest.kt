@@ -3,10 +3,10 @@ package com.sefford.artdrian.downloads.domain.model
 import com.sefford.artdrian.common.language.files.contentToString
 import com.sefford.artdrian.common.language.files.writeString
 import com.sefford.artdrian.downloads.store.DownloadsEvents
-import com.sefford.artdrian.test.networking.FakeByteReadChannel
 import com.sefford.artdrian.test.InjectableTest
-import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import com.sefford.artdrian.test.mothers.DownloadsMother
+import com.sefford.artdrian.test.networking.FakeByteReadChannel
+import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import io.kotest.matchers.shouldBe
 import io.ktor.client.HttpClient
 import io.ktor.http.HttpStatusCode
@@ -37,23 +37,28 @@ class DownloadProcessFetchTest : InjectableTest() {
 
     @Test
     fun `downloads a file`() = runTest {
-        val downloadFile = File(cache, "${DownloadsMother.createOngoing().name}.jpg.download")
+        val downloadFile = File(cache, DownloadsMother.createOngoing().fileName)
 
-        givenAFetch(download = DownloadsMother.createOngoing(file = downloadFile)) shouldBe DownloadProcess.Results.Success
+        givenAFetch(
+            download = DownloadsMother.createOngoing(
+                total = CONTENT.length.toLong(),
+                file = downloadFile
+            )
+        ) shouldBe DownloadProcess.Results.Success
 
         downloadFile.contentToString() shouldBe CONTENT
     }
 
     @Test
     fun `downloads a partial file`() = runTest {
-        val downloadFile = File.createTempFile(DownloadsMother.createOngoing().name, ".jpg").also { file ->
+        val downloadFile = File.createTempFile(DownloadsMother.createOngoing().fileName, "").also { file ->
             file.writeString(PARTIAL_DOWNLOADED_CONTENT)
         }
 
         givenAFetch(
             status = HttpStatusCode.PartialContent,
             source = ByteReadChannel(PARTIAL_CONTENT_TO_DOWNLOAD),
-            download = DownloadsMother.createOngoing(file = downloadFile)
+            download = DownloadsMother.createOngoing(total = CONTENT.length.toLong(), file = downloadFile)
         ) shouldBe DownloadProcess.Results.Success
 
         downloadFile.contentToString() shouldBe CONTENT

@@ -24,7 +24,7 @@ lifecycle-runtime-ktx = "2.8.7"
 material3 = "1.3.1"
 material-icons-extended = "1.7.6"
 mockwebserver = "4.9.3"
-okio = "3.7.0"
+okio = "3.9.1"
 robolectric = "4.14.1"
 room = "2.6.1"
 serialization-json = "1.7.3"
@@ -112,3 +112,4 @@ screenshot = { module = "com.karumi:shot", version.ref = "shot" }
 
 # Workmanager
 workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
+workmanager-test= { module = "androidx.work:work-testing", version.ref = "workmanager" }

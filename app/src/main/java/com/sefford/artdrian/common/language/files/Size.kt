@@ -40,6 +40,8 @@ class Size(private val size: Double, private val unit: SizeUnit) {
 
     operator fun compareTo(progress: Int): Int = inBytes.compareTo(progress)
 
+    operator fun div(total: Size): Float = (inBytes.toFloat() / total.inBytes)
+
     companion object {
         inline val Number.bytes: Size get() = Size(this.toDouble(), SizeUnit.BYTE)
         inline val Number.kBs: Size get() = Size(this.toDouble(), SizeUnit.KILOBYTE)

@@ -2,6 +2,7 @@ package com.sefford.artdrian.downloads.domain.model
 
 import com.sefford.artdrian.common.language.files.Size
 import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.common.language.removeQuotes
 import com.sefford.artdrian.downloads.data.dto.DownloadDto
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
@@ -11,46 +12,47 @@ import okio.buffer
 import okio.sink
 import java.io.File
 
-sealed class Download(
-    val id: String,
-    val url: String,
-) {
+sealed class Download(val url: String) : Measured {
+
+    val format: Format by lazy { Format(url) }
 
     val finished: Boolean by lazy { order == Order.FINISHED.ordinal }
 
-    class Pending(id: String, url: String) : Download(id, url) {
+    class Pending(url: String) : Download(url) {
 
-        constructor(url: String) : this(url.hashCode().toString(), url)
+        override val order: Int = Order.PENDING.ordinal
 
-        override val order: Int = 0
+        override val progress: Size = 0.bytes
 
-        override fun toDto(): DownloadDto = DownloadDto(id, url)
+        override val total: Size = 0.bytes
 
-        override fun plus(other: Download): Download = other
+        override fun toDto(): DownloadDto = DownloadDto(url)
 
         fun start(headers: Headers, directory: File): Ongoing {
             val name = FILENAME_REGEX.find(headers[HttpHeaders.ContentDisposition]!!)?.groups?.get(1)?.value.orEmpty()
             return Ongoing(
-                id = id,
                 url = url,
-                hash = headers[HttpHeaders.ETag]!!,
+                hash = headers[HttpHeaders.ETag]!!.removeQuotes(),
                 name = name,
                 total = headers[HttpHeaders.ContentLength]!!.toLong().bytes,
-                file = File(directory, "$name.download")
+                file = File(directory, "$name.${format.suffix}.download")
             )
+        }
+
+        override fun toString(): String {
+            return "Pending($url)"
         }
     }
 
     class Ongoing(
-        id: String,
         url: String,
         val hash: String,
         val name: String,
         override val total: Size,
         private val file: File
-    ) : Download(id, url), Measured {
+    ) : Download(url) {
 
-        override val order: Int = 2
+        override val order: Int = Order.ONGOING.ordinal
 
         override val progress: Size
             get() = file.length().bytes
@@ -62,9 +64,12 @@ sealed class Download(
             file.sink(true).buffer()
         }
 
+        val uri: String = file.absolutePath
+
+        val fileName: String = file.name
+
         override fun toDto(): DownloadDto =
             DownloadDto(
-                id = id,
                 url = url,
                 hash = hash,
                 name = name,
@@ -74,20 +79,18 @@ sealed class Download(
             )
 
         fun refresh(headers: Headers, destination: File) =
-            if (hash != headers[HttpHeaders.ETag]) {
-                Pending(id, url).start(headers, destination).also { clear() }
+            if (hash != headers[HttpHeaders.ETag]?.removeQuotes()) {
+                Pending(url).start(headers, destination).also { clear() }
             } else {
                 this
             }
 
         fun clear() {
+            if (!file.exists()) {
+                file.parentFile?.mkdirs()
+                file.createNewFile()
+            }
             FileSystem.SYSTEM.write(file = file.toOkioPath()) {}
-        }
-
-        override fun plus(other: Download): Download = when {
-            this == other && this < other as Ongoing -> other
-            this > other -> this
-            else -> super.plus(other)
         }
 
         override fun compareTo(other: Download): Int = if (order != other.order) {
@@ -97,42 +100,38 @@ sealed class Download(
         }
 
         fun finish(): Finished {
-            check(total == progress && total > 0 && progress > 0) { "Cannot complete the file: Status $progress/$total"}
-            return Finished(id, url, hash, name, total, file)
+            check(total == progress && total > 0 && progress > 0) { "Cannot complete the file: Status $progress/$total" }
+            return Finished(url, hash, name, total, file)
+        }
+
+
+        override fun toString(): String {
+            return "Ongoing($url)"
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is Ongoing) return false
-            if (!super.equals(other)) return false
-
-            if (hash != other.hash) return false
-            if (name != other.name) return false
-            if (total != other.total) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = super.hashCode()
-            result = 31 * result + hash.hashCode()
-            result = 31 * result + name.hashCode()
-            result = 31 * result + total.hashCode()
-            return result
+            if (other is Ongoing) return super.equals(other) && hash == other.hash
+            return super.equals(other)
         }
     }
 
-    class Finished(id: String, url: String, val hash: String, val name: String, override val total: Size, val file: File) :
-        Download(id, url), Measured {
+    class Finished(
+        url: String,
+        val hash: String,
+        val name: String,
+        override val total: Size,
+        val file: File
+    ) : Download(url) {
 
-        override val order: Int = 3
+        override val order: Int = Order.FINISHED.ordinal
 
         override val progress: Size = total
 
-        override fun plus(other: Download): Download = if (this == other) this else super.plus(other)
+        val uri: String = file.absolutePath
+
+        val fileName: String = file.name
 
         override fun toDto(): DownloadDto = DownloadDto(
-            id = id,
             url = url,
             hash = hash,
             name = name,
@@ -141,28 +140,17 @@ sealed class Download(
             uri = file.absolutePath
         )
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other !is Finished) return false
-            if (!super.equals(other)) return false
-
-            if (hash != other.hash) return false
-            if (total != other.total) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = super.hashCode()
-            result = 31 * result + hash.hashCode()
-            result = 31 * result + total.hashCode()
-            return result
+        override fun toString(): String {
+            return "Finished($url)"
         }
     }
 
     protected abstract val order: Int
 
-    open operator fun plus(other: Download): Download = takeIf { this > other } ?: other
+    operator fun plus(other: Download): Download {
+        check(this == other) { "Cannot merge two different downloads!" }
+        return takeIf { this > other } ?: other
+    }
 
     open operator fun compareTo(other: Download) = order.compareTo(other.order)
 
@@ -172,24 +160,20 @@ sealed class Download(
         if (this === other) return true
         if (other !is Download) return false
 
-        if (id != other.id) return false
         if (url != other.url) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + url.hashCode()
-        return result
+        return url.hashCode()
     }
 
     companion object {
         operator fun invoke(dto: DownloadDto): Download =
             when {
-                dto.pending -> Pending(dto.id, dto.url)
-                dto.inProgress -> Ongoing(
-                    dto.id,
+                dto.pending -> Pending(dto.url)
+                dto.ongoing -> Ongoing(
                     dto.url,
                     dto.hash,
                     dto.name,
@@ -197,12 +181,37 @@ sealed class Download(
                     File(dto.uri)
                 )
 
-                dto.completed -> Finished(dto.id, dto.url, dto.hash, dto.name, dto.total.bytes, File(dto.uri))
+                dto.completed -> Finished(
+                    dto.url,
+                    dto.hash,
+                    dto.name,
+                    dto.total.bytes,
+                    File(dto.uri)
+                )
+
                 else -> throw IllegalStateException("This is an unreachable condition")
             }
     }
 
-    private enum class Order { PENDING, PRIMED, ONGOING, FINISHED }
+    private enum class Order { PENDING, ONGOING, FINISHED }
+
+    enum class Format(val suffix: String) {
+        DESKTOP("desktop"), MOBILE("mobile"), UNKNOWN("unknown");
+
+        companion object {
+            operator fun invoke(format: String) =
+                FORMAT_REGEX.find(format)?.groupValues?.get(1).let { value ->
+                    when (value) {
+                        "desktop" -> DESKTOP
+                        "mobile" -> MOBILE
+                        else -> UNKNOWN
+
+                    }
+                }
+
+            private val FORMAT_REGEX = "(mobile|desktop)".toRegex()
+        }
+    }
 
     protected val FILENAME_REGEX = """filename="([^"]+)"""".toRegex()
 }

@@ -7,4 +7,7 @@ interface Measured {
     val total: Size
 
     val progress: Size
+
+    val percentage: Float
+        get() = (progress / total) * 100
 }

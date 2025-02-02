@@ -3,6 +3,7 @@ package com.sefford.artdrian.downloads.store
 import androidx.work.WorkInfo
 import com.sefford.artdrian.connectivity.Connectivity
 import com.sefford.artdrian.test.FakeEnqueuer
+import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import com.sefford.artdrian.test.mothers.WorkInfoMother
 import com.sefford.artdrian.test.unconfine
@@ -20,10 +21,11 @@ class DownloaderTest {
     private val finishedJobs = MutableSharedFlow<List<WorkInfo>>()
     private val connectivity = MutableStateFlow<Connectivity>(Connectivity.Disconnected)
     private val enqueuer = FakeEnqueuer()
+    private val logger = FakeLogger()
 
     @Test
     fun `holds the queue while there is no connection`() = runTest {
-        givenADownloader().queue(DownloadsMother.createPending())
+        givenADownloader().queue(URL)
 
         enqueuer.queue.shouldBeEmpty()
     }
@@ -40,9 +42,9 @@ class DownloaderTest {
     @Test
     fun `discards downloads that are already ongoing`() = runTest {
         connectivity.emit(WIFI)
-        runningJobs.emit(listOf(WorkInfoMother.createWorkInfo(tags = setOf("1"))))
+        runningJobs.emit(listOf(WorkInfoMother.createWorkInfo(tags = setOf(URL))))
 
-        givenADownloader().queue(DownloadsMother.createPending())
+        givenADownloader().queue(URL)
 
         enqueuer.queue.shouldBeEmpty()
     }
@@ -51,14 +53,14 @@ class DownloaderTest {
     fun `enqueues a job`() = runTest {
         connectivity.emit(WIFI)
 
-        givenADownloader().queue(DownloadsMother.createPending())
+        givenADownloader().queue(URL)
 
         enqueuer.queue.shouldHaveSize(1)
     }
 
     @Test
     fun `enqueues next job on connecting`() = runTest {
-        givenADownloader().queue(DownloadsMother.createPending())
+        givenADownloader().queue(URL)
 
         connectivity.emit(WIFI)
 
@@ -77,7 +79,7 @@ class DownloaderTest {
         val downloader = givenADownloader()
 
         // We queue a task
-        downloader.queue(DownloadsMother.createPending())
+        downloader.queue(URL)
 
         // This task should not be queued because we reach max parallelization
         enqueuer.queue.shouldBeEmpty()
@@ -90,13 +92,16 @@ class DownloaderTest {
     }
 
     private fun TestScope.givenADownloader() = Downloader(
-        runningJobs,
-        finishedJobs,
-        connectivity,
-        enqueuer::enqueue,
-        backgroundScope.unconfine()
+        running = runningJobs,
+        finished = finishedJobs,
+        connectivity = connectivity,
+        enqueue = enqueuer::enqueue,
+        clearNotification = {},
+        log = logger::log,
+        scope = backgroundScope.unconfine(),
     )
 }
 
+private val URL = "http://image.com/mobile/example.jpg"
 private val WIFI = Connectivity.Connected(Connectivity.Type.WIFI, Connectivity.Speed.Fast(56))
 private val THROTTLED = Connectivity.Connected(Connectivity.Type.MOBILE, Connectivity.Speed.Slow(0))

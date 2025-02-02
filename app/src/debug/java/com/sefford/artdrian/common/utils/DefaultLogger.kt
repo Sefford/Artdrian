@@ -7,7 +7,7 @@ import javax.inject.Singleton
 @Singleton
 class DefaultLogger @Inject constructor() : Logger {
 
-    override fun debug(tag: String, message: String) {
+    override fun log(tag: String, message: String) {
         Log.d(tag, message)
     }
 

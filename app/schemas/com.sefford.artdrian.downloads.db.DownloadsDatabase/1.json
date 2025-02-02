@@ -2,18 +2,12 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7914d464ca0620df1fff331d7bf5dfd6",
+    "identityHash": "f8e59b1c9497a5e018a49da28acef45f",
     "entities": [
       {
         "tableName": "downloads",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `url` TEXT NOT NULL, `hash` TEXT NOT NULL, `name` TEXT NOT NULL, `total` INTEGER NOT NULL, `downloaded` INTEGER NOT NULL, `uri` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`url` TEXT NOT NULL, `hash` TEXT NOT NULL, `name` TEXT NOT NULL, `total` INTEGER NOT NULL, `downloaded` INTEGER NOT NULL, `uri` TEXT NOT NULL, PRIMARY KEY(`url`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "id",
-            "affinity": "TEXT",
-            "notNull": true
-          },
           {
             "fieldPath": "url",
             "columnName": "url",
@@ -54,7 +48,7 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "id"
+            "url"
           ]
         },
         "indices": [],
@@ -64,7 +58,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7914d464ca0620df1fff331d7bf5dfd6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f8e59b1c9497a5e018a49da28acef45f')"
     ]
   }
 }

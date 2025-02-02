@@ -1,5 +1,6 @@
 package com.sefford.artdrian.downloads.domain.model
 
+import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.test.InjectableTest
 import com.sefford.artdrian.test.networking.LazyMockEngineHandler
@@ -33,6 +34,8 @@ class DownloadProcessProbeTest : InjectableTest() {
 
     @Inject
     internal lateinit var handlers: LazyMockEngineHandler
+
+    private val logger = FakeLogger()
 
     @BeforeEach
     override fun beforeEach() {
@@ -127,6 +130,7 @@ class DownloadProcessProbeTest : InjectableTest() {
             events = {},
             client = client,
             directory = cache,
+            log = logger::log,
             download = download
         ).analyze()
 }

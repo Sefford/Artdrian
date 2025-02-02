@@ -2,6 +2,8 @@ package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.test.mothers.DownloadsMother
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -27,28 +29,26 @@ class PreloadDowloadsStateTest {
 
     @Test
     fun `Preload plus Preload equals Preload`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(listOf(DownloadsMother.createPending("2")))).should { preload ->
+        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(
+            listOf(
+                DownloadsMother.createPending(
+                    "2"
+                )
+            )
+        )).should { preload ->
             preload.shouldBeInstanceOf<DownloadsState.Preload>()
             preload.downloads.shouldHaveSize(2)
         }
     }
 
     @Test
-    fun `Preload plus empty Downloads equals Empty`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + listOf()).should { loaded ->
-            loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
-            loaded.downloads.shouldHaveSize(1)
-        }
-    }
+    fun `the difference between a Preload and a Loaded does not include downloads in Loaded`() {
+        val pending = DownloadsMother.createPending()
 
-    @Test
-    fun `Preload plus Downloads equals Loaded`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + listOf(DownloadsMother.createPending("2"))).should { loaded ->
-            loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
-            loaded.downloads.shouldHaveSize(2)
-        }
+        (DownloadsState.Preload(listOf(pending)) - DownloadsState.Loaded(listOf(DownloadsMother.createOngoing(url = OTHER_DOWNLOAD_URL))))
+            .shouldContainOnly(pending)
     }
 }
 
 private val ERROR = DataError.Local.Critical(RuntimeException())
-
+private val OTHER_DOWNLOAD_URL = "http://example.com/desktop/image.jpg"

@@ -9,35 +9,34 @@ import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.Measured
+import com.sefford.artdrian.downloads.domain.model.filterFinished
+import com.sefford.artdrian.downloads.domain.model.plus
 
-sealed class DownloadsState {
+sealed class DownloadsState(val downloads: Downloads) {
 
-    data object Idle : DownloadsState() {
+    data object Idle : DownloadsState(emptyList()) {
         override fun viabilityOf(id: String): Viability = Viability.WAIT
 
         override fun plus(error: DataError): DownloadsState = Empty
 
-        override fun plus(list: Downloads): DownloadsState = if (list.isNotEmpty()) Loaded(list) else Empty
+        override fun plus(preloads: Preload): DownloadsState = preloads
 
-        override fun plus(preloads: Preload): DownloadsState = if (preloads.empty) Idle else preloads
-
-        override fun get(id: String): Option<Download> = none()
+        override fun get(url: String): Option<Download> = none()
     }
 
-    data object Empty : DownloadsState() {
+    data object Empty : DownloadsState(emptyList()) {
 
         override fun viabilityOf(id: String): Viability = Viability.FAILURE
 
         override fun plus(error: DataError): DownloadsState = this
 
-        override fun plus(list: Downloads): DownloadsState = if (list.isNotEmpty()) Loaded(list) else Empty
+        override fun plus(preloads: Preload): DownloadsState = Empty
 
-        override fun plus(preloads: Preload): DownloadsState = if (!preloads.empty) Loaded(preloads.downloads) else Empty
+        override fun get(url: String): Option<Download> = none()
 
-        override fun get(id: String): Option<Download> = none()
     }
 
-    class Preload(val downloads: Downloads) : DownloadsState() {
+    class Preload(downloads: Downloads) : DownloadsState(downloads) {
 
         val empty: Boolean = downloads.isEmpty()
 
@@ -45,44 +44,46 @@ sealed class DownloadsState {
 
         override fun plus(error: DataError): DownloadsState = Loaded(downloads)
 
-        override fun plus(list: Downloads): DownloadsState =
-            Loaded(downloads + list)
+        override fun plus(preloads: Preload): DownloadsState = Preload((downloads + preloads.downloads).toSet().toList())
 
-        override fun plus(preloads: Preload): DownloadsState = Preload(downloads + preloads.downloads)
+        override fun get(url: String): Option<Download> = downloads.find { it.url == url }.toOption()
 
-        override fun get(id: String): Option<Download> = downloads.find { it.id == id }.toOption()
     }
 
-    class Loaded(val downloads: Downloads) : DownloadsState(), Measured {
+    class Loaded(downloads: Downloads) : DownloadsState(downloads), Measured {
 
         override fun viabilityOf(id: String): Viability = if (this[id].isNone()) Viability.FAILURE else Viability.PROCEED
 
-        override val total: Size by lazy { downloads.filterIsInstance<Measured>().sumOf { it.total } }
+        override val total: Size by lazy { downloads.sumOf { it.total } }
 
-        override val progress: Size by lazy { downloads.filterIsInstance<Measured>().sumOf { it.progress } }
+        override val progress: Size by lazy { downloads.sumOf { it.progress } }
 
         val pending: List<Download.Pending> = downloads.filterIsInstance<Download.Pending>()
 
         override fun plus(error: DataError): DownloadsState = this
 
-        override fun plus(list: Downloads): DownloadsState = Loaded(downloads + list)
+        fun plus(list: Downloads): DownloadsState = Loaded(downloads + list)
 
-        override fun plus(preloads: Preload): DownloadsState = Loaded(downloads + preloads.downloads)
+        override fun plus(preloads: Preload): DownloadsState = Loaded(downloads)
 
-        override fun get(id: String): Option<Download> = downloads.find { it.id == id }.toOption()
+        override fun get(url: String): Option<Download> = downloads.find { it.url == url }.toOption()
+
+        override fun toString(): String {
+            return "Loaded[${downloads.size}](downloads=$downloads)"
+        }
     }
+
+    operator fun minus(other: DownloadsState): Downloads = (downloads - other.downloads)
 
     abstract fun viabilityOf(id: String): Viability
 
     abstract operator fun plus(error: DataError): DownloadsState
 
-    abstract operator fun plus(list: Downloads): DownloadsState
-
     abstract operator fun plus(preloads: Preload): DownloadsState
 
-    abstract operator fun get(id: String): Option<Download>
+    abstract operator fun get(url: String): Option<Download>
 
-    enum class Viability { FAILURE, WAIT, PROCEED}
+    enum class Viability { FAILURE, WAIT, PROCEED }
 }
 
 private inline fun <T> Iterable<T>.sumOf(selector: (T) -> Size): Size {

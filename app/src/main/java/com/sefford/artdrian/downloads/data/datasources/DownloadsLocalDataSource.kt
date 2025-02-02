@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.sefford.artdrian.common.data.DataError
+import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.downloads.db.DownloadsDao
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
@@ -16,17 +17,27 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DownloadsDataSource @Inject constructor(private val db: DownloadsDao) {
+class DownloadsDataSource constructor(
+    private val db: DownloadsDao,
+    private val log: (String, String) -> Unit = { _, _ -> }
+) {
 
-    suspend fun save(downloads: Downloads) {
+    @Inject
+    constructor(
+        db: DownloadsDao,
+        logger: Logger,
+    ) : this(db, logger::log)
+
+    fun save(downloads: Downloads) {
         Either.catch { db.add(*downloads.map { it.toDto() }.toTypedArray()) }
+            .mapLeft { log("DownloadsDataSource", "Error: $it") }
     }
 
     fun getAll(): Flow<DownloadsResponse> =
         Either.catch {
             db.getAll().map { response ->
                 if (response.isNotEmpty()) {
-                    response.map { Download(it) }.filterNot { it.finished }.right()
+                    response.map { Download(it) }.right()
                 } else {
                     DataError.Local.Empty.left<DataError>()
                 }

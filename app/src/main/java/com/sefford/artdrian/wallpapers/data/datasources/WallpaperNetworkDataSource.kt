@@ -17,13 +17,10 @@ import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.domain.model.WallpaperList.FromNetwork
 import io.ktor.client.call.body
-import io.ktor.client.network.sockets.ConnectTimeoutException
-import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.isSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.nio.channels.UnresolvedAddressException
 import javax.inject.Inject
 
 class WallpaperNetworkDataSource @Inject constructor(

@@ -19,10 +19,10 @@ class DownloadTest {
 
     @Test
     fun starts() {
-        Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).should { download ->
+        Download.Pending(IMAGE).start(HEADERS_RESPONSE, cache).should { download ->
             download.shouldBeInstanceOf<Download.Ongoing>()
-            download.id shouldBe ID
             download.url shouldBe IMAGE
+            download.format shouldBe FORMAT
             download.hash shouldBe HASH
             download.total shouldBe TOTAL
             download.progress.shouldBeZero()
@@ -31,22 +31,23 @@ class DownloadTest {
 
     @Test
     fun finishes() {
-        val file = Files.createFile(cache.toPath().resolve("${DownloadsMother.createOngoing().name}.download")).toFile()
-        file.writeString("a".repeat(TOTAL.inBytes.toInt()))
+        val download = Download.Pending(IMAGE).start(HEADERS_RESPONSE, cache)
 
-        Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).finish().should { download ->
-            download.shouldBeInstanceOf<Download.Finished>()
-            download.id shouldBe ID
-            download.url shouldBe IMAGE
-            download.hash shouldBe HASH
-            download.total shouldBe TOTAL
-            download.progress shouldBe TOTAL
+        download.fileName.download()
+
+        download.finish().should { result ->
+            result.shouldBeInstanceOf<Download.Finished>()
+            result.url shouldBe IMAGE
+            result.format shouldBe FORMAT
+            result.hash shouldBe HASH
+            result.total shouldBe TOTAL
+            result.progress shouldBe TOTAL
         }
     }
 
     @Test
     fun `fails if the file is not completely downloaded`() {
-        shouldThrow<IllegalStateException> { Download.Pending(ID, IMAGE).start(HEADERS_RESPONSE, cache).finish() }
+        shouldThrow<IllegalStateException> { Download.Pending(IMAGE).start(HEADERS_RESPONSE, cache).finish() }
     }
 
     @Test
@@ -56,7 +57,7 @@ class DownloadTest {
 
     @Test
     fun `Ongoing returns progress`() {
-        val file = Files.createTempFile(DownloadsMother.createOngoing().name, ".download").toFile()
+        val file = Files.createTempFile(DownloadsMother.createOngoing().fileName, "").toFile()
         file.writeString("a".repeat(PROGRESS.inBytes.toInt()))
 
         DownloadsMother.createOngoing(file = file).progress shouldBe PROGRESS
@@ -71,11 +72,18 @@ class DownloadTest {
     fun `Finished returns progress`() {
         DownloadsMother.createFinished().progress shouldBe TOTAL
     }
+
+    private fun String.download() {
+        val file = Files.createFile(cache.toPath().resolve(this)).toFile()
+        file.writeString("a".repeat(TOTAL.inBytes.toInt()))
+    }
+
 }
 
-private const val ID = "pending"
+private const val ID = "2005695365"
 private const val HASH = "9cc769f284bba4616668623ca2c22f3e"
-private const val IMAGE = "http://example.com/image.jpg"
+private val FORMAT = Download.Format.MOBILE
+private const val IMAGE = "http://example.com/mobile/image.jpg"
 private val TOTAL = 1000L.bytes
 private val PROGRESS = 250L.bytes
 private val HEADERS_RESPONSE = headers {

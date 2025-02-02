@@ -42,5 +42,4 @@ interface TestComponent {
     fun inject(test: DownloadProcessPrimeTest)
 
     fun inject(test: DownloadProcessFetchTest)
-
 }

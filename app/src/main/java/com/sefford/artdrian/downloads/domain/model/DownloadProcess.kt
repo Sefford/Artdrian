@@ -11,6 +11,8 @@ import com.sefford.artdrian.common.language.files.Size.Companion.kBs
 import com.sefford.artdrian.common.language.fold
 import com.sefford.artdrian.common.language.orElse
 import com.sefford.artdrian.common.language.orFalse
+import com.sefford.artdrian.common.utils.Logger
+import com.sefford.artdrian.common.utils.disableCache
 import com.sefford.artdrian.downloads.store.DownloadsEvents
 import com.sefford.artdrian.downloads.store.DownloadsState
 import com.sefford.artdrian.downloads.store.DownloadsStore
@@ -32,42 +34,52 @@ sealed class DownloadProcess {
             private val client: HttpClient,
             private val downloads: DownloadsState,
             private val events: (DownloadsEvents) -> Unit,
+            private val log: (String, String) -> Unit,
             private val directory: File,
-            private val id: String
+            private val url: String
         ) : Step() {
 
             constructor(
                 client: HttpClient,
                 downloads: DownloadsStore,
                 directory: File,
-                id: String
+                logger: Logger,
+                url: String
             ) : this(
                 client = client,
                 downloads = downloads.current,
                 events = downloads::event,
+                log = logger::log,
                 directory = directory,
-                id = id
+                url = url
             )
 
             fun check(): Either<Results, Probe> {
-                return when (downloads.viabilityOf(id)) {
+                return when (downloads.viabilityOf(url)
+                    .also {
+                        log(TAG, "URL: $url -> $it")
+                    }) {
                     DownloadsState.Viability.FAILURE -> Results.Failure.left()
                     DownloadsState.Viability.WAIT -> Results.Retry.left()
-                    else -> downloads[id]
+                    else -> downloads[url]
                         .toEither { Results.Failure }
                         .flatMap { download ->
                             when (download) {
-                                is Download.Finished -> Results.Success.left()
-                                else -> Probe(events, client, directory, download).right()
+                                is Download.Finished -> Results.Success.left().also { log(TAG, "$url has been downloaded") }
+                                else -> Probe(events, client, log, directory, download).right()
                             }
                         }
                 }
             }
+
+            private val TAG = "Viability"
+
         }
 
         class Probe(
             private val events: (DownloadsEvents) -> Unit,
             private val client: HttpClient,
+            private val log: (String, String) -> Unit,
             private val directory: File,
             private val download: Download,
         ) : Step() {
@@ -75,19 +87,29 @@ sealed class DownloadProcess {
             suspend fun analyze(): Either<Results, Prime> =
                 Either.catch {
                     client.get(download.url) {
+                        disableCache()
                         if (download is Download.Ongoing && download.progress > 0) {
                             header(HttpHeaders.Range, "bytes=${download.progress}-")
+                            log(TAG, "${download.url} has ${download.progress} downloaded")
+                        } else {
+                            log(TAG, "${download.url} needs to be restarted")
                         }
                     }
                 }
                     .errorToResult()
                     .statusCheck()
-                    .map { response -> Prime(events, client, directory, response, download) }
+                    .map { response ->
+                        Prime(events, client, log, directory, response, download)
+                            .also { log(TAG, "Download is ${download.javaClass.simpleName}") }
+                    }
+
+            private val TAG = "Probe"
         }
 
         class Prime(
             private val events: (DownloadsEvents) -> Unit,
             private val client: HttpClient,
+            private val log: (String, String) -> Unit,
             private val directory: File,
             val response: HttpResponse,
             val download: Download
@@ -101,22 +123,25 @@ sealed class DownloadProcess {
                         response.bodyAsChannel(),
                         download.start(response.headers, directory)
                     ).right()
-
                     is Download.Ongoing -> download.confirm()
                     is Download.Finished -> Results.Success.left()
                 }
 
             private suspend fun Download.Ongoing.confirm(): Either<Results, Fetch> {
                 val refresh = refresh(response.headers, directory)
-                return if (this == refresh) {
+                return if (this.hash == refresh.hash) {
                     Fetch(events, response.status, response.bodyAsChannel(), this).right()
                 } else {
-                    Either.catch { client.get(url) }
+                    Either.catch {
+                        client.get(url, disableCache)
+                    }
                         .errorToResult()
                         .statusCheck()
                         .map { response -> Fetch(events, response.status, response.bodyAsChannel(), refresh) }
                 }
             }
+
+            private val TAG = "Prime"
         }
 
         class Fetch(
@@ -133,6 +158,7 @@ sealed class DownloadProcess {
                         download.clear()
                     }
                     download()
+                    events(DownloadsEvents.Update(download.finish()))
                     Results.Success
                 }
                     .errorToResult()

@@ -3,9 +3,11 @@ package com.sefford.artdrian.common.di
 import android.app.WallpaperManager
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
+import com.sefford.artdrian.common.Permissions
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.common.WallpaperAdapterImpl
 import com.sefford.artdrian.common.utils.DefaultLogger
@@ -31,6 +33,10 @@ class AndroidModule {
     @Singleton
     @Downloads
     fun provideExternalCacheDirForDownloads(@Application context: Context) = File(context.externalCacheDir, "downloads")
+
+    @Provides
+    @Singleton
+    fun providePackageManager(@Application context: Context) = context.packageManager
 
     @Provides
     @Singleton
@@ -64,6 +70,14 @@ class AndroidModule {
 
     @Provides
     @Singleton
-    fun provideWorkManager(@Application context: Context) = WorkManager.getInstance(context)
+    fun provideWorkManager(@Application context: Context): WorkManager = WorkManager.getInstance(context)
+
+    @Provides
+    @Singleton
+    fun provideNotificationManager(@Application context: Context) = NotificationManagerCompat.from(context)
+
+    @Provides
+    @Singleton
+    fun providePermissions(@Application context: Context) = Permissions(context)
 
 }

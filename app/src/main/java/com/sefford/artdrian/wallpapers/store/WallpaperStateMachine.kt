@@ -21,7 +21,7 @@ val WallpaperStateMachine: StateMachine<WallpaperEvents, WallpapersState, Wallpa
             effect(WallpaperEffects.PrepareDownloads(
                 event.response.wallpapers.flatMap { wallpaper ->
                     listOf(wallpaper.images.mobile, wallpaper.images.desktop)
-                }.map { url -> Download.Pending(url.hashCode().toString(), url) })
+                }.map { url -> Download.Pending(url) })
             )
         }
     }

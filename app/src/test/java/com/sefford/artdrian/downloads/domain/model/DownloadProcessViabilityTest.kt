@@ -1,6 +1,7 @@
 package com.sefford.artdrian.downloads.domain.model
 
 import com.sefford.artdrian.downloads.store.DownloadsState
+import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.test.InjectableTest
 import com.sefford.artdrian.test.mothers.DownloadsMother
@@ -21,6 +22,8 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Inject
     internal lateinit var client: HttpClient
+
+    private val logger = FakeLogger()
 
     @BeforeEach
     override fun beforeEach() {
@@ -62,7 +65,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `returns success when the download is already finished`() {
-        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createFinished(id = DOWNLOAD_ID)))).should { result ->
+        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))).should { result ->
             result.shouldBeLeft()
             result.value shouldBe DownloadProcess.Results.Success
         }
@@ -70,7 +73,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `proceeds with next step when the download is on a viable state`() {
-        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createPending(id = DOWNLOAD_ID)))).should { result ->
+        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createPending()))).should { result ->
             result.shouldBeRight()
             result.value.shouldBeInstanceOf<DownloadProcess.Step.Probe>()
         }
@@ -82,10 +85,10 @@ class DownloadProcessViabilityTest : InjectableTest() {
         DownloadProcess.Step.Viability(
             client = FakeHttpClient(client),
             downloads = state,
+            log = logger::log ,
             events = {},
             directory = cache,
-            id = DOWNLOAD_ID
+            url = DownloadsMother.createPending().url
         ).check()
 }
 
-private const val DOWNLOAD_ID = "1"

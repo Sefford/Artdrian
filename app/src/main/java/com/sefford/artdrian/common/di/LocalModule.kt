@@ -17,6 +17,7 @@ class LocalModule {
         WallpaperDatabase::class.java, "wallpapers"
     ).fallbackToDestructiveMigration()
         .fallbackToDestructiveMigrationOnDowngrade()
+        .fallbackToDestructiveMigrationFrom(1)
         .build()
 
     @Provides
@@ -26,5 +27,6 @@ class LocalModule {
         DownloadsDatabase::class.java, "downloads"
     ).fallbackToDestructiveMigration()
         .fallbackToDestructiveMigrationOnDowngrade()
+        .fallbackToDestructiveMigrationFrom(1)
         .build()
 }

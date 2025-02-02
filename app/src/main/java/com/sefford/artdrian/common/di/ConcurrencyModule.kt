@@ -7,9 +7,7 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.plus
 import javax.inject.Singleton
 
 @Module

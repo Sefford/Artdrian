@@ -8,19 +8,16 @@ import java.nio.file.Files
 object DownloadsMother {
 
     fun createPending(
-        id: String = "1",
-        url: String = "http://example.com/image.jpg",
-    ) = Download.Pending(id = id, url = url)
+        url: String = "http://example.com/mobile/image.jpg",
+    ) = Download.Pending(url = url)
 
     fun createOngoing(
-        id: String = "1",
-        url: String = "http://example.com/image.jpg",
+        url: String = "http://example.com/mobile/image.jpg",
         hash: String = "1234",
         name: String = "ghost_waves_004.jpg",
         total: Long = 1000,
-        file: File = Files.createTempFile(name, ".download").toFile(),
+        file: File = Files.createTempFile(name, ".${Download.Format(url).suffix}.download").toFile(),
     ) = Download.Ongoing(
-        id = id,
         url = url,
         hash = hash,
         name = name,
@@ -29,13 +26,16 @@ object DownloadsMother {
     )
 
     fun createFinished(
-        id: String = "1",
-        url: String = "http://example.com/image.jpg",
+        url: String = "http://example.com/mobile/image.jpg",
         hash: String = "1234",
         name: String = "ghost_waves_004.jpg",
         total: Long = 1000,
-        file: File = Files.createTempFile(name, ".download").toFile(),
+        file: File = Files.createTempFile(name, ".${Download.Format(url).suffix}.download").toFile(),
     ) = Download.Finished(
-        id = id, url = url, hash = hash, name = name, total = total.bytes, file = file
+        url = url,
+        hash = hash,
+        name = name,
+        total = total.bytes,
+        file = file
     )
 }

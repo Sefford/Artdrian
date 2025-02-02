@@ -1,7 +1,6 @@
 package com.sefford.artdrian.wallpapers.effects
 
 import com.sefford.artdrian.common.stores.EffectHandler
-import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse

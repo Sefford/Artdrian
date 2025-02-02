@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.onEach
 class LoggableEffectDispatching<Effect>(
     private val delegate: DispatchesEffects<Effect>,
     private val logger: Logger,
-    private val scope: CoroutineScope,
+    scope: CoroutineScope,
     private val tag: String
 ) : DispatchesEffects<Effect> by delegate {
 
     init {
-        delegate.effects.onEach { effect -> logger.debug(tag, "Dispatched Effect: $effect") }
+        delegate.effects.onEach { effect -> logger.log(tag, "Dispatched Effect: $effect") }
             .launchIn(scope)
     }
 }
