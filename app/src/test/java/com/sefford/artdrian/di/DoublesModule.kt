@@ -13,26 +13,33 @@ import com.sefford.artdrian.common.di.Default
 import com.sefford.artdrian.common.di.IO
 import com.sefford.artdrian.common.di.Memory
 import com.sefford.artdrian.common.di.NetworkCache
+import com.sefford.artdrian.common.di.NetworkModule
+import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.test.FakeLogger
 import com.sefford.artdrian.test.MemoryStorage
 import com.sefford.artdrian.test.networking.LazyMockEngineHandler
 import com.sefford.artdrian.test.networking.MockEngineFactory
 import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.downloads.db.DownloadsDatabase
+import com.sefford.artdrian.test.networking.FakeHttpClient
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import dagger.Module
 import dagger.Provides
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.cache.storage.CacheStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.TestScope
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
+import com.sefford.artdrian.common.data.network.HttpClient as DelegatedFakeClient
 
 @Module
 class DoublesModule(
@@ -116,5 +123,17 @@ class DoublesModule(
     @Provides
     @Singleton
     fun provideEngine(handlers: LazyMockEngineHandler): HttpClientEngineFactory<*> = MockEngineFactory(handlers)
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(deserialization: Json,
+                          engine: HttpClientEngineFactory<*> = CIO,
+                          storage: CacheStorage,
+                          logger: Logger = DefaultLogger()
+    ): HttpClient = NetworkModule().provideHttpClient(deserialization, engine, storage, logger)
+
+    @Singleton
+    @Provides
+    fun provideFakeClient(client: HttpClient): DelegatedFakeClient = FakeHttpClient(client)
 
 }

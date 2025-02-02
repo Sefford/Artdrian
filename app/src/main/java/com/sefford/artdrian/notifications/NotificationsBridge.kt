@@ -2,6 +2,7 @@ package com.sefford.artdrian.notifications
 
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
+import com.sefford.artdrian.downloads.domain.model.filterFinished
 import com.sefford.artdrian.downloads.domain.model.plus
 import com.sefford.artdrian.downloads.domain.model.progress
 import com.sefford.artdrian.downloads.domain.model.total
@@ -26,7 +27,7 @@ fun StateFlow<DownloadsState>.bridgeNotifications(
         .map { downloads -> downloads.downloads }
         .scan(emptyList()) { prev: Downloads, next: Downloads ->
             if (prev.isEmpty()) {
-                next.filterNot { download -> download is Download.Finished }
+                next.filterFinished()
             } else {
                 prev + next
             }

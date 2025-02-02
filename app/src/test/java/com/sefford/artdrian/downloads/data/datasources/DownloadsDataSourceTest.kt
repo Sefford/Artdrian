@@ -83,6 +83,7 @@ class DownloadsDataSourceTest : InjectableTest() {
         dataSource.getAll().first().should { response ->
             response.shouldBeRight()
             response.value.shouldBeInstanceOf<Downloads>()
+            @Suppress("UNCHECKED_CAST")
             (response.value as Downloads).shouldHaveSize(1)
         }
     }
