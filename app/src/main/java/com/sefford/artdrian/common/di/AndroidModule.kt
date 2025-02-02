@@ -52,32 +52,6 @@ class AndroidModule {
 
     @Provides
     @Singleton
-    fun provideLogger(logger: DefaultLogger): Logger = logger
-
-    @Provides
-    @Singleton
-    fun provideConnectivityManager(@Application context: Context): ConnectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-    @Provides
-    @Singleton
-    fun provideConnectivitySubscription(manager: ConnectivityManager): ConnectivitySubscription =
-        DefaultConnectivitySubscription(manager)
-
-    @Provides
-    fun provideDefaultConnectivity(manager: ConnectivityManager): Connectivity =
-        manager.getNetworkCapabilities(manager.activeNetwork)?.let { Connectivity(it) } ?: Connectivity.Undetermined
-
-    @Provides
-    @Singleton
-    fun provideWorkManager(@Application context: Context): WorkManager = WorkManager.getInstance(context)
-
-    @Provides
-    @Singleton
-    fun provideNotificationManager(@Application context: Context) = NotificationManagerCompat.from(context)
-
-    @Provides
-    @Singleton
     fun providePermissions(@Application context: Context) = Permissions(context)
 
 }

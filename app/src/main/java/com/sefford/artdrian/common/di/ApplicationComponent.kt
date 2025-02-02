@@ -1,7 +1,11 @@
 package com.sefford.artdrian.common.di
 
 import com.sefford.artdrian.Artpplication
+import com.sefford.artdrian.connectivity.di.ConnectivityModule
+import com.sefford.artdrian.downloads.di.DownloadsModule
 import com.sefford.artdrian.downloads.tasks.DownloadTask
+import com.sefford.artdrian.notifications.di.NotificationsModule
+import com.sefford.artdrian.wallpapers.di.WallpapersModule
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailComponent
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailModule
 import com.sefford.artdrian.wallpapers.ui.list.WallpaperListActivity
@@ -14,9 +18,13 @@ import javax.inject.Singleton
         ApplicationModule::class,
         AndroidModule::class,
         ConcurrencyModule::class,
+        ConnectivityModule::class,
         CoreModule::class,
-        LocalModule::class,
-        NetworkModule::class]
+        DownloadsModule::class,
+        NotificationsModule::class,
+        NetworkModule::class,
+        WallpapersModule::class,
+    ]
 )
 @Singleton
 interface ApplicationComponent {
