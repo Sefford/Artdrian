@@ -15,7 +15,7 @@ class Size(private val size: Double, private val unit: SizeUnit) {
             .let { (size, unit) -> unit.format(size) }
     }
 
-    private fun toDouble(size: SizeUnit) = size.toDouble(inBytes)
+    val isZero: Boolean by lazy { toDouble(SizeUnit.BYTE) == 0.0 }
 
     operator fun plus(downloaded: Long): Size = Size(inBytes + downloaded.toDouble(), SizeUnit.BYTE)
 
@@ -41,6 +41,8 @@ class Size(private val size: Double, private val unit: SizeUnit) {
     operator fun compareTo(progress: Int): Int = inBytes.compareTo(progress)
 
     operator fun div(total: Size): Float = (inBytes.toFloat() / total.inBytes)
+
+    private fun toDouble(size: SizeUnit) = size.toDouble(inBytes)
 
     companion object {
         inline val Number.bytes: Size get() = Size(this.toDouble(), SizeUnit.BYTE)
