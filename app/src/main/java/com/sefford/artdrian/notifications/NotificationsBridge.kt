@@ -1,42 +1,49 @@
 package com.sefford.artdrian.notifications
 
-import com.sefford.artdrian.downloads.domain.model.Download
-import com.sefford.artdrian.downloads.domain.model.Downloads
-import com.sefford.artdrian.downloads.domain.model.filterFinished
-import com.sefford.artdrian.downloads.domain.model.plus
-import com.sefford.artdrian.downloads.domain.model.progress
-import com.sefford.artdrian.downloads.domain.model.total
-import com.sefford.artdrian.downloads.store.DownloadsState
+import com.sefford.artdrian.downloads.store.DownloadsEffects
+import com.sefford.artdrian.downloads.store.DownloadsStore
+import com.sefford.artdrian.notifications.model.Channels
 import com.sefford.artdrian.notifications.model.Notifications
+import com.sefford.artdrian.notifications.model.NotificationsBridgeState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.scan
 
-fun StateFlow<DownloadsState>.bridgeNotifications(
+fun DownloadsStore.bridgeNotifications(notifications: NotificationCenter, scope: CoroutineScope) =
+    effects.bridgeNotifications(
+        canNotify = { notifications.canNotifyOnChannel(Channels.DOWNLOAD) },
+        notify = notifications::notify,
+        clear = { notifications.clear(Notifications.DOWNLOADS_ID) },
+        scope = scope
+    )
+
+fun Flow<DownloadsEffects>.bridgeNotifications(
     canNotify: () -> Boolean,
     notify: (Notifications.DownloadNotification) -> Unit,
-    scope: CoroutineScope) =
-    filterIsInstance<DownloadsState.Loaded>()
-        .filter { canNotify() }
-        .map { downloads -> downloads.downloads }
-        .scan(emptyList()) { prev: Downloads, next: Downloads ->
-            if (prev.isEmpty()) {
-                next.filterFinished()
-            } else {
-                prev + next
-            }
+    clear: () -> Unit,
+    scope: CoroutineScope
+) = filterIsInstance<DownloadsEffects.External>()
+    .filter { canNotify() }
+    .map { effect ->
+        when (effect) {
+            is DownloadsEffects.Notify -> NotificationsBridgeState.Notifying(effect.downloads)
+            is DownloadsEffects.Update -> NotificationsBridgeState.Notifying(effect.download)
+            DownloadsEffects.Refresh -> NotificationsBridgeState.Refreshing
         }
-        .filter { downloads -> downloads.isNotEmpty() }
-        .map { downloads ->
-            Notifications.DownloadNotification(
-                downloads = downloads.size,
-                total = downloads.total,
-                progress = downloads.progress,
-            )
-        }.onEach(notify).launchIn(scope)
+    }
+    .scan(NotificationsBridgeState.Idle) { prev: NotificationsBridgeState, next: NotificationsBridgeState ->
+        (prev + next)
+    }
+    .onEach { state ->
+        when (state) {
+            is NotificationsBridgeState.Notifying -> notify(Notifications.DownloadNotification(state.downloads))
+            NotificationsBridgeState.Finished -> clear()
+            NotificationsBridgeState.Idle, NotificationsBridgeState.Refreshing -> {}
+        }
+    }
+    .launchIn(scope)

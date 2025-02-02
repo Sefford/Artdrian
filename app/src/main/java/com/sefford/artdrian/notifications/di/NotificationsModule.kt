@@ -1,14 +1,13 @@
 package com.sefford.artdrian.notifications.di
 
-import android.content.Context
-import androidx.core.app.NotificationManagerCompat
-import com.sefford.artdrian.common.Permissions
-import com.sefford.artdrian.common.di.Application
 import com.sefford.artdrian.common.di.Default
-import com.sefford.artdrian.downloads.store.DownloadsStore
+import com.sefford.artdrian.common.stores.KotlinStore
 import com.sefford.artdrian.notifications.NotificationCenter
-import com.sefford.artdrian.notifications.bridgeNotifications
-import com.sefford.artdrian.notifications.model.Channels
+import com.sefford.artdrian.notifications.effects.NotificationsEffectHandler
+import com.sefford.artdrian.notifications.effects.bridgeEffectHandler
+import com.sefford.artdrian.notifications.store.NotificationsState
+import com.sefford.artdrian.notifications.store.NotificationsStateMachine
+import com.sefford.artdrian.notifications.store.NotificationsStore
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -19,18 +18,18 @@ class NotificationsModule {
 
     @Provides
     @Singleton
-    fun provideNotificationCenter(
-        @Application context: Context,
-        notifications: NotificationManagerCompat,
-        downloads: DownloadsStore,
-        permissions: Permissions,
+    fun provideNotificationsEffectHandler(
+        notifications: NotificationCenter,
         @Default scope: CoroutineScope,
-    ) = NotificationCenter(context, context.resources, notifications, permissions).also { center ->
-        downloads.state.bridgeNotifications(
-            { center.canNotifyOnChannel(Channels.DOWNLOAD) },
-            center::notify,
-            scope
-        )
+    ) = NotificationsEffectHandler(notifications, scope)
+
+    @Provides
+    @Singleton
+    fun provideNotificationsStore(
+        effectHandler: NotificationsEffectHandler,
+        @Default scope: CoroutineScope,
+    ): NotificationsStore = KotlinStore(NotificationsStateMachine, NotificationsState(), scope).also { store ->
+        store.bridgeEffectHandler(effectHandler, scope)
     }
 
 }
