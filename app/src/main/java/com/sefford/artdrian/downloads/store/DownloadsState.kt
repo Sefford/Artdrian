@@ -9,6 +9,7 @@ import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.Measured
+import com.sefford.artdrian.downloads.domain.model.filterFinished
 import com.sefford.artdrian.downloads.domain.model.plus
 
 sealed class DownloadsState(val downloads: Downloads) {
@@ -47,7 +48,6 @@ sealed class DownloadsState(val downloads: Downloads) {
 
         override fun get(url: String): Option<Download> = downloads.find { it.url == url }.toOption()
 
-        operator fun minus(other: Loaded): Downloads = downloads - other.downloads
     }
 
     class Loaded(downloads: Downloads) : DownloadsState(downloads), Measured {
@@ -73,7 +73,7 @@ sealed class DownloadsState(val downloads: Downloads) {
         }
     }
 
-    operator fun minus(other: DownloadsState): Downloads = downloads - other.downloads
+    operator fun minus(other: DownloadsState): Downloads = (downloads - other.downloads)
 
     abstract fun viabilityOf(id: String): Viability
 

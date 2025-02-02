@@ -15,3 +15,4 @@ val Downloads.progress: Long
 val Downloads.total: Long
     get() = filterIsInstance<Measured>().sumOf { download -> download.total.inBytes }
 
+fun Downloads.filterFinished() = filterNot { download -> download.finished }

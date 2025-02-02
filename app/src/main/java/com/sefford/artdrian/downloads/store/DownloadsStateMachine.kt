@@ -2,6 +2,7 @@ package com.sefford.artdrian.downloads.store
 
 import com.sefford.artdrian.common.stores.StateMachine
 import com.sefford.artdrian.downloads.domain.model.Downloads
+import com.sefford.artdrian.downloads.domain.model.filterFinished
 import com.sefford.artdrian.downloads.store.DownloadsState.Loaded
 import com.sefford.artdrian.downloads.store.DownloadsState.Preload
 
@@ -20,7 +21,7 @@ val DownloadsStateMachine: StateMachine<DownloadsEvents, DownloadsState, Downloa
         state { received }
         if (prev is Preload) {
             effect(DownloadsEffects.Notify(received.downloads))
-            effect(DownloadsEffects.Register(prev - received))
+            effect(DownloadsEffects.Register((prev - received).filterFinished()))
         } else {
             effect(DownloadsEffects.Notify(received - prev))
         }

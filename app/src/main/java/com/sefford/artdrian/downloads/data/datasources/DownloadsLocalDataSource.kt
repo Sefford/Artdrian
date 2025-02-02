@@ -37,7 +37,7 @@ class DownloadsDataSource constructor(
         Either.catch {
             db.getAll().map { response ->
                 if (response.isNotEmpty()) {
-                    response.map { Download(it) }.filterNot { it.finished }.right()
+                    response.map { Download(it) }.right()
                 } else {
                     DataError.Local.Empty.left<DataError>()
                 }
