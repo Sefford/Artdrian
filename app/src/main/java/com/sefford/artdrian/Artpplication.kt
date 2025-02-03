@@ -4,13 +4,13 @@ import android.app.Application
 import coil3.ImageLoader
 import coil3.PlatformContext
 import coil3.SingletonImageLoader
+import coil3.request.allowHardware
 import coil3.request.crossfade
-import coil3.util.DebugLogger
 import com.sefford.artdrian.common.di.ApplicationModule
 import com.sefford.artdrian.common.di.CoreModule
 import com.sefford.artdrian.common.di.DaggerApplicationComponent
 import com.sefford.artdrian.common.di.TopComponentHolder
-import com.sefford.artdrian.common.utils.debuggable
+import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.connectivity.ConnectivityStore
 import com.sefford.artdrian.downloads.store.Downloader
 import com.sefford.artdrian.notifications.store.NotificationsStore
@@ -32,6 +32,9 @@ class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Fa
     @Inject
     internal lateinit var notifications: NotificationsStore
 
+    @Inject
+    internal lateinit var logger: Logger
+
 
     override val graph = DaggerApplicationComponent.builder()
         .applicationModule(ApplicationModule(this))
@@ -44,13 +47,11 @@ class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Fa
         wallpapers.event(WallpaperEvents.Load)
     }
 
-    override fun newImageLoader(context: PlatformContext): ImageLoader =
-        ImageLoader.Builder(context)
-        .crossfade(true)
-        .apply {
-            if (context.applicationInfo.debuggable) {
-                logger(DebugLogger())
-            }
-        }
-        .build()
+    override fun newImageLoader(context: PlatformContext): ImageLoader {
+        return ImageLoader.Builder(context)
+            .crossfade(true)
+            .allowHardware(false)
+            .apply { logger(logger) }
+            .build()
+    }
 }
