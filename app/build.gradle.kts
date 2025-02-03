@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.coil.ktor)
     implementation(libs.material3)
     implementation(libs.material.icons.extended)
+    implementation(libs.palette)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.permissions)
 
