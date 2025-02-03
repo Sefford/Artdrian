@@ -43,7 +43,7 @@ class DownloadsStoreTest {
     fun `holds the preloads when not having confirmation from the backend`() {
         val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Idle)
 
-        store.event(DownloadsEvents.Register(listOf(FIRST)))
+        store.event(DownloadsEvents.Register(setOf(FIRST)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Preload>()
@@ -54,8 +54,8 @@ class DownloadsStoreTest {
 
     @Test
     fun `merges preloads when receiving more preloads`() {
-        val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Preload(listOf(FIRST)))
-        store.event(DownloadsEvents.Register(listOf(SECOND)))
+        val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Preload(setOf(FIRST)))
+        store.event(DownloadsEvents.Register(setOf(SECOND)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Preload>()
@@ -68,7 +68,7 @@ class DownloadsStoreTest {
     fun `persists the new downloads when the state is empty`() {
         val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Empty)
 
-        store.event(DownloadsEvents.Register(listOf(FIRST, SECOND)))
+        store.event(DownloadsEvents.Register(setOf(FIRST, SECOND)))
 
         store.result.should { (states, effects) ->
             store.current.shouldBeInstanceOf<DownloadsState.Empty>()
@@ -82,11 +82,11 @@ class DownloadsStoreTest {
     fun `persists the new downloads when the state is loaded`() {
         val store = StoreInstrumentation(
             DownloadsStateMachine, DownloadsState.Loaded(
-                listOf(SECOND, THIRD)
+                setOf(SECOND, THIRD)
             )
         )
 
-        store.event(DownloadsEvents.Register(listOf(FIRST, SECOND)))
+        store.event(DownloadsEvents.Register(setOf(FIRST, SECOND)))
 
         store.result.should { (_, effects) ->
             store.current.shouldBeInstanceOf<DownloadsState.Loaded>()
@@ -101,7 +101,7 @@ class DownloadsStoreTest {
     fun `receives the downloads from the cache while on Idle`() {
         val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Idle)
 
-        store.event(DownloadsEvents.OnDownloadsReceived(listOf(FIRST)))
+        store.event(DownloadsEvents.OnDownloadsReceived(setOf(FIRST)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Loaded>()
@@ -116,7 +116,7 @@ class DownloadsStoreTest {
     fun `receives the downloads from the cache while on Empty`() {
         val store = StoreInstrumentation(DownloadsStateMachine, DownloadsState.Empty)
 
-        store.event(DownloadsEvents.OnDownloadsReceived(listOf(FIRST)))
+        store.event(DownloadsEvents.OnDownloadsReceived(setOf(FIRST)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Loaded>()
@@ -131,10 +131,10 @@ class DownloadsStoreTest {
     fun `receives the downloads from the cache while on Preload`() {
         val store = StoreInstrumentation(
             DownloadsStateMachine,
-            DownloadsState.Preload(listOf(FIRST, SECOND))
+            DownloadsState.Preload(setOf(FIRST, SECOND))
         )
 
-        store.event(DownloadsEvents.OnDownloadsReceived(listOf(SECOND, THIRD)))
+        store.event(DownloadsEvents.OnDownloadsReceived(setOf(SECOND, THIRD)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Loaded>()
@@ -151,10 +151,10 @@ class DownloadsStoreTest {
     fun `receives the downloads from the cache while on Loaded`() {
         val store = StoreInstrumentation(
             DownloadsStateMachine,
-            DownloadsState.Loaded(listOf(FIRST, SECOND))
+            DownloadsState.Loaded(setOf(FIRST, SECOND))
         )
 
-        store.event(DownloadsEvents.OnDownloadsReceived(listOf(SECOND, THIRD)))
+        store.event(DownloadsEvents.OnDownloadsReceived(setOf(SECOND, THIRD)))
 
         store.result.should { (states, effects) ->
             states.last().shouldBeInstanceOf<DownloadsState.Loaded>()

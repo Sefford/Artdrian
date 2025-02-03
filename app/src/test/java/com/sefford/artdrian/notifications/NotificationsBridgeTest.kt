@@ -1,68 +1,120 @@
 package com.sefford.artdrian.notifications
 
-import com.sefford.artdrian.common.language.files.writeString
-import com.sefford.artdrian.downloads.store.DownloadsState
+import com.sefford.artdrian.common.language.files.Size.Companion.bytes
+import com.sefford.artdrian.downloads.store.DownloadsEffects
 import com.sefford.artdrian.notifications.model.Notifications
 import com.sefford.artdrian.test.mothers.DownloadsMother
 import com.sefford.artdrian.test.unconfine
+import io.kotest.matchers.booleans.shouldBeFalse
+import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
-import java.io.File
 
 class NotificationsBridgeTest {
 
-    private val events = mutableListOf<Notifications.DownloadNotification>()
+    private val notifications = mutableListOf<Notifications.DownloadNotification>()
+    private var cleared = false
+    private val clear = { cleared = true }
+    private val effects = MutableSharedFlow<DownloadsEffects>()
 
     @Test
     fun `initializes the information the first time`() = runTest {
-        MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createPending()))))
-            .bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
+        effects.bridgeNotifications(
+            canNotify = { true },
+            notify = notifications::add,
+            clear = clear,
+            scope = backgroundScope.unconfine()
+        )
 
-        events.last().should { notification ->
-            notification.downloads shouldBe 1
-            notification.total shouldBe 0
-            notification.progress shouldBe 0
+        effects.emit(DownloadsEffects.Notify(DownloadsMother.createPending()))
+
+        notifications.last().should { notification ->
+            notification.number shouldBe 1
+            notification.total shouldBe 0.bytes
+            notification.progress shouldBe 0.bytes
             notification.percentage shouldBe 0
+            notification.indeterminate.shouldBeTrue()
         }
+        cleared.shouldBeFalse()
     }
 
     @Test
-    fun `filters out initially finished downloads`() = runTest {
-        MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))))
-            .bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
+    fun `does not execute if the notifications are disabled`() = runTest {
+        effects.bridgeNotifications(
+            canNotify = { false },
+            notify = notifications::add,
+            clear = clear,
+            scope = backgroundScope.unconfine()
+        )
 
-        events.shouldBeEmpty()
+        effects.emit(DownloadsEffects.Notify(DownloadsMother.createPending()))
+
+        notifications.shouldBeEmpty()
+        cleared.shouldBeFalse()
     }
 
     @Test
-    fun `filters out when the notifications are not enabled`() = runTest {
-        MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))))
-            .bridgeNotifications({ false }, events::add, backgroundScope.unconfine())
+    fun `updates a download`() = runTest {
+        effects.bridgeNotifications(
+            canNotify = { true },
+            notify = notifications::add,
+            clear = clear,
+            scope = backgroundScope.unconfine()
+        )
 
-        events.shouldBeEmpty()
-    }
+        effects.emit(DownloadsEffects.Notify(DownloadsMother.createPending()))
+        effects.emit(DownloadsEffects.Update(DownloadsMother.createOngoing()))
 
-    @Test
-    fun `keeps a download when it is finished`() = runTest {
-        val downloadFile = File.createTempFile(DownloadsMother.createFinished().name, ".jpg").also { file ->
-            file.writeString("a".repeat(DownloadsMother.createFinished().total.inBytes.toInt()))
+        notifications.last().should { notification ->
+            notification.number shouldBe 1
+            notification.total shouldBe TOTAL
+            notification.progress shouldBe 0.bytes
+            notification.percentage shouldBe 0
+            notification.indeterminate.shouldBeFalse()
         }
+        cleared.shouldBeFalse()
+    }
 
-        val downloads = MutableStateFlow<DownloadsState>((DownloadsState.Loaded(listOf(DownloadsMother.createPending()))))
+    @Test
+    fun `clears notification when all the downloads are finished`() = runTest {
+        effects.bridgeNotifications(
+            canNotify = { true },
+            notify = notifications::add,
+            clear = clear,
+            scope = backgroundScope.unconfine()
+        )
 
-        downloads.bridgeNotifications({ true }, events::add, backgroundScope.unconfine())
+        effects.emit(DownloadsEffects.Notify(DownloadsMother.createPending()))
+        effects.emit(DownloadsEffects.Update(DownloadsMother.createFinished()))
 
-        downloads.emit(DownloadsState.Loaded(listOf(DownloadsMother.createFinished(file = downloadFile))))
+        cleared.shouldBeTrue()
+    }
 
-        events.last().should { notification ->
-            notification.downloads shouldBe 1
-            notification.total shouldBe 1000L
-            notification.progress shouldBe 1000L
-            notification.percentage shouldBe 100f
+    @Test
+    fun `reinits the cycle`() = runTest {
+        effects.bridgeNotifications(
+            canNotify = { true },
+            notify = notifications::add,
+            clear = clear,
+            scope = backgroundScope.unconfine()
+        )
+
+        effects.emit(DownloadsEffects.Notify(DownloadsMother.createPending()))
+        effects.emit(DownloadsEffects.Update(DownloadsMother.createFinished()))
+        effects.emit(DownloadsEffects.Update(DownloadsMother.createPending()))
+
+        notifications.last().should { notification ->
+            notification.number shouldBe 1
+            notification.total shouldBe 0.bytes
+            notification.progress shouldBe 0.bytes
+            notification.percentage shouldBe 0
+            notification.indeterminate.shouldBeTrue()
         }
     }
 }
+
+private val TOTAL = 1000.bytes

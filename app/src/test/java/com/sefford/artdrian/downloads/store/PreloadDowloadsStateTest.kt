@@ -13,7 +13,7 @@ class PreloadDowloadsStateTest {
 
     @Test
     fun `Preload plus Error equals Loaded`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + ERROR).should { loaded ->
+        (DownloadsState.Preload(setOf(DownloadsMother.createPending())) + ERROR).should { loaded ->
             loaded.shouldBeInstanceOf<DownloadsState.Loaded>()
             loaded.downloads.shouldHaveSize(1)
         }
@@ -21,7 +21,7 @@ class PreloadDowloadsStateTest {
 
     @Test
     fun `Preload plus Empty Preload equals Preload`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(listOf())).should { preload ->
+        (DownloadsState.Preload(setOf(DownloadsMother.createPending())) + DownloadsState.Preload(emptySet())).should { preload ->
             preload.shouldBeInstanceOf<DownloadsState.Preload>()
             preload.downloads.shouldHaveSize(1)
         }
@@ -29,8 +29,8 @@ class PreloadDowloadsStateTest {
 
     @Test
     fun `Preload plus Preload equals Preload`() {
-        (DownloadsState.Preload(listOf(DownloadsMother.createPending())) + DownloadsState.Preload(
-            listOf(
+        (DownloadsState.Preload(setOf(DownloadsMother.createPending())) + DownloadsState.Preload(
+            setOf(
                 DownloadsMother.createPending(
                     "2"
                 )
@@ -45,7 +45,7 @@ class PreloadDowloadsStateTest {
     fun `the difference between a Preload and a Loaded does not include downloads in Loaded`() {
         val pending = DownloadsMother.createPending()
 
-        (DownloadsState.Preload(listOf(pending)) - DownloadsState.Loaded(listOf(DownloadsMother.createOngoing(url = OTHER_DOWNLOAD_URL))))
+        (DownloadsState.Preload(setOf(pending)) - DownloadsState.Loaded(setOf(DownloadsMother.createOngoing(url = OTHER_DOWNLOAD_URL))))
             .shouldContainOnly(pending)
     }
 }

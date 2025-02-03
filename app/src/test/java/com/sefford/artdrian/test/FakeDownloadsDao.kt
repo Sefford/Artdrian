@@ -13,13 +13,13 @@ class FakeDownloadsDao(
     private val clearBehavior: () -> Unit = {}
 ) : DownloadsDao {
 
-    override fun add(vararg downloads: DownloadDto) = addBehavior(downloads)
-
     override fun getAll(): Flow<List<DownloadDto>> = getAllBehavior()
+
+    override suspend fun add(vararg downloads: DownloadDto) = addBehavior(downloads)
 
     override suspend fun get(url: String): DownloadDto? = getSingleBehavior(url)
 
-    override fun delete(id: String) = deleteBehavior(id)
+    override suspend fun delete(id: String) = deleteBehavior(id)
 
-    override fun clear() = clearBehavior()
+    override suspend fun clear() = clearBehavior()
 }

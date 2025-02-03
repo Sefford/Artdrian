@@ -1,13 +1,12 @@
 package com.sefford.artdrian.wallpapers.di
 
-import android.content.Context
-import androidx.room.Room
-import com.sefford.artdrian.common.di.Application
 import com.sefford.artdrian.common.di.Default
 import com.sefford.artdrian.common.di.IO
 import com.sefford.artdrian.common.stores.KotlinStore
 import com.sefford.artdrian.common.utils.Logger
 import com.sefford.artdrian.downloads.data.datasources.DownloadsDataSource
+import com.sefford.artdrian.downloads.store.DownloadsStore
+import com.sefford.artdrian.downloads.store.bridgeToDownload
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperCache
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperLocalDataSource
 import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSource
@@ -17,6 +16,7 @@ import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.wallpapers.domain.model.MetadataResponse
 import com.sefford.artdrian.wallpapers.domain.model.SingleMetadataResponse
 import com.sefford.artdrian.wallpapers.effects.WallpaperDomainEffectHandler
+import com.sefford.artdrian.wallpapers.effects.bridgeEffectHandler
 import com.sefford.artdrian.wallpapers.store.WallpaperStateMachine
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
@@ -24,8 +24,6 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Singleton
 
 @Module
@@ -56,23 +54,24 @@ class WallpapersModule {
     fun provideWallpaperDomainEffectHandler(
         repository: WallpaperRepository,
         cache: WallpaperCache,
-        downloads: DownloadsDataSource
     ): WallpaperDomainEffectHandler {
         val getAllMetadata: () -> Flow<MetadataResponse> = repository::getMetadata
         val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = repository::getMetadata
-        return WallpaperDomainEffectHandler(getAllMetadata, getSingleMetadata, cache::save, downloads::save, cache::clear)
+        return WallpaperDomainEffectHandler(getAllMetadata, getSingleMetadata, cache::save, cache::clear)
     }
 
     @Provides
     @Singleton
     fun provideWallpaperStore(
-        domainEffectHandler: WallpaperDomainEffectHandler,
+        effectHandler: WallpaperDomainEffectHandler,
+        downloads: DownloadsStore,
         logger: Logger,
         @IO ioScope: CoroutineScope,
         @Default defaultScope: CoroutineScope
     ): WallpaperStore = KotlinStore(WallpaperStateMachine, WallpapersState.Idle.Empty, defaultScope)
         .monitor(logger, "WallpaperStore")
         .also { store ->
-            store.effects.onEach { effect -> domainEffectHandler.handle(effect, store::event) }.launchIn(ioScope)
+            store.bridgeToDownload(downloads, defaultScope)
+            store.bridgeEffectHandler(effectHandler, ioScope)
         }
 }

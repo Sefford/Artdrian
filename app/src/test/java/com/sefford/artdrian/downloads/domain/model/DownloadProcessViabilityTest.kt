@@ -41,7 +41,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `returns failure when the ID cannot be found`() {
-        givenAViabilityStep(state = DownloadsState.Loaded(emptyList())).should { result ->
+        givenAViabilityStep(state = DownloadsState.Loaded(emptySet())).should { result ->
             result.shouldBeLeft()
             result.value shouldBe DownloadProcess.Results.Failure
         }
@@ -57,7 +57,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `returns retry when the downloads are Preloaded`() {
-        givenAViabilityStep(state = DownloadsState.Preload(emptyList())).should { result ->
+        givenAViabilityStep(state = DownloadsState.Preload(emptySet())).should { result ->
             result.shouldBeLeft()
             result.value shouldBe DownloadProcess.Results.Retry
         }
@@ -65,7 +65,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `returns success when the download is already finished`() {
-        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createFinished()))).should { result ->
+        givenAViabilityStep(state = DownloadsState.Loaded(setOf(DownloadsMother.createFinished()))).should { result ->
             result.shouldBeLeft()
             result.value shouldBe DownloadProcess.Results.Success
         }
@@ -73,7 +73,7 @@ class DownloadProcessViabilityTest : InjectableTest() {
 
     @Test
     fun `proceeds with next step when the download is on a viable state`() {
-        givenAViabilityStep(state = DownloadsState.Loaded(listOf(DownloadsMother.createPending()))).should { result ->
+        givenAViabilityStep(state = DownloadsState.Loaded(setOf(DownloadsMother.createPending()))).should { result ->
             result.shouldBeRight()
             result.value.shouldBeInstanceOf<DownloadProcess.Step.Probe>()
         }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DownloadsDao {
     @Upsert
-    fun add(vararg downloads: DownloadDto)
+    suspend fun add(vararg downloads: DownloadDto)
 
     @Query("SELECT * FROM downloads")
     fun getAll(): Flow<List<DownloadDto>>
@@ -18,9 +18,9 @@ interface DownloadsDao {
     suspend fun get(url: String): DownloadDto?
 
     @Query("DELETE FROM downloads WHERE url = :id")
-    fun delete(id: String)
+    suspend fun delete(id: String)
 
     @Query("DELETE FROM downloads")
-    fun clear()
+    suspend fun clear()
 
 }

@@ -66,11 +66,9 @@ class WallpaperStoreTest {
         store.result.should { (states, effects) ->
             states.shouldHaveSize(1)
             states.first().shouldBeInstanceOf<WallpapersState.Loaded>()
-            effects.shouldHaveSize(2)
-            effects.first().shouldBeInstanceOf<WallpaperEffects.Persist>()
-            (effects.first() as WallpaperEffects.Persist).metadata.shouldHaveSize(1)
-            effects.last().shouldBeInstanceOf<WallpaperEffects.PrepareDownloads>()
-            (effects.last() as WallpaperEffects.PrepareDownloads).downloads.shouldHaveSize(2)
+            effects.shouldHaveSize(1)
+            effects.last().shouldBeInstanceOf<WallpaperEffects.Persist>()
+            (effects.last() as WallpaperEffects.Persist).metadata.shouldHaveSize(1)
         }
     }
 

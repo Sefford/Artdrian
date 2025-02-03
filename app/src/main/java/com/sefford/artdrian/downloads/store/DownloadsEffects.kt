@@ -7,10 +7,17 @@ sealed class DownloadsEffects {
 
     data object LoadAll: DownloadsEffects()
 
-    class Register(val downloads: List<Download>) : DownloadsEffects()
+    class Register(val downloads: Downloads) : DownloadsEffects() {
+        constructor(download: Download): this(setOf(download))
+    }
 
-    class Update(val download: Download): DownloadsEffects()
+    class Update(val download: Download): DownloadsEffects(), External
 
-    class Notify(val downloads: Downloads): DownloadsEffects()
+    class Notify(val downloads: Downloads): DownloadsEffects(), External {
+        constructor(download: Download): this(setOf(download))
+    }
 
+    data object Refresh: DownloadsEffects(), External
+
+    sealed interface External
 }

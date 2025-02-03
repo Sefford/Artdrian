@@ -172,6 +172,7 @@ sealed class DownloadProcess {
                         val bytesRead = body.readAvailable(buffer)
                         if (bytesRead > 0) {
                             sink.write(buffer, 0, bytesRead)
+                            events(DownloadsEvents.Refresh)
                         }
                     }
                 }

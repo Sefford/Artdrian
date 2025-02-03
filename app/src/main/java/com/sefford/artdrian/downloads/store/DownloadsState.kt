@@ -9,12 +9,11 @@ import com.sefford.artdrian.common.language.files.Size.Companion.bytes
 import com.sefford.artdrian.downloads.domain.model.Download
 import com.sefford.artdrian.downloads.domain.model.Downloads
 import com.sefford.artdrian.downloads.domain.model.Measured
-import com.sefford.artdrian.downloads.domain.model.filterFinished
 import com.sefford.artdrian.downloads.domain.model.plus
 
 sealed class DownloadsState(val downloads: Downloads) {
 
-    data object Idle : DownloadsState(emptyList()) {
+    data object Idle : DownloadsState(emptySet()) {
         override fun viabilityOf(id: String): Viability = Viability.WAIT
 
         override fun plus(error: DataError): DownloadsState = Empty
@@ -24,7 +23,7 @@ sealed class DownloadsState(val downloads: Downloads) {
         override fun get(url: String): Option<Download> = none()
     }
 
-    data object Empty : DownloadsState(emptyList()) {
+    data object Empty : DownloadsState(emptySet()) {
 
         override fun viabilityOf(id: String): Viability = Viability.FAILURE
 
@@ -44,7 +43,7 @@ sealed class DownloadsState(val downloads: Downloads) {
 
         override fun plus(error: DataError): DownloadsState = Loaded(downloads)
 
-        override fun plus(preloads: Preload): DownloadsState = Preload((downloads + preloads.downloads).toSet().toList())
+        override fun plus(preloads: Preload): DownloadsState = Preload((downloads + preloads.downloads).toSet())
 
         override fun get(url: String): Option<Download> = downloads.find { it.url == url }.toOption()
 
