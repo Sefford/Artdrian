@@ -21,7 +21,6 @@ class WallpaperDomainEffectHandler(
     private val getAllMetadata: () -> Flow<MetadataResponse> = { flow {} },
     private val getSingleMetadata: (String) -> Flow<SingleMetadataResponse> = { flow {} },
     private val persistMetadata: suspend (List<Wallpaper>) -> Unit = {},
-    private val persistDownloads: suspend (Downloads) -> Unit = {},
     private val clear: suspend () -> Unit = {},
     private val scope: CoroutineScope = MainScope().plus(Dispatchers.IO)
 ) : EffectHandler<WallpaperEvents, WallpaperEffects> {
@@ -31,7 +30,6 @@ class WallpaperDomainEffectHandler(
             WallpaperEffects.LoadAll -> loadAll(event)
             is WallpaperEffects.Load -> load(effect.id, event)
             is WallpaperEffects.Persist -> scope.launch { persistMetadata(effect.metadata) }
-            is WallpaperEffects.PrepareDownloads ->  scope.launch { persistDownloads(effect.downloads) }
             WallpaperEffects.Clear -> scope.launch { clear() }
         }
     }

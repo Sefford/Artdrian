@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.sefford.artdrian.common.FakeFileManager
 import com.sefford.artdrian.common.FakeWallpaperAdapter
 import com.sefford.artdrian.common.FileManager
+import com.sefford.artdrian.common.Permissions
 import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.wallpapers.data.db.WallpaperDatabase
 import com.sefford.artdrian.common.di.Application
@@ -51,6 +52,14 @@ class DoublesModule(
     @Singleton
     @Application
     fun provideContext() = ApplicationProvider.getApplicationContext<Context>()
+
+    @Provides
+    @Singleton
+    fun provideResources() = ApplicationProvider.getApplicationContext<Context>().resources
+
+    @Provides
+    @Singleton
+    fun providePermissions(@Application context: Context) = Permissions(context)
 
     @Provides
     @Singleton

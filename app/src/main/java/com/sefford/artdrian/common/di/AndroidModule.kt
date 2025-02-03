@@ -2,9 +2,6 @@ package com.sefford.artdrian.common.di
 
 import android.app.WallpaperManager
 import android.content.Context
-import android.net.ConnectivityManager
-import androidx.core.app.NotificationManagerCompat
-import androidx.work.WorkManager
 import com.sefford.artdrian.common.FileManager
 import com.sefford.artdrian.common.FileManagerImpl
 import com.sefford.artdrian.common.Permissions
@@ -12,9 +9,6 @@ import com.sefford.artdrian.common.WallpaperAdapter
 import com.sefford.artdrian.common.WallpaperAdapterImpl
 import com.sefford.artdrian.common.utils.DefaultLogger
 import com.sefford.artdrian.common.utils.Logger
-import com.sefford.artdrian.connectivity.Connectivity
-import com.sefford.artdrian.connectivity.ConnectivitySubscription
-import com.sefford.artdrian.connectivity.DefaultConnectivitySubscription
 import dagger.Module
 import dagger.Provides
 import io.ktor.client.HttpClient
@@ -33,6 +27,9 @@ class AndroidModule {
     @Singleton
     @Downloads
     fun provideExternalCacheDirForDownloads(@Application context: Context) = File(context.externalCacheDir, "downloads")
+
+    @Provides
+    fun provideResources(@Application context: Context) = context.resources
 
     @Provides
     @Singleton

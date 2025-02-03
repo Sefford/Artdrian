@@ -11,7 +11,5 @@ sealed class WallpaperEffects {
 
     class Persist(val metadata: List<Wallpaper>): WallpaperEffects()
 
-    class PrepareDownloads(val downloads: Downloads): WallpaperEffects()
-
     data object Clear: WallpaperEffects()
 }

@@ -13,7 +13,7 @@ import com.sefford.artdrian.common.di.TopComponentHolder
 import com.sefford.artdrian.common.utils.debuggable
 import com.sefford.artdrian.connectivity.ConnectivityStore
 import com.sefford.artdrian.downloads.store.Downloader
-import com.sefford.artdrian.notifications.NotificationCenter
+import com.sefford.artdrian.notifications.store.NotificationsStore
 import com.sefford.artdrian.wallpapers.store.WallpaperEvents
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import javax.inject.Inject
@@ -30,7 +30,7 @@ class Artpplication : Application(), TopComponentHolder, SingletonImageLoader.Fa
     internal lateinit var downloader: Downloader
 
     @Inject
-    internal lateinit var notifications: NotificationCenter
+    internal lateinit var notifications: NotificationsStore
 
 
     override val graph = DaggerApplicationComponent.builder()
