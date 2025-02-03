@@ -2,6 +2,8 @@ package com.sefford.artdrian.wallpapers.ui.views
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
 import coil3.compose.AsyncImage
 
@@ -13,6 +15,7 @@ fun WallpaperImage(
     AsyncImage(
         modifier = modifier,
         model = image.url,
+        placeholder = ColorPainter(image.placeholder),
         contentDescription = image.description,
         contentScale = image.scale,
     )
@@ -21,5 +24,6 @@ fun WallpaperImage(
 class ImageRequest(
     val url: String,
     val description: String,
+    val placeholder: Color,
     val scale: ContentScale
 )

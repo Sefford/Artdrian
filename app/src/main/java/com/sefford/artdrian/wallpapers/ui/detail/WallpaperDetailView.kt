@@ -81,6 +81,7 @@ import com.sefford.artdrian.wallpapers.ui.detail.ContentMode.INFO
 import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState
 import com.sefford.artdrian.wallpapers.ui.views.ImageRequest
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperImage
+import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -156,6 +157,7 @@ private fun ShowWallpaper(
             image = ImageRequest(
                 wallpaper.images.mobile,
                 wallpaper.title,
+                placeholder = WallpaperPalette[wallpaper.slug].dominant,
                 ContentScale.Crop
             )
         )

@@ -32,6 +32,7 @@ import com.sefford.artdrian.wallpapers.domain.model.Images
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.ui.views.ImageRequest
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperImage
+import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -53,9 +54,10 @@ fun WallpaperCard(
             WallpaperImage(
                 modifier = Modifier.fillMaxSize(),
                 image = ImageRequest(
-                    wallpaper.images.preview,
-                    wallpaper.title,
-                    ContentScale.Crop
+                    url = wallpaper.images.preview,
+                    description = wallpaper.title,
+                    placeholder = WallpaperPalette[wallpaper.slug].dominant,
+                    scale = ContentScale.Crop
                 )
             )
             Row(
