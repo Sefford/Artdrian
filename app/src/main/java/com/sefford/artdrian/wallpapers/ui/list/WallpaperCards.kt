@@ -28,6 +28,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.wallpapers.domain.model.Images
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.ui.views.ImageRequest
@@ -65,7 +66,7 @@ fun WallpaperCard(
                     .align(Alignment.BottomEnd)
                     .padding(8.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color.White)
+                    .background(ArtdrianTheme.colors.background)
                     .padding(8.dp, 2.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround

@@ -37,15 +37,15 @@ import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun WallpaperListScreen(response: WallpaperListViewModel.ViewState, onItemClicked: (String, String) -> Unit = { _, _ ->}) {
+fun WallpaperListScreen(response: WallpaperListViewModel.ViewState, onItemClicked: (String, String) -> Unit = { _, _ -> }) {
     ArtdrianTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = { Text(text = stringResource(id = R.string.app_name)) },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Black,
-                        titleContentColor = Color.White
+                        containerColor = ArtdrianTheme.colors.background,
+                        titleContentColor = ArtdrianTheme.colors.onBackground
                     )
                 )
             },
@@ -71,7 +71,8 @@ private fun ShowLoading() {
         CircularProgressIndicator(
             modifier = Modifier
                 .wrapContentSize()
-                .align(Alignment.Center), color = Color.Black
+                .align(Alignment.Center),
+            color = ArtdrianTheme.colors.onBackground
         )
     }
 }
@@ -101,12 +102,12 @@ private fun ShowError(errors: WallpaperListViewModel.Errors) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Icon(icon, modifier = Modifier.size(120.dp), contentDescription = "", tint = Color.Black)
+        Icon(icon, modifier = Modifier.size(120.dp), contentDescription = "", tint = ArtdrianTheme.colors.onBackground)
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.network_error),
             textAlign = TextAlign.Center,
-            color = Color.Black
+            color = ArtdrianTheme.colors.onBackground
         )
     }
 }
