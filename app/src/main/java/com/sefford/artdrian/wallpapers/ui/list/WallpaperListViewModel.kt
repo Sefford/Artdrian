@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import javax.inject.Inject
 
 class WallpaperListViewModel @AssistedInject constructor(
     private val wallpaperStore: WallpaperStore,
@@ -52,6 +53,20 @@ class WallpaperListViewModel @AssistedInject constructor(
             @Assisted initialState: ViewState,
         ): WallpaperListViewModel
     }
+
+
+    class Provider @Inject constructor(
+        private val wallpaperStore: WallpaperStore,
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(WallpaperListViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return WallpaperListViewModel(wallpaperStore, ViewState.Loading) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
 
     @Suppress("UNCHECKED_CAST")
     companion object {

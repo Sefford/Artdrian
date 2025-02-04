@@ -10,8 +10,9 @@ import com.sefford.artdrian.wallpapers.di.WallpapersBoundaryModule
 import com.sefford.artdrian.wallpapers.di.WallpapersModule
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailComponent
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailModule
-import com.sefford.artdrian.wallpapers.ui.list.WallpaperListActivity
 import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel
+import com.sefford.artdrian.wallpapers.ui.list.di.WallpaperListComponent
+import com.sefford.artdrian.wallpapers.ui.list.di.WallpaperListModule
 import dagger.Component
 import javax.inject.Singleton
 
@@ -37,10 +38,9 @@ interface ApplicationComponent {
 
     fun inject(application: Artpplication)
 
-    fun inject(activity: WallpaperListActivity)
-
     fun inject(viewModel: WallpaperListViewModel)
 
     fun inject(task: DownloadTask)
 
+    fun plus(module: WallpaperListModule): WallpaperListComponent
 }

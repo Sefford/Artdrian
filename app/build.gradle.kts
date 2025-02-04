@@ -74,17 +74,18 @@ dependencies {
     // Android
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.activity.compose)
     implementation(libs.workmanager)
 
     // Compose
     implementation(platform(libs.compose.bom))
+    implementation(libs.compose.activity)
+    implementation(libs.compose.navigation)
     implementation(libs.compose.tooling)
     implementation(libs.compose.test.manifest)
     implementation(libs.coil.compose)
     implementation(libs.coil.core)
     implementation(libs.coil.ktor)
-    implementation(libs.material3)
+    implementation(libs.material)
     implementation(libs.material.icons.extended)
     implementation(libs.palette)
     implementation(libs.accompanist.pager)
