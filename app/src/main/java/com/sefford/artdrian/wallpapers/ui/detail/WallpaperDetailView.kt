@@ -68,10 +68,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
-import com.sefford.artdrian.common.ui.theme.Black40
-import com.sefford.artdrian.common.ui.theme.Black80
-import com.sefford.artdrian.common.ui.theme.Typography
-import com.sefford.artdrian.common.ui.theme.White20
 import com.sefford.artdrian.common.ui.theme.White50
 import com.sefford.artdrian.common.utils.isAtLeastAPI
 import com.sefford.artdrian.wallpapers.domain.model.Images
@@ -100,8 +96,8 @@ fun WallpaperDetailScreen(
                 TopAppBar(
                     title = { Text(text = name) },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Black,
-                        titleContentColor = Color.White
+                        containerColor = ArtdrianTheme.colors.background,
+                        titleContentColor = ArtdrianTheme.colors.onBackground
                     )
                 )
             },
@@ -132,7 +128,8 @@ private fun ShowLoading() {
         CircularProgressIndicator(
             modifier = Modifier
                 .wrapContentSize()
-                .align(Alignment.Center), color = Color.Black
+                .align(Alignment.Center),
+            color = ArtdrianTheme.colors.onBackground
         )
     }
 }
@@ -185,7 +182,7 @@ private fun InfoOverlay(
             .background(
                 Brush.verticalGradient(
                     gradientOrigin to Color.Transparent,
-                    1f to Black40
+                    1f to ArtdrianTheme.colors.secondary
                 )
             )
             .padding(start = 16.dp)
@@ -198,7 +195,7 @@ private fun InfoOverlay(
             enter = slideInVertically(tween(), initialOffsetY = { it / 2 }) + fadeIn(tween()),
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
-            Text(wallpaper.title, fontWeight = FontWeight.Bold, style = Typography.headlineLarge)
+            Text(wallpaper.title, fontWeight = FontWeight.Bold, style = ArtdrianTheme.typography.headlineLarge)
         }
         Spacer(modifier = Modifier.height(24.dp))
         AnimatedVisibility(
@@ -222,7 +219,11 @@ private fun InfoOverlay(
             ),
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
-            Text(stringResource(R.string.detail_info_copyright), fontWeight = FontWeight.Bold, style = Typography.bodySmall)
+            Text(
+                stringResource(R.string.detail_info_copyright),
+                fontWeight = FontWeight.Bold,
+                style = ArtdrianTheme.typography.bodySmall
+            )
         }
     }
 }
@@ -249,8 +250,8 @@ private fun ButtonRow(
                 ACTIONS -> R.string.detail_info_button
                 INFO -> R.string.detail_close_button
             },
-            buttonColor = White20,
-            iconTint = Color.White
+            buttonColor = ArtdrianTheme.colors.surface,
+            iconTint = ArtdrianTheme.colors.onSurface
         ) {
             setMode(if (mode == ACTIONS) INFO else ACTIONS)
         }
@@ -258,8 +259,8 @@ private fun ButtonRow(
             ButtonWithLabel(
                 icon = Icons.Sharp.Download,
                 buttonText = R.string.detail_save_button,
-                buttonColor = White20,
-                iconTint = Color.White,
+                buttonColor = ArtdrianTheme.colors.surface,
+                iconTint = ArtdrianTheme.colors.onSurface,
                 onClick = decorateWithPermissions(onSaveClicked)
             )
         }
@@ -267,8 +268,8 @@ private fun ButtonRow(
             ButtonWithLabel(
                 icon = Icons.Default.Wallpaper,
                 buttonText = R.string.detail_apply_button,
-                buttonColor = Black80,
-                iconTint = Color.White,
+                buttonColor = ArtdrianTheme.colors.inverseSurface,
+                iconTint = ArtdrianTheme.colors.inverseOnSurface,
                 onClick = decorateWithPermissions(onApplyClicked)
             )
         }
@@ -366,12 +367,17 @@ private fun ShowError() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Icon(Icons.Rounded.QuestionMark, modifier = Modifier.size(120.dp), contentDescription = "", tint = Color.Black)
+        Icon(
+            Icons.Rounded.QuestionMark,
+            modifier = Modifier.size(120.dp),
+            contentDescription = "",
+            tint = ArtdrianTheme.colors.onBackground
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(R.string.network_error),
             textAlign = TextAlign.Center,
-            color = Color.Black
+            color = ArtdrianTheme.colors.onBackground
         )
     }
 }

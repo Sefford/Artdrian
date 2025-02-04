@@ -2,7 +2,7 @@
 accompanist = "0.34.0"
 accompanist-permissions = "0.27.0"
 activity-compose = "1.10.0"
-android-gradle-plugin = "8.7.3"
+android-gradle-plugin = "8.8.0"
 arrow = "1.2.4"
 coil = "3.0.4"
 compose-bom = "2025.01.01"

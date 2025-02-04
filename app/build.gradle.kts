@@ -43,7 +43,8 @@ android {
         jvmTarget = "17"
         freeCompilerArgs += listOf(
             "-Xjvm-default=all-compatibility",
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xwhen-guards"
         )
     }
     buildFeatures {
