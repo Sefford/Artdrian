@@ -1,5 +1,6 @@
 package com.sefford.artdrian.common.ui.theme
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.Configuration
 import android.os.Build
@@ -114,18 +115,18 @@ val lightTheme: ColorScheme = lightColorScheme(
 )
 
 
+@SuppressLint("NewApi")
 @Composable
 fun ArtdrianTheme(
     darkMode: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
     content: @Composable () -> Unit
 ) {
     // Determine the color scheme
     val context = LocalContext.current
-    val androidS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val colorScheme: ColorScheme = when {
-        dynamicColor && androidS && darkMode -> dynamicDarkColorScheme(context)
-        dynamicColor && androidS -> dynamicLightColorScheme(context)
+        dynamicColor && darkMode -> dynamicDarkColorScheme(context)
+        dynamicColor -> dynamicLightColorScheme(context)
         darkMode -> darkTheme
         else -> lightTheme
     }
