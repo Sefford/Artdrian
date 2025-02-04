@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Artdrian"
-        tools:targetApi="31"
+        tools:targetApi="35"
         android:requestLegacyExternalStorage="true"
         >
         <activity
@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".wallpaperdetail.ui.WallpaperDetailActivity"
+            android:name=".wallpapers.ui.detail.WallpaperDetailActivity"
             android:exported="false"
             android:theme="@style/Theme.Artdrian"/>
     </application>
