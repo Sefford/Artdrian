@@ -1,11 +1,12 @@
 [versions]
 accompanist = "0.34.0"
 accompanist-permissions = "0.27.0"
-activity-compose = "1.10.0"
 android-gradle-plugin = "8.8.0"
 arrow = "1.2.4"
 coil = "3.0.4"
 compose-bom = "2025.01.01"
+compose-activity = "1.10.0"
+compose-navigation = "2.8.6"
 coroutines = "1.9.0"
 coroutines-test = "1.10.0"
 core-ktx = "1.15.0"
@@ -48,15 +49,16 @@ accompanist-pager = { group = "com.google.accompanist", name = "accompanist-page
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist-permissions" }
 
 # AndroidX Libraries
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 palette = { module = "androidx.palette:palette", version.ref = "palette" }
 
 # Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose-activity" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "compose-navigation" }
+material = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "material-icons-extended" }
 compose-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
