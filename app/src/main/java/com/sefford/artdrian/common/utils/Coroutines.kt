@@ -9,5 +9,7 @@ fun CoroutineScope.io(parallelism: Int = Int.MAX_VALUE) = this.plus(Dispatchers.
 
 fun CoroutineScope.default(parallelism: Int = Int.MAX_VALUE) = this.plus(Dispatchers.Default.limit(parallelism))
 
+fun CoroutineScope.main(parallelism: Int = Int.MAX_VALUE) = this.plus(Dispatchers.Main.immediate)
+
 private fun CoroutineDispatcher.limit(parallelism: Int) =
     if (parallelism < Int.MAX_VALUE) this.limitedParallelism(parallelism) else this

@@ -10,5 +10,7 @@ class StoreEffectDispatching<Effect>(private val scope: CoroutineScope): Dispatc
     private val _effects = MutableSharedFlow<Effect>()
     override val effects: Flow<Effect> = _effects.asSharedFlow()
 
-    fun effect(effect: Effect) = scope.launch { _effects.emit(effect) }
+    override fun effect(effect: Effect) {
+        scope.launch { _effects.emit(effect) }
+    }
 }

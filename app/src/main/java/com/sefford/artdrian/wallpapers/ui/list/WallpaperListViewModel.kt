@@ -3,13 +3,16 @@ package com.sefford.artdrian.wallpapers.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.sefford.artdrian.common.di.Default
+import com.sefford.artdrian.common.stores.DispatchesEffects
 import com.sefford.artdrian.common.stores.HoldsState
-import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
+import com.sefford.artdrian.common.stores.StoreEffectDispatching
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
-import com.sefford.artdrian.wallpapers.store.WallpapersState
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListEffect
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListState
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -17,67 +20,27 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class WallpaperListViewModel @AssistedInject constructor(
-    private val wallpaperStore: WallpaperStore,
-    @Assisted initial: ViewState
-) : ViewModel(), HoldsState<WallpaperListViewModel.ViewState> {
+    wallpaperStore: WallpaperStore,
+    @Assisted initial: WallpaperListState,
+    scope: CoroutineScope,
+) : ViewModel(), HoldsState<WallpaperListState>, DispatchesEffects<WallpaperListEffect> by StoreEffectDispatching(scope) {
 
-    override val state: StateFlow<ViewState> = wallpaperStore.state.map { ViewState(it) }
+    override val state: StateFlow<WallpaperListState> = wallpaperStore.state.map { WallpaperListState(it, ::effect) }
         .stateIn(viewModelScope, SharingStarted.Lazily, initial)
 
-    override val current: ViewState
+    override val current: WallpaperListState
         get() = state.value
-
-    sealed class ViewState {
-        data object Loading : ViewState()
-        class Content(val wallpapers: List<Wallpaper>) : ViewState()
-
-        class Error(val error: Errors) : ViewState()
-
-        companion object {
-            operator fun invoke(state: WallpapersState): ViewState = when (state) {
-                is WallpapersState.Idle -> Loading
-                is WallpapersState.Loaded -> Content(state.wallpapers.map { it })
-                is WallpapersState.Error -> Error(Errors.NotFoundError(""))
-            }
-        }
-    }
-
-    sealed class Errors {
-        class NetworkError(val status: Int) : Errors()
-        class NotFoundError(val id: String) : Errors()
-    }
-
-    @AssistedFactory
-    interface Factory {
-        fun create(
-            @Assisted initialState: ViewState,
-        ): WallpaperListViewModel
-    }
-
 
     class Provider @Inject constructor(
         private val wallpaperStore: WallpaperStore,
+        @Default private val scope: CoroutineScope
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(WallpaperListViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return WallpaperListViewModel(wallpaperStore, ViewState.Loading) as T
+                return WallpaperListViewModel(wallpaperStore, WallpaperListState.Loading, scope) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
-
-
-    @Suppress("UNCHECKED_CAST")
-    companion object {
-
-        fun providesFactory(
-            assistedFactory: Factory,
-            initialState: ViewState
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(initialState) as T
-            }
         }
     }
 }

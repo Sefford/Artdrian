@@ -30,4 +30,7 @@ annotation class Default
 annotation class IO
 
 @Qualifier
+annotation class Main
+
+@Qualifier
 annotation class Build
