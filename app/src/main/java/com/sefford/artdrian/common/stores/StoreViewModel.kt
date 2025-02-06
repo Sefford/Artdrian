@@ -2,6 +2,7 @@ package com.sefford.artdrian.common.stores
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -24,4 +25,7 @@ class StoreViewModel<Event, State, Effect>(
 
     override val effects: Flow<Effect>
         get() = store.effects
+
+    override fun effect(effect: Effect) =
+        store.effect(effect)
 }
