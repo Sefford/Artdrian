@@ -26,7 +26,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,10 +33,13 @@ import androidx.compose.ui.unit.dp
 import com.sefford.artdrian.R
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListState
+import com.sefford.artdrian.wallpapers.ui.views.WallpaperCard
+import com.sefford.artdrian.wallpapers.ui.views.WallpaperCardState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun WallpaperListScreen(response: WallpaperListViewModel.ViewState, onItemClicked: (String, String) -> Unit = { _, _ -> }) {
+fun WallpaperListScreen(response: WallpaperListState, onItemClicked: (String, String) -> Unit = { _, _ -> }) {
     ArtdrianTheme {
         Scaffold(
             topBar = {
@@ -56,9 +58,9 @@ fun WallpaperListScreen(response: WallpaperListViewModel.ViewState, onItemClicke
                         .padding(innerPadding),
                 ) {
                     when (response) {
-                        WallpaperListViewModel.ViewState.Loading -> ShowLoading()
-                        is WallpaperListViewModel.ViewState.Content -> ShowWallpapers(response.wallpapers, onItemClicked)
-                        is WallpaperListViewModel.ViewState.Error -> ShowError(response.error)
+                        WallpaperListState.Loading -> ShowLoading()
+                        is WallpaperListState.Content -> ShowWallpapers(response.wallpapers, onItemClicked)
+                        is WallpaperListState.Errors -> ShowError(response)
                     }
                 }
             })
@@ -78,22 +80,21 @@ private fun ShowLoading() {
 }
 
 @Composable
-private fun ShowWallpapers(wallpapers: List<Wallpaper>, onItemClick: (String, String) -> Unit) {
+private fun ShowWallpapers(wallpapers: List<WallpaperCardState>, onItemClick: (String, String) -> Unit) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(wallpapers) { wallpaper ->
-            WallpaperCard(wallpaper = wallpaper, onItemClicked = { onItemClick(wallpaper.id, wallpaper.title) })
-        }
+        items(wallpapers) { wallpaper -> WallpaperCard(wallpaper = wallpaper) }
     }
 }
 
 @Composable
-private fun ShowError(errors: WallpaperListViewModel.Errors) {
+private fun ShowError(errors: WallpaperListState.Errors) {
     val icon = when (errors) {
-        is WallpaperListViewModel.Errors.NetworkError -> Icons.Rounded.WifiOff
-        is WallpaperListViewModel.Errors.NotFoundError -> Icons.Rounded.QuestionMark
+        WallpaperListState.Errors.Critical -> Icons.Rounded.WifiOff
+        WallpaperListState.Errors.Empty -> Icons.Rounded.QuestionMark
+        WallpaperListState.Errors.Network -> Icons.Rounded.QuestionMark
     }
     Column(
         modifier = Modifier
@@ -115,17 +116,17 @@ private fun ShowError(errors: WallpaperListViewModel.Errors) {
 @Preview
 @Composable
 private fun showLoading() {
-    WallpaperListScreen(WallpaperListViewModel.ViewState.Loading)
+    WallpaperListScreen(WallpaperListState.Loading)
 }
 
 @Preview
 @Composable
 private fun showContent() {
-    WallpaperListScreen(WallpaperListViewModel.ViewState.Content(listOf()))
+    WallpaperListScreen(WallpaperListState.Content(listOf()))
 }
 
 @Preview
 @Composable
 private fun showError() {
-    WallpaperListScreen(WallpaperListViewModel.ViewState.Error(WallpaperListViewModel.Errors.NetworkError(0)))
+    WallpaperListScreen(WallpaperListState.Errors.Network)
 }
