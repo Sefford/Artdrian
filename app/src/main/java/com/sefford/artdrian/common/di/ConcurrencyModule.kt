@@ -2,6 +2,7 @@ package com.sefford.artdrian.common.di
 
 import com.sefford.artdrian.common.utils.default
 import com.sefford.artdrian.common.utils.io
+import com.sefford.artdrian.common.utils.main
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -35,5 +36,9 @@ class ConcurrencyModule {
     @Singleton
     @IO
     fun provideStoreIoScope(): CoroutineScope = MainScope().io()
+
+    @Provides
+    @Main
+    fun provideMainScope(): CoroutineScope = MainScope().main()
 
 }
