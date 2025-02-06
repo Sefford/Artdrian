@@ -68,7 +68,6 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
-import com.sefford.artdrian.common.ui.theme.White50
 import com.sefford.artdrian.common.utils.isAtLeastAPI
 import com.sefford.artdrian.wallpapers.domain.model.Images
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
@@ -326,7 +325,7 @@ private fun ButtonWithLabel(
     icon: ImageVector,
     @StringRes buttonText: Int,
     buttonColor: Color,
-    iconTint: Color = White50,
+    iconTint: Color = Color.White,
     onClick: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -354,7 +353,7 @@ private fun ButtonWithLabel(
         AnimatedContent(
             targetState = buttonText,
             transitionSpec = { scaleIn() + fadeIn() with scaleOut() + fadeOut() }
-        ) { text -> Text(text = stringResource(text), color = White50) }
+        ) { text -> Text(text = stringResource(text), color = Color.White) }
     }
 }
 
