@@ -1,4 +1,4 @@
-package com.sefford.artdrian.wallpapers.ui.list.viewmodel
+package com.sefford.artdrian.wallpapers.ui.list.effects
 
 sealed class WallpaperListEffect {
 

@@ -72,5 +72,7 @@ class WallpaperPalette(
 
 
         operator fun get(slug: String): WallpaperPalette = PALETTES.getValue(slug)
+
+        operator fun get(index: Int): WallpaperPalette = PALETTES.values.toList()[index]
     }
 }

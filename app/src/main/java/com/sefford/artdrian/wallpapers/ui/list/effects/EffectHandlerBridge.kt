@@ -1,7 +1,6 @@
 package com.sefford.artdrian.wallpapers.ui.list.effects
 
-import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel
-import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListEffect
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn

@@ -1,4 +1,4 @@
-package com.sefford.artdrian.wallpapers.ui.list
+package com.sefford.artdrian.wallpapers.ui.list.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,8 +8,7 @@ import com.sefford.artdrian.common.stores.DispatchesEffects
 import com.sefford.artdrian.common.stores.HoldsState
 import com.sefford.artdrian.common.stores.StoreEffectDispatching
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
-import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListEffect
-import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListState
+import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListEffect
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
@@ -20,12 +19,12 @@ import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 class WallpaperListViewModel @AssistedInject constructor(
-    wallpaperStore: WallpaperStore,
+    wallpapers: WallpaperStore,
     @Assisted initial: WallpaperListState,
     scope: CoroutineScope,
 ) : ViewModel(), HoldsState<WallpaperListState>, DispatchesEffects<WallpaperListEffect> by StoreEffectDispatching(scope) {
 
-    override val state: StateFlow<WallpaperListState> = wallpaperStore.state.map { WallpaperListState(it, ::effect) }
+    override val state: StateFlow<WallpaperListState> = wallpapers.state.map { WallpaperListState(it, ::effect) }
         .stateIn(viewModelScope, SharingStarted.Lazily, initial)
 
     override val current: WallpaperListState

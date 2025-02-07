@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.sefford.artdrian.common.ui.LightDarkPreview
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
-import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListEffect
+import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListEffect
 
 @Composable
 fun WallpaperCard(
@@ -97,8 +97,7 @@ sealed class WallpaperCardState(
         tag: String,
         color: @Composable () -> Color,
         downloads: Int,
-        onClick: ()
-        -> Unit
+        onClick: () -> Unit
     ) :
         WallpaperCardState(
             name = name,
@@ -106,8 +105,7 @@ sealed class WallpaperCardState(
             tag = tag,
             color = color,
             downloads = downloads,
-            onClick =
-            onClick
+            onClick = onClick
         )
 
     val showStatistics by lazy { downloads > 0 }
@@ -117,9 +115,11 @@ sealed class WallpaperCardState(
             name = wallpaper.title,
             url = wallpaper.images.preview,
             tag = wallpaper.tags.first(),
-            color = { WallpaperPalette[wallpaper.id].dominant },
+            color = { WallpaperPalette[wallpaper.slug].dominant },
             downloads = wallpaper.downloads,
-            onClick = { effect(WallpaperListEffect.GoToDetail(wallpaper.id, wallpaper.title)) }
+            onClick = {
+                effect(WallpaperListEffect.GoToDetail(wallpaper.id, wallpaper.title))
+            }
         )
     }
 }

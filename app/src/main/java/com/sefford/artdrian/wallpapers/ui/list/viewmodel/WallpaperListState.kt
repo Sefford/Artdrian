@@ -2,6 +2,7 @@ package com.sefford.artdrian.wallpapers.ui.list.viewmodel
 
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.wallpapers.store.WallpapersState
+import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListEffect
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperCardState
 
 sealed class WallpaperListState(val wallpapers: List<WallpaperCardState>) {
