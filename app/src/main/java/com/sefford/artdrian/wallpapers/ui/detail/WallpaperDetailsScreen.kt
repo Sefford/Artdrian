@@ -43,11 +43,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,67 +58,35 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sefford.artdrian.R
+import com.sefford.artdrian.common.ui.LightDarkPreview
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.common.utils.isAtLeastAPI
-import com.sefford.artdrian.wallpapers.domain.model.Images
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
 import com.sefford.artdrian.wallpapers.ui.detail.ContentMode.ACTIONS
 import com.sefford.artdrian.wallpapers.ui.detail.ContentMode.INFO
-import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState
+import com.sefford.artdrian.wallpapers.ui.detail.effects.WallpaperDetailsEffect
+import com.sefford.artdrian.wallpapers.ui.detail.viewmodel.WallpaperDetailsState
 import com.sefford.artdrian.wallpapers.ui.views.ImageRequest
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperImage
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WallpaperDetailScreen(
-    viewState: ViewState,
-    name: String,
-    onSaveClicked: () -> Unit = {},
-    onApplyClicked: () -> Unit = {}
+    state: WallpaperDetailsState,
 ) {
-    ArtdrianTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = name) },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = ArtdrianTheme.colors.background,
-                        titleContentColor = ArtdrianTheme.colors.onBackground
-                    )
-                )
-            },
-            content = { innerPadding ->
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                ) {
-                    when (viewState) {
-                        ViewState.Loading -> ShowLoading()
-                        is ViewState.Content -> ShowWallpaper(
-                            wallpaper = viewState.wallpaper,
-                            onSaveClicked = onSaveClicked,
-                            onApplyClicked = onApplyClicked
-                        )
-
-                        is ViewState.NotFound -> ShowError()
-                    }
-                }
-            })
+    when (state) {
+        WallpaperDetailsState.Loading -> Loading()
+        is WallpaperDetailsState.Content -> Content(wallpaper = state.wallpaper)
+        is WallpaperDetailsState.Error -> Error()
     }
 }
 
 @Composable
-private fun ShowLoading() {
+private fun Loading() {
     Box(modifier = Modifier.fillMaxSize()) {
         CircularProgressIndicator(
             modifier = Modifier
@@ -134,10 +98,8 @@ private fun ShowLoading() {
 }
 
 @Composable
-private fun ShowWallpaper(
-    wallpaper: Wallpaper,
-    onSaveClicked: () -> Unit = {},
-    onApplyClicked: () -> Unit = {}
+private fun Content(
+    wallpaper: WallpaperDetail,
 ) {
     val (mode, setMode) = remember { mutableStateOf(ACTIONS) }
     Box(
@@ -151,9 +113,9 @@ private fun ShowWallpaper(
                 .align(Alignment.Center)
                 .fillMaxSize(),
             image = ImageRequest(
-                wallpaper.images.mobile,
-                wallpaper.title,
-                placeholder = WallpaperPalette[wallpaper.slug].dominant,
+                wallpaper.url,
+                wallpaper.name,
+                placeholder = wallpaper.color(),
                 ContentScale.Crop
             )
         )
@@ -164,7 +126,7 @@ private fun ShowWallpaper(
             }
         )
         InfoOverlay(gradientOrigin, mode, wallpaper)
-        ButtonRow(mode, setMode, onSaveClicked, onApplyClicked)
+        ButtonRow(mode, setMode, wallpaper.listeners)
     }
 }
 
@@ -172,7 +134,7 @@ private fun ShowWallpaper(
 private fun InfoOverlay(
     gradientOrigin: Float,
     mode: ContentMode,
-    wallpaper: Wallpaper
+    wallpaper: WallpaperDetail
 ) {
     Column(
         modifier = Modifier
@@ -194,7 +156,7 @@ private fun InfoOverlay(
             enter = slideInVertically(tween(), initialOffsetY = { it / 2 }) + fadeIn(tween()),
             exit = slideOutVertically(targetOffsetY = { it / 2 }) + fadeOut()
         ) {
-            Text(wallpaper.title, fontWeight = FontWeight.Bold, style = ArtdrianTheme.typography.headlineLarge)
+            Text(wallpaper.name, fontWeight = FontWeight.Bold, style = ArtdrianTheme.typography.headlineLarge)
         }
         Spacer(modifier = Modifier.height(24.dp))
         AnimatedVisibility(
@@ -231,8 +193,7 @@ private fun InfoOverlay(
 private fun ButtonRow(
     mode: ContentMode,
     setMode: (ContentMode) -> Unit,
-    onSaveClicked: () -> Unit,
-    onApplyClicked: () -> Unit
+    listeners: Listeners
 ) {
     Row(
         modifier = Modifier.Companion
@@ -260,7 +221,7 @@ private fun ButtonRow(
                 buttonText = R.string.detail_save_button,
                 buttonColor = ArtdrianTheme.colors.surface,
                 iconTint = ArtdrianTheme.colors.onSurface,
-                onClick = decorateWithPermissions(onSaveClicked)
+                onClick = decorateWithPermissions(listeners.onDownloadMobile)
             )
         }
         AnimatedButtonWithLabel(mode) {
@@ -269,7 +230,7 @@ private fun ButtonRow(
                 buttonText = R.string.detail_apply_button,
                 buttonColor = ArtdrianTheme.colors.inverseSurface,
                 iconTint = ArtdrianTheme.colors.inverseOnSurface,
-                onClick = decorateWithPermissions(onApplyClicked)
+                onClick = decorateWithPermissions(listeners.onApplyMobile)
             )
         }
     }
@@ -292,9 +253,59 @@ private fun AnimatedButtonWithLabel(
     }
 }
 
+class WallpaperDetail(
+    val url: String,
+    val name: String,
+    val downloads: Int,
+    val color: @Composable () -> Color,
+    val listeners: Listeners
+) {
+    constructor(wallpaper: Wallpaper, listeners: Listeners) : this(
+        url = wallpaper.images.mobile,
+        name = wallpaper.title,
+        downloads = wallpaper.downloads,
+        color = { WallpaperPalette[wallpaper.id].dominant },
+        listeners = listeners
+    )
+}
+
+class Listeners(
+    val onShareLink: () -> Unit = {},
+    val onDownloadMobile: () -> Unit = {},
+    val onDownloadDesktop: () -> Unit = {},
+    val onApplyMobile: () -> Unit = {},
+    val onApplyDesktop: () -> Unit = {}
+) {
+
+    companion object {
+        operator fun invoke(wallpaper: Wallpaper, effects: (WallpaperDetailsEffect) -> Unit) =
+            Listeners(
+                onShareLink = { effects(WallpaperDetailsEffect.Share(wallpaper.id)) },
+                onDownloadMobile = { effects(WallpaperDetailsEffect.Download(wallpaper.images.mobile)) },
+                onDownloadDesktop = { effects(WallpaperDetailsEffect.Download(wallpaper.images.desktop)) },
+                onApplyMobile = { effects(WallpaperDetailsEffect.Apply(wallpaper.images.mobile)) },
+                onApplyDesktop = { effects(WallpaperDetailsEffect.Apply(wallpaper.images.desktop)) }
+            )
+    }
+}
+
 private enum class ContentMode {
-    ACTIONS,
-    INFO
+    ACTIONS {
+        @Composable
+        override fun label(): String = stringResource(R.string.detail_info_button)
+        override fun icon(): ImageVector = Icons.Rounded.Info
+    },
+    INFO {
+        @Composable
+        override fun label(): String = stringResource(R.string.detail_close_button)
+
+        override fun icon(): ImageVector = Icons.Default.Close
+    };
+
+    @Composable
+    abstract fun label(): String
+
+    abstract fun icon(): ImageVector
 }
 
 @Composable
@@ -358,7 +369,7 @@ private fun ButtonWithLabel(
 }
 
 @Composable
-private fun ShowError() {
+private fun Error() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -381,33 +392,36 @@ private fun ShowError() {
     }
 }
 
-@Preview
 @Composable
-private fun showLoading() {
-    WallpaperDetailScreen(ViewState.Loading, "Example")
+@LightDarkPreview
+private fun PreviewLoading() {
+    ArtdrianTheme {
+        WallpaperDetailScreen(state = WallpaperDetailsState.Loading)
+    }
 }
 
-@Preview
 @Composable
-private fun showContent() {
-    WallpaperDetailScreen(
-        ViewState.Content(
-            Wallpaper.FromLocal(
-                id = "6",
-                slug = "ghost_waves_001",
-                title = "Ghost Waves",
-                version = "001",
-                downloads = 456,
-                images = Images("", "", ""),
-                tags = listOf("4K-READY"),
-                published = Clock.System.now().toLocalDateTime(TimeZone.UTC),
+@LightDarkPreview
+private fun PreviewContent() {
+    ArtdrianTheme {
+        WallpaperDetailScreen(
+            state = WallpaperDetailsState.Content(
+                wallpaper = WallpaperDetail(
+                    url = "http://image.jpg",
+                    name = "Ghost Waves #001",
+                    downloads = 924,
+                    color = { ArtdrianTheme.colors.inversePrimary },
+                    listeners = Listeners(),
+                )
             )
-        ), "Example"
-    )
+        )
+    }
 }
 
-@Preview
 @Composable
-private fun showError() {
-    WallpaperDetailScreen(ViewState.NotFound("6"), "Example")
+@LightDarkPreview
+private fun PreviewError() {
+    ArtdrianTheme {
+        WallpaperDetailScreen(state = WallpaperDetailsState.Error.NotFound)
+    }
 }
