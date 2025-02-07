@@ -34,3 +34,6 @@ annotation class Main
 
 @Qualifier
 annotation class Build
+
+@Qualifier
+annotation class Id
