@@ -12,9 +12,4 @@ interface WallpaperListComponent {
 
     fun viewModel(): WallpaperListViewModel.Provider
 
-    fun effectHandler(): WallpaperListNavigationEffectHandler
-
-    @Main
-    fun mainScope(): CoroutineScope
-
 }

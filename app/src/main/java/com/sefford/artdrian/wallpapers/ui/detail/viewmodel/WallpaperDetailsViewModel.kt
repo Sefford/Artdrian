@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import com.sefford.artdrian.common.data.DataError
 import com.sefford.artdrian.common.di.Default
 import com.sefford.artdrian.common.di.Id
+import com.sefford.artdrian.common.di.Main
 import com.sefford.artdrian.common.stores.DispatchesEffects
 import com.sefford.artdrian.common.stores.HoldsState
 import com.sefford.artdrian.common.stores.StoreEffectDispatching
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.store.WallpapersState
 import com.sefford.artdrian.wallpapers.ui.detail.effects.WallpaperDetailsEffect
+import com.sefford.artdrian.wallpapers.ui.detail.effects.WallpaperDetailsEffectHandler
+import com.sefford.artdrian.wallpapers.ui.detail.effects.bridgeEffectHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -83,13 +86,16 @@ class WallpaperDetailsViewModel(
 
     class Provider @Inject constructor(
         private val wallpaperStore: WallpaperStore,
+        private val handler: WallpaperDetailsEffectHandler,
         @Id private val id: String,
-        @Default private val scope: CoroutineScope
+        @Default private val default: CoroutineScope,
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(WallpaperDetailsViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return WallpaperDetailsViewModel(wallpaperStore, WallpaperDetailsState.Loading, id, scope) as T
+                return WallpaperDetailsViewModel(wallpaperStore, WallpaperDetailsState.Loading, id, default).also { vm ->
+                    vm.bridgeEffectHandler(handler::handle, default)
+                } as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }

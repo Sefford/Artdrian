@@ -1,5 +1,7 @@
 package com.sefford.artdrian.wallpapers.ui.list
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,17 +28,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sefford.artdrian.R
 import com.sefford.artdrian.common.ui.LightDarkPreview
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
+import com.sefford.artdrian.common.utils.disableFullscreen
 import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListState
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListViewModel
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperCard
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperCardState
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
 
 @Composable
+fun WallpaperListScreen(viewModel: WallpaperListViewModel) {
+    (LocalActivity.current as ComponentActivity).window.disableFullscreen()
+    WallpaperListScreen(viewModel.state.collectAsStateWithLifecycle().value)
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun WallpaperListScreen(response: WallpaperListState) {
+fun WallpaperListScreen(state: WallpaperListState) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -53,10 +64,10 @@ fun WallpaperListScreen(response: WallpaperListState) {
                     .fillMaxSize()
                     .padding(innerPadding),
             ) {
-                when (response) {
-                    WallpaperListState.Loading -> Content(response.wallpapers)
-                    is WallpaperListState.Content -> Content(response.wallpapers)
-                    is WallpaperListState.Errors -> Error(response)
+                when (state) {
+                    WallpaperListState.Loading -> Content(state.wallpapers)
+                    is WallpaperListState.Content -> Content(state.wallpapers)
+                    is WallpaperListState.Errors -> Error(state)
                 }
             }
         })

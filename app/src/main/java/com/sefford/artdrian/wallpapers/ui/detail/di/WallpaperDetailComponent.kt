@@ -11,9 +11,4 @@ import kotlinx.coroutines.CoroutineScope
 interface WallpaperDetailComponent {
 
     fun viewModel(): WallpaperDetailsViewModel.Provider
-
-    fun effectHandler(): WallpaperDetailsEffectHandler
-
-    @Default
-    fun defaultScope(): CoroutineScope
 }

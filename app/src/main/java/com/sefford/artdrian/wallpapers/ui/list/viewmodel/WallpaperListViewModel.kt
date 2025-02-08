@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.sefford.artdrian.common.di.Default
+import com.sefford.artdrian.common.di.Main
 import com.sefford.artdrian.common.stores.DispatchesEffects
 import com.sefford.artdrian.common.stores.HoldsState
 import com.sefford.artdrian.common.stores.StoreEffectDispatching
 import com.sefford.artdrian.wallpapers.store.WallpaperStore
 import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListEffect
+import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListNavigationEffectHandler
+import com.sefford.artdrian.wallpapers.ui.list.effects.bridgeEffectHandler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineScope
@@ -32,12 +35,16 @@ class WallpaperListViewModel @AssistedInject constructor(
 
     class Provider @Inject constructor(
         private val wallpaperStore: WallpaperStore,
-        @Default private val scope: CoroutineScope
+        private val handler: WallpaperListNavigationEffectHandler,
+        @Default private val defaultSCope: CoroutineScope,
+        @Main private val mainScope: CoroutineScope
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(WallpaperListViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
-                return WallpaperListViewModel(wallpaperStore, WallpaperListState.Loading, scope) as T
+                return WallpaperListViewModel(wallpaperStore, WallpaperListState.Loading, defaultSCope).also { vm ->
+                    vm.bridgeEffectHandler(handler::handle, mainScope)
+                } as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
