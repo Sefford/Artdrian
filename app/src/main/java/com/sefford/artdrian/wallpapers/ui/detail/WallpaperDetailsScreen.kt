@@ -44,6 +44,8 @@ import com.sefford.artdrian.wallpapers.ui.detail.views.InfoOverlay
 import com.sefford.artdrian.wallpapers.ui.views.ImageRequest
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperImage
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeSource
 
 @Composable
 fun WallpaperDetailScreen(viewModel: WallpaperDetailsViewModel) {
@@ -79,6 +81,7 @@ private fun Content(
     wallpaper: WallpaperDetail,
 ) {
     val (mode, setMode) = remember { mutableStateOf(ContentMode.ACTIONS) }
+    val hazeState = remember { HazeState() }
     Box(
         modifier = Modifier
             .padding(8.dp)
@@ -88,7 +91,8 @@ private fun Content(
         WallpaperImage(
             modifier = Modifier
                 .align(Alignment.Center)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .hazeSource(hazeState),
             image = ImageRequest(
                 wallpaper.url,
                 wallpaper.name,
@@ -96,7 +100,7 @@ private fun Content(
                 ContentScale.Crop
             )
         )
-        Gradient(mode = mode, color = wallpaper.tint)
+        Gradient(mode = mode, blur = hazeState, color = wallpaper.tint)
         InfoOverlay(mode = mode, wallpaper = wallpaper)
         ButtonRow(mode, wallpaper.tint(), wallpaper.onTint(), setMode, wallpaper.listeners)
     }
