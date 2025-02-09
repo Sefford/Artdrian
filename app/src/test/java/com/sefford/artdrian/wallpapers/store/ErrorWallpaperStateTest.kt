@@ -11,7 +11,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
 
-class ErrorsWallpaperStateTest {
+class ErrorWallpaperStateTest {
 
     private val error = WallpapersState.Error(DataError.Network.NotFound("1234"))
 

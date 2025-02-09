@@ -15,7 +15,7 @@ import com.sefford.artdrian.wallpapers.data.datasources.WallpaperNetworkDataSour
 import com.sefford.artdrian.wallpapers.di.WallpapersModule
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailComponent
 import com.sefford.artdrian.wallpapers.ui.detail.di.WallpaperDetailModule
-import com.sefford.artdrian.wallpapers.ui.list.WallpaperListViewModel
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListViewModel
 import dagger.Component
 import javax.inject.Singleton
 

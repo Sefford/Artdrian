@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.core)
     implementation(libs.coil.ktor)
+    implementation(libs.haze)
     implementation(libs.material)
     implementation(libs.material.icons.extended)
     implementation(libs.palette)

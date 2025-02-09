@@ -1,7 +1,8 @@
 package com.sefford.artdrian.wallpapers.ui.list
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.material.icons.rounded.WifiOff
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -28,59 +27,54 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sefford.artdrian.R
+import com.sefford.artdrian.common.ui.LightDarkPreview
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
-import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
+import com.sefford.artdrian.common.utils.disableFullscreen
 import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListState
+import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListViewModel
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperCard
 import com.sefford.artdrian.wallpapers.ui.views.WallpaperCardState
+import com.sefford.artdrian.wallpapers.ui.views.WallpaperPalette
+
+@Composable
+fun WallpaperListScreen(viewModel: WallpaperListViewModel) {
+    (LocalActivity.current as ComponentActivity).window.disableFullscreen()
+    WallpaperListScreen(viewModel.state.collectAsStateWithLifecycle().value)
+}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun WallpaperListScreen(response: WallpaperListState, onItemClicked: (String, String) -> Unit = { _, _ -> }) {
-    ArtdrianTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = stringResource(id = R.string.app_name)) },
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = ArtdrianTheme.colors.background,
-                        titleContentColor = ArtdrianTheme.colors.onBackground
-                    )
+fun WallpaperListScreen(state: WallpaperListState) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.app_name)) },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = ArtdrianTheme.colors.background,
+                    titleContentColor = ArtdrianTheme.colors.onBackground
                 )
-            },
-            content = { innerPadding ->
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding),
-                ) {
-                    when (response) {
-                        WallpaperListState.Loading -> ShowLoading()
-                        is WallpaperListState.Content -> ShowWallpapers(response.wallpapers, onItemClicked)
-                        is WallpaperListState.Errors -> ShowError(response)
-                    }
+            )
+        },
+        content = { innerPadding ->
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+            ) {
+                when (state) {
+                    WallpaperListState.Loading -> Content(state.wallpapers)
+                    is WallpaperListState.Content -> Content(state.wallpapers)
+                    is WallpaperListState.Errors -> Error(state)
                 }
-            })
-    }
+            }
+        })
 }
 
 @Composable
-private fun ShowLoading() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        CircularProgressIndicator(
-            modifier = Modifier
-                .wrapContentSize()
-                .align(Alignment.Center),
-            color = ArtdrianTheme.colors.onBackground
-        )
-    }
-}
-
-@Composable
-private fun ShowWallpapers(wallpapers: List<WallpaperCardState>, onItemClick: (String, String) -> Unit) {
+private fun Content(wallpapers: List<WallpaperCardState>) {
     LazyColumn(
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -90,7 +84,7 @@ private fun ShowWallpapers(wallpapers: List<WallpaperCardState>, onItemClick: (S
 }
 
 @Composable
-private fun ShowError(errors: WallpaperListState.Errors) {
+private fun Error(errors: WallpaperListState.Errors) {
     val icon = when (errors) {
         WallpaperListState.Errors.Critical -> Icons.Rounded.WifiOff
         WallpaperListState.Errors.Empty -> Icons.Rounded.QuestionMark
@@ -113,20 +107,33 @@ private fun ShowError(errors: WallpaperListState.Errors) {
     }
 }
 
-@Preview
 @Composable
-private fun showLoading() {
-    WallpaperListScreen(WallpaperListState.Loading)
+@LightDarkPreview
+private fun PreviewLoading() {
+    ArtdrianTheme {
+        WallpaperListScreen(WallpaperListState.Loading)
+    }
 }
 
-@Preview
 @Composable
-private fun showContent() {
-    WallpaperListScreen(WallpaperListState.Content(listOf()))
+@LightDarkPreview
+private fun PreviewContent() {
+    ArtdrianTheme {
+        WallpaperListScreen(WallpaperListState.Content(List(5) { index ->
+            WallpaperCardState.Content(
+                name = "Ghost Waves #00$index",
+                url = "http://image.jpg",
+                tag = "${index}K-READY",
+                color = { WallpaperPalette[index].dominant },
+                downloads = 92 * index,
+                onClick = {}
+            )
+        }))
+    }
 }
 
-@Preview
 @Composable
-private fun showError() {
-    WallpaperListScreen(WallpaperListState.Errors.Network)
+@LightDarkPreview
+private fun PreviewError() {
+    ArtdrianTheme { WallpaperListScreen(WallpaperListState.Errors.Network) }
 }

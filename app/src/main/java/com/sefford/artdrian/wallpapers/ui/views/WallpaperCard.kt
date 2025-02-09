@@ -12,10 +12,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -23,7 +26,13 @@ import androidx.compose.ui.unit.dp
 import com.sefford.artdrian.common.ui.LightDarkPreview
 import com.sefford.artdrian.common.ui.theme.ArtdrianTheme
 import com.sefford.artdrian.wallpapers.domain.model.Wallpaper
-import com.sefford.artdrian.wallpapers.ui.list.viewmodel.WallpaperListEffect
+import com.sefford.artdrian.wallpapers.ui.list.effects.WallpaperListEffect
+import dev.chrisbanes.haze.HazeDefaults
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
 
 @Composable
 fun WallpaperCard(
@@ -35,6 +44,14 @@ fun WallpaperCard(
             .fillMaxWidth()
             .aspectRatio(1.778f)
     ) {
+        val hazeState = remember { HazeState() }
+        val hazeStyle = HazeStyle(
+            backgroundColor = Color.Transparent,
+            tints = listOf(HazeTint(ArtdrianTheme.colors.background.copy(alpha = 0.5f))),
+            blurRadius = 8.dp,
+            noiseFactor = HazeDefaults.noiseFactor,
+        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -42,7 +59,9 @@ fun WallpaperCard(
                 .clickable(onClick = wallpaper.onClick)
         ) {
             WallpaperImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .hazeSource(hazeState),
                 image = ImageRequest(
                     url = wallpaper.url,
                     description = wallpaper.name,
@@ -55,6 +74,8 @@ fun WallpaperCard(
                     Modifier
                         .align(Alignment.BottomStart)
                         .padding(bottom = 8.dp, start = 8.dp)
+                        .clip(ShapeDefaults.Medium)
+                        .hazeEffect(state = hazeState, style = hazeStyle)
                 ) {
                     Text(text = wallpaper.tag, style = ArtdrianTheme.typography.bodySmall)
                 }
@@ -64,6 +85,8 @@ fun WallpaperCard(
                     Modifier
                         .align(Alignment.BottomEnd)
                         .padding(bottom = 8.dp, end = 8.dp)
+                        .clip(ShapeDefaults.Medium)
+                        .hazeEffect(state = hazeState, style = hazeStyle)
                 ) {
                     Icon(Icons.Rounded.Download, modifier = Modifier.size(12.dp), contentDescription = "")
                     Text(text = wallpaper.downloads.toString(), style = ArtdrianTheme.typography.bodySmall)
@@ -97,8 +120,7 @@ sealed class WallpaperCardState(
         tag: String,
         color: @Composable () -> Color,
         downloads: Int,
-        onClick: ()
-        -> Unit
+        onClick: () -> Unit
     ) :
         WallpaperCardState(
             name = name,
@@ -106,8 +128,7 @@ sealed class WallpaperCardState(
             tag = tag,
             color = color,
             downloads = downloads,
-            onClick =
-            onClick
+            onClick = onClick
         )
 
     val showStatistics by lazy { downloads > 0 }
@@ -117,9 +138,11 @@ sealed class WallpaperCardState(
             name = wallpaper.title,
             url = wallpaper.images.preview,
             tag = wallpaper.tags.first(),
-            color = { WallpaperPalette[wallpaper.id].dominant },
+            color = { WallpaperPalette[wallpaper.slug].dominant },
             downloads = wallpaper.downloads,
-            onClick = { effect(WallpaperListEffect.GoToDetail(wallpaper.id, wallpaper.title)) }
+            onClick = {
+                effect(WallpaperListEffect.GoToDetail(wallpaper.id, wallpaper.title))
+            }
         )
     }
 }

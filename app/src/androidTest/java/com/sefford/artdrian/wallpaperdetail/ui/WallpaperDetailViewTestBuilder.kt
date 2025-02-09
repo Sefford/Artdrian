@@ -9,8 +9,8 @@ import com.karumi.shot.ScreenshotTest
 import com.sefford.artdrian.R
 import com.sefford.artdrian.WallpaperMother
 import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailScreen
-import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState.Content
-import com.sefford.artdrian.wallpapers.ui.detail.WallpaperDetailViewModel.ViewState.Loading
+import com.sefford.artdrian.wallpapers.ui.detail.viewmodel.WallpaperDetailsViewModel.ViewState.Content
+import com.sefford.artdrian.wallpapers.ui.detail.viewmodel.WallpaperDetailsViewModel.ViewState.Loading
 import org.junit.Rule
 import org.junit.Test
 
