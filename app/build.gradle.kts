@@ -129,7 +129,6 @@ dependencies {
     testImplementation(libs.kotest.assertions.arrow)
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.ktor.client.mock)
-    testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
     testImplementation(libs.room.testing)
     testImplementation(libs.workmanager.test)

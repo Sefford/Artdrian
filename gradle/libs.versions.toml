@@ -1,36 +1,34 @@
 [versions]
-accompanist = "0.34.0"
+accompanist = "0.36.0"
 accompanist-permissions = "0.27.0"
-android-gradle-plugin = "8.8.0"
-arrow = "1.2.4"
-coil = "3.0.4"
-compose-bom = "2025.01.01"
+android-gradle-plugin = "8.8.1"
+arrow = "2.0.1"
+coil = "3.1.0"
+compose-bom = "2025.02.00"
 compose-activity = "1.10.0"
-compose-navigation = "2.8.6"
-coroutines = "1.9.0"
-coroutines-test = "1.10.0"
+compose-navigation = "2.8.7"
+coroutines = "1.10.1"
 core-ktx = "1.15.0"
-dagger = "2.52"
+dagger = "2.55"
 datetime = "0.6.1"
 haze = "1.3.0"
 junit5 = "5.11.4"
 jqwik = "1.7.1"
 kotest = "5.9.1"
 kotest-arrow = "2.0.0"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 kotlin-serialization = "2.1.0"
 kotlin-snapshot = "2.3.0"
-ksp = "2.1.0-1.0.29"
-ktor = "3.0.3"
+ksp = "2.1.10-1.0.30"
+ktor = "3.1.0"
 lifecycle-runtime-ktx = "2.8.7"
 material3 = "1.3.1"
-material-icons-extended = "1.7.7"
-mockwebserver = "4.9.3"
+material-icons-extended = "1.7.8"
 palette = "1.0.0"
-okio = "3.9.1"
+okio = "3.10.2"
 robolectric = "4.14.1"
 room = "2.6.1"
-serialization-json = "1.7.3"
+serialization-json = "1.8.0"
 shot = "6.1.0"
 test-core = "1.6.1"
 workmanager = "2.10.0"
@@ -87,7 +85,7 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serialization-json" }
 kotlin-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "datetime" }
-kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "coroutines-test" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version = "coroutines" }
 
 # Kotlin Libraries
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
@@ -109,7 +107,6 @@ junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref
 kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core-jvm", version.ref = "kotest" }
 kotest-assertions-arrow = { group = "io.kotest.extensions", name = "kotest-assertions-arrow", version.ref = "kotest-arrow" }
 jqwik = { group = "net.jqwik", name = "jqwik", version.ref = "jqwik" }
-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 androidx-test-core = { module = "androidx.test:core", version.ref = "test-core" }
 
