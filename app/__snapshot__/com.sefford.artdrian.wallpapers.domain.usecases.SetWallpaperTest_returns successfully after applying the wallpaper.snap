@@ -2,7 +2,5 @@
   "__class__": "Right",
   "value": {
     "__class__": "Unit"
-  },
-  "isLeft": false,
-  "isRight": true
+  }
 }
